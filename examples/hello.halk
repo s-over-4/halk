@@ -1,5 +1,6 @@
 USE."io";
 
-message="Hello, World!";
+message._="Hello, World!";
 
-io~o.message;
+io~o.message._;
+
