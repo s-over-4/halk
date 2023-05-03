@@ -2,6 +2,7 @@
 #include "include/token.h"
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 lexer_T* lexer_init(char* content) {
    lexer_T* lexer = calloc(1, sizeof(struct LEXER_STRUC));
@@ -120,7 +121,18 @@ token_T* lexer_get_string(lexer_T* lexer) {
 }
 
 token_T* lexer_get_id(lexer_T* lexer) {
+   char* str_so_far = calloc(1, sizeof(char));
+   str_so_far[0] = '\0';
 
+   while (isalnum(lexer->c)) {
+      char* current = lexer_get_c_as_string(lexer);
+      str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));
+      strcat(str_so_far, current);
+
+      lexer_next(lexer);
+   }
+
+   return token_init(TOKEN_ID, str_so_far);
 }
 
 token_T* lexer_next_token(lexer_T* lexer, token_T* token) {
