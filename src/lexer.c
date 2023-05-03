@@ -102,7 +102,21 @@ token_T* lexer_get_next_token(lexer_T* lexer) {
 }
 
 token_T* lexer_get_string(lexer_T* lexer) {
-  // while c not ", add c to token value 
+   lexer_next(lexer);
+   
+   char* str_so_far = calloc(1, sizeof(char));
+   str_so_far[0] = '\0';
+
+   while (lexer->c != '"') {
+      char* current = lexer_get_c_as_string(lexer);
+      str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));  // give str so far some more memory
+      strcat(str_so_far, current);  // add current to str so far
+
+      lexer_next(lexer);
+   }
+
+   lexer_next(lexer);
+   return token_init(TOKEN_QUOTE, str_so_far);
 }
 
 token_T* lexer_get_id(lexer_T* lexer) {

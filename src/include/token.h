@@ -13,6 +13,7 @@ typedef struct TOKEN_STRUC {
       TOKEN_RBRAK,    // ']'
       TOKEN_POUND,    // '#''
       TOKEN_TILDE,    // '~'
+      TOKEN_QUOTE,    // '''
       TOKEN_EOF       // '\0'
     } type;
 
