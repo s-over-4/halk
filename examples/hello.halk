@@ -1,4 +1,5 @@
-USE.io;
+USE."io";
 
 message="Hello, World!";
+
 io~o.message;
