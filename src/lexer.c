@@ -102,11 +102,11 @@ token_T* lexer_get_next_token(lexer_T* lexer) {
 }
 
 token_T* lexer_get_string(lexer_T* lexer) {
-   
+  // while c not ", add c to token value 
 }
 
 token_T* lexer_get_id(lexer_T* lexer) {
-
+   // 
 }
 
 token_T* lexer_next_token(lexer_T* lexer, token_T* token) {
@@ -117,5 +117,9 @@ token_T* lexer_next_token(lexer_T* lexer, token_T* token) {
 }
 
 char* lexer_get_c_as_string(lexer_T* lexer) {
+   char* str = calloc(1, sizeof(char));
+   str[0] = lexer->c;
+   str[1] = '\0';
 
+   return str;
 }
