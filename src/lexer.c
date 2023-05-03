@@ -36,6 +36,66 @@ token_T* lexer_get_next_token(lexer_T* lexer) {
             lexer->c == '\n') {
         lexer_pass(lexer); 
       }
+
+      switch (lexer->c) {
+         case '"': return lexer_get_string(lexer); break;
+         case '=': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_EQ,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case '/': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_LORD,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case '\\': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_RORD,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case '&': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_AMP,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case '[': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_LBRAK,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case ']': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_RBRAK,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case '#': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_POUND,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+         case '~': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_TILDE,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
+      }
    }
 
    return token_init(TOKEN_EOF, "\0");
@@ -52,7 +112,7 @@ token_T* lexer_get_id(lexer_T* lexer) {
 token_T* lexer_next_token(lexer_T* lexer, token_T* token) {
    lexer_next(lexer);
 
-   return lexer;
+   return token;
 
 }
 
