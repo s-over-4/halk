@@ -1,6 +1,29 @@
-USE."io";
+[comments are in square brackets]
 
-message._="Hello, World!";
+[begin list with /]
+[end list with \]
+[items in list separated by &]
 
-io~o.message._;
+[lines terminated by ;]
 
+[arguments given as a list after the .]
+
+[USE brings a module into scope]
+USE./"base"&"io"\;
+
+[all variables are mutable at all times]
+message="Hello, World!";
+
+[new functions defined with = followed by a list of procedures, which are called procedurally when called]
+say.msg=/
+
+[functions/variables in a module are accessed through a ~ (analogous to dot notation)]
+msg=io~escape.msg&
+io~o.msg
+\;
+
+for_each./ build_list./5\ &
+
+say.message
+
+\
