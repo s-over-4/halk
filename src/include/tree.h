@@ -20,6 +20,6 @@ typedef struct TREE_STRUC {
 
 } TREE_t;
 
-TREE_t tree_init(int type);
+TREE_t* tree_init(int type);
 
 #endif
