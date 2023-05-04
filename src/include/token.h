@@ -12,13 +12,13 @@ typedef struct TOKEN_STRUC {
       TOKEN_LBRAK,    // '['
       TOKEN_RBRAK,    // ']'
       TOKEN_POUND,    // '#''
-      TOKEN_TILDE,    // '~'
+      TOKEN_tILDE,    // '~'
       TOKEN_QUOTE,    // '''
       TOKEN_EOF       // '\0'
     } type;
 
     char* value;
-} token_T;
+} token_t;
 
-token_T* token_init(int type, char* value);
+token_t* token_init(int type, char* value);
 #endif

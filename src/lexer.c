@@ -4,8 +4,8 @@
 #include <string.h>
 #include <ctype.h>
 
-lexer_T* lexer_init(char* content) {
-   lexer_T* lexer = calloc(1, sizeof(struct LEXER_STRUC));
+lexer_t* lexer_init(char* content) {
+   lexer_t* lexer = calloc(1, sizeof(struct LEXER_STRUC));
 
    lexer->content = content;
    lexer->i = 0;
@@ -14,7 +14,7 @@ lexer_T* lexer_init(char* content) {
    return lexer;
 }
 
-void lexer_next(lexer_T* lexer) {
+void lexer_next(lexer_t* lexer) {
    // if not at end of line or file
    if (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
       lexer->i += 1;                                  // advance index 1 character
@@ -22,7 +22,7 @@ void lexer_next(lexer_T* lexer) {
    }
 }
 
-void lexer_pass(lexer_T* lexer) {
+void lexer_pass(lexer_t* lexer) {
    while (lexer->c == ' ' ||
          lexer->c == '\t' ||
          lexer->c == '\n') {
@@ -30,7 +30,7 @@ void lexer_pass(lexer_T* lexer) {
    }
 }
 
-token_T* lexer_get_next_token(lexer_T* lexer) {
+token_t* lexer_get_next_token(lexer_t* lexer) {
    while (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
       if (lexer->c == ' ' ||
             lexer->c == '\t' ||
@@ -92,7 +92,7 @@ token_T* lexer_get_next_token(lexer_T* lexer) {
          case '~': return lexer_next_token(
                          lexer,
                          token_init(
-                            TOKEN_TILDE,
+                            TOKEN_tILDE,
                             lexer_get_c_as_string(lexer)
                             )
                          ); break;
@@ -102,7 +102,7 @@ token_T* lexer_get_next_token(lexer_T* lexer) {
    return token_init(TOKEN_EOF, "\0");
 }
 
-token_T* lexer_get_string(lexer_T* lexer) {
+token_t* lexer_get_string(lexer_t* lexer) {
    lexer_next(lexer);
    
    char* str_so_far = calloc(2, sizeof(char));
@@ -120,7 +120,7 @@ token_T* lexer_get_string(lexer_T* lexer) {
    return token_init(TOKEN_QUOTE, str_so_far);
 }
 
-token_T* lexer_get_id(lexer_T* lexer) {
+token_t* lexer_get_id(lexer_t* lexer) {
    char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
 
@@ -135,13 +135,13 @@ token_T* lexer_get_id(lexer_T* lexer) {
    return token_init(TOKEN_ID, str_so_far);
 }
 
-token_T* lexer_next_token(lexer_T* lexer, token_T* token) {
+token_t* lexer_next_token(lexer_t* lexer, token_t* token) {
    lexer_next(lexer);
 
    return token;
 }
 
-char* lexer_get_c_as_string(lexer_T* lexer) {
+char* lexer_get_c_as_string(lexer_t* lexer) {
    char* str = calloc(1, sizeof(char));
    str[0] = lexer->c;
    str[1] = '\0';
