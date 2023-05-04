@@ -78,4 +78,5 @@ tags
 
 # End of https://www.gitignore.io/api/vim,c
 
-.DS_Store 
+# macos woes
+.DS_Store
