@@ -42,12 +42,14 @@ fn main {
    }
    say "done.\n";
 }
+
+
+Hello, World!
+Hello, World!
+Hello, World!
+Hello, World!
+done.
 ```
 
->Hello, World!
->Hello, World!
->Hello, World!
->Hello, World!
->done.
 
 ***HALK*** **progress:** 10%
