@@ -33,15 +33,21 @@ Note that all syntax described is liable to sudden and violent change.
 
 ```HALK
 let variable = 4;
-let another_variable = "Hello, World!";
+let another_variable = "Hello, World!\n";
 
-fn main /
-   for variable > 0 /
+fn main {
+   while variable >= 0 {
       say another_variable;
       variable -= 1;
-   \
-   say "done.";
-\
+   }
+   say "done.\n";
+}
 ```
+
+>Hello, World!
+>Hello, World!
+>Hello, World!
+>Hello, World!
+>done.
 
 ***HALK*** **progress:** 10%
