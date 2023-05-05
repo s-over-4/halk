@@ -69,20 +69,8 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                             lexer_get_c_as_string(lexer)
                             )
                          ); break;
-         case '[': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_LBRAK,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
-         case ']': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_RBRAK,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
+         case '[': return lexer_get_comment(lexer); break;
+         case ']': lexer_next(lexer); break;
          case '#': return lexer_next_token(
                          lexer,
                          token_init(
@@ -100,7 +88,8 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
       }
    }
 
-   return token_init(TOKEN_EOF, "\0");
+   // return token_init(TOKEN_EOF, "\0");
+   return NULL;
 }
 
 token_t* lexer_get_string(lexer_t* lexer) {
@@ -119,6 +108,17 @@ token_t* lexer_get_string(lexer_t* lexer) {
 
    lexer_next(lexer);
    return token_init(TOKEN_QUOTE, str_so_far);
+}
+
+token_t* lexer_get_comment(lexer_t* lexer) {
+   lexer_next(lexer);
+
+   while (lexer->c != ']') {
+      lexer_next(lexer);
+   }
+
+   lexer_next(lexer);
+   return token_init(TOKEN_SEMI, NULL);
 }
 
 token_t* lexer_get_id(lexer_t* lexer) {
