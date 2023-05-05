@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[]) {
    lexer_t* lexer = lexer_init(
-      "[nice & simple]\nlet it = \"Hello, World!\";\nsay it;\n"
+      "Let it = \"Hello, World!\";\nsay it;"
    );
 
    printf("\n=== INPUT =======\n%s\n=== END INPUT ===\n", lexer->content);

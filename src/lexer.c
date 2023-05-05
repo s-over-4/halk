@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdio.h>
 
 lexer_t* lexer_init(char* content) {
    lexer_t* lexer = calloc(1, sizeof(struct LEXER_STRUC));
@@ -38,6 +39,9 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             lexer->c == '\n') {
         lexer_pass(lexer); 
       }
+
+      if (isalnum(lexer->c))
+         return lexer_get_id(lexer);
 
       switch (lexer->c) {
          case '"': return lexer_get_string(lexer); break;
@@ -133,6 +137,8 @@ token_t* lexer_get_id(lexer_t* lexer) {
       lexer_next(lexer);
    }
 
+   lexer_next(lexer);
+
    return token_init(TOKEN_ID, str_so_far);
 }
 
@@ -143,7 +149,7 @@ token_t* lexer_next_token(lexer_t* lexer, token_t* token) {
 }
 
 char* lexer_get_c_as_string(lexer_t* lexer) {
-   char* str = calloc(1, sizeof(char));
+   char* str = calloc(2, sizeof(char));
    str[0] = lexer->c;
    str[1] = '\0';
 
