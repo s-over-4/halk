@@ -85,10 +85,17 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          case '~': return lexer_next_token(
                          lexer,
                          token_init(
-                            TOKEN_tILDE,
+                            TOKEN_TILDE,
                             lexer_get_c_as_string(lexer)
                             )
                          ); break;
+         case ';': return lexer_next_token(
+            lexer,
+            token_init(
+               TOKEN_SEMI,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
       }
    }
 
@@ -122,7 +129,7 @@ token_t* lexer_get_comment(lexer_t* lexer) {
    }
 
    lexer_next(lexer);
-   return token_init(TOKEN_SEMI, NULL);
+   return token_init(TOKEN_COMM, lexer_get_c_as_string(lexer));
 }
 
 token_t* lexer_get_id(lexer_t* lexer) {

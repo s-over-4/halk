@@ -12,8 +12,9 @@ typedef struct TOKEN_STRUC {
       TOKEN_LBRAK,    // '['
       TOKEN_RBRAK,    // ']'
       TOKEN_POUND,    // '#''
-      TOKEN_tILDE,    // '~'
+      TOKEN_TILDE,    // '~'
       TOKEN_QUOTE,    // '''
+      TOKEN_COMM,     // '[comment]'
       TOKEN_EOF       // '\0'
     } type;
 
