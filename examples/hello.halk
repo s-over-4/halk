@@ -1,3 +1,6 @@
-[nice & simple]
+[hello world in HALK.]
 let it = "Hello, World!";
-say it;
+
+fn main = /
+   say it;
+\
