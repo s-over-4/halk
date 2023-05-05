@@ -106,7 +106,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
 token_t* lexer_get_string(lexer_t* lexer) {
    lexer_next(lexer);
    
-   char* str_so_far = calloc(2, sizeof(char));
+   char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
 
    while (lexer->c != '"') {
