@@ -1,10 +1,12 @@
 #include "include/lexer.h"
 #include "include/token.h"
 
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
+
 
 lexer_t* lexer_init(char* content) {
    lexer_t* lexer = calloc(1, sizeof(struct LEXER_STRUC));
@@ -46,49 +48,48 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
       switch (lexer->c) {
          case '"': return lexer_get_string(lexer); break;
          case '=': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_EQ,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
-         case '/': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_LORD,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
-         case '\\': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_RORD,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
+            lexer,
+            token_init(
+               TOKEN_EQ,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
+         case '{': return lexer_next_token(
+            lexer,
+            token_init(
+               TOKEN_LORD,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
+         case '}': return lexer_next_token(
+            lexer,
+            token_init(
+               TOKEN_RORD,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
          case '&': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_AMP,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
+            lexer,
+            token_init(
+               TOKEN_AMP,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
          case '[': return lexer_get_comment(lexer); break;
-         case ']': lexer_next(lexer); break;
          case '#': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_POUND,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
+            lexer,
+            token_init(
+               TOKEN_POUND,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
          case '~': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_TILDE,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
+            lexer,
+            token_init(
+               TOKEN_TILDE,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
          case ';': return lexer_next_token(
             lexer,
             token_init(
@@ -99,7 +100,6 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
       }
    }
 
-   // return token_init(TOKEN_EOF, "\0");
    return NULL;
 }
 
@@ -110,25 +110,26 @@ token_t* lexer_get_string(lexer_t* lexer) {
    str_so_far[0] = '\0';
 
    while (lexer->c != '"') {
+      // until reaching the closing ", add each character to str_so_far and adjust size to match.
       char* current = lexer_get_c_as_string(lexer);
-      str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));  // give str so far some more memory
-      strcat(str_so_far, current);  // add current to str so far
+      str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));
+      strcat(str_so_far, current);
 
       lexer_next(lexer);
    }
 
-   lexer_next(lexer);
+   lexer_next(lexer);   // skip over closing "
+
    return token_init(TOKEN_QUOTE, str_so_far);
 }
 
 token_t* lexer_get_comment(lexer_t* lexer) {
-   lexer_next(lexer);
-
    while (lexer->c != ']') {
       lexer_next(lexer);
    }
 
-   lexer_next(lexer);
+   lexer_next(lexer);   // skip over closing ]
+
    return token_init(TOKEN_COMM, lexer_get_c_as_string(lexer));
 }
 
@@ -143,8 +144,6 @@ token_t* lexer_get_id(lexer_t* lexer) {
 
       lexer_next(lexer);
    }
-
-   lexer_next(lexer);
 
    return token_init(TOKEN_ID, str_so_far);
 }

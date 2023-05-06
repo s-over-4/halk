@@ -35,7 +35,7 @@ Note that all syntax described is liable to sudden and violent change.
 let variable = 4;
 let another_variable = "Hello, World!\n";
 
-fn main {
+fn main _ {
    while variable >= 0 {
       say another_variable;
       variable -= 1;
