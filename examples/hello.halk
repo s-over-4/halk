@@ -10,7 +10,7 @@ let.hello -> 'hello, ';                                  [variables must be give
 let.PI => math/PI;                                       [namespaces are accessed with a '/']
                                                          [constants are denoted with a '=>']
 
-fn.greeting.to -> {                                      [functions defined with: `fn.<name>,<argument>,..., -> {<body>};`] 
+fn.greeting,to -> {                                      [functions defined with: `fn.<name>,<argument>,..., -> {<body>};`] 
    let.message -> str.cat.hello,to;                      [functions are right-associative]
 
    stdo.message;                                         [since 'io' was brought into global scope, we
