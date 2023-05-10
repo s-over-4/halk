@@ -11,7 +11,7 @@ let.PI => math/PI;                                       [namespaces are accesse
                                                          [constants are denoted with a '=>']
 
 fn.greeting,to -> {                                      [functions defined with: `fn.<name>,<argument>,..., -> {<body>};`] 
-   let.message -> str.cat.hello,to;                      [functions are right-associative]
+   let.message -> strcat.hello,to;                       [functions are right-associative]
 
    stdo.message;                                         [since 'io' was brought into global scope, we
                                                          do not prefix it with a namespace/]
