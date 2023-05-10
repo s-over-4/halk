@@ -5,10 +5,26 @@
 #INCLUDE 'io' AS '';          [bring everything in 'io' into global scope]
 
 
+let.hello -> 'hello, ';       [variables must be given a value at declaration]
 
-let.  hello => 'hello, ';     [variables must be given a value at declaration]
+let.PI => math/PI;            [header namespaces are accessed with a '/']
                               [constants are denoted with a '=>']
 
-let.  say_hello.to -> {
-   let.greeting -> 
-}
+fn.greeting.to -> {     ['fn' only expects 1 argument, so no grouping of arguments is necessary]
+   let.message -> str.cat.(hello,to);  [parens can be used to make calls to multi-argument
+                                       functions more clear]
+
+   stdo.message;        [since 'io' was brought into global scope, we
+                        don't need to (and, in fact, cannot) prefix it 
+                        with a namespace]
+};
+
+fn.sum_all._ -> {       [variadic functions are possible with the reserved '_' argument,
+                        which is treated as an array]
+   return.foldl.+,0,_;  
+};
+
+fn.main -> {   [where our code will begin executing]
+   greeting.[comments can be placed *anywhere*]"world.";
+   exit.0;  [exit with code 0]
+};
