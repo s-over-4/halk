@@ -24,7 +24,7 @@ typedef struct TREE_STRUC {
       struct var_def_struc {
          char*                      name;
          struct TREE_STRUC*         val;
-         int                        is_const;
+         int*                       is_const;
       } var_def;
 
       struct var_struc {
@@ -49,7 +49,7 @@ typedef struct TREE_STRUC {
       } str;
 
       struct subtree_struc {
-         struct TREE_STRUC*         val;
+         struct TREE_STRUC**        val;
          size_t                     size;
       } subtree;
 

@@ -1,5 +1,9 @@
 #include <stdio.h>
+
+
 #include "include/lexer.h"
+#include "include/tree.h"
+
 
 int main(int argc, char* argv[]) {
    lexer_t* lexer = lexer_init(
