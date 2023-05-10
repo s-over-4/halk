@@ -32,23 +32,41 @@ One can only hope this feature will be added in the future.
 Note that all syntax described is liable to sudden and violent change.
 
 ```HALK
-let variable = 4;
-let another_variable = "Hello, World!\n";
+[comments in square brackets]
 
-fn main _ {
-   while variable >= 0 {
-      say another_variable;
-      variable -= 1;
-   }
-   say "done.\n";
-}
+[preprocessor directives]
+#INCLUDE 'math.halk';                                    [looks for a 'math.halk' file in the cwd, then ~/halk/include]
+#INCLUDE 'io' AS '';                                     [bring everything in 'io' into global scope]
 
 
-Hello, World!
-Hello, World!
-Hello, World!
-Hello, World!
-done.
+let.hello -> 'hello, ';                                  [variables must be given a value at declaration]
+
+let.PI => math/PI;                                       [namespaces are accessed with a '/']
+                                                         [constants are denoted with a '=>']
+
+fn.greeting,to -> {                                      [functions defined with: `fn.<name>,<argument>,..., -> {<body>};`] 
+   let.message -> strcat.hello,to;                       [functions are right-associative]
+
+   stdo.message;                                         [since 'io' was brought into global scope, we
+                                                         do not prefix it with a namespace/]
+};
+
+fn.sum_all._ -> {                                        [variadic functions are possible with the reserved '_' argument,
+                                                         which is treated as an array]
+   return.foldl.+,0,_;  
+};
+
+fn.fibonacci.n -> {
+   if.or.(num=?.n, 0), (num=?.n, 1) -> {                 [functions ending in '?' should be predicates]
+      return.1;
+   };
+   return.+.(fibonacci. -.n, 1), (fibonacci. -.n, 2);    [parens can be used to group function application]
+};
+
+fn.main -> {   [where our code will begin executing]
+   greeting.[comments can be placed *anywhere*]"world.";
+   exit.0;                                               [exit with code 0 for success]
+};
 ```
 
 
