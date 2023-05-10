@@ -1,6 +1,14 @@
-[hello world in HALK.]
-let it = "Hello, World!";
+[comments in square brackets]
 
-fn main = /
-   say it;
-\
+[preprocessor directives]
+#INCLUDE 'math.halk';         [looks for a 'math' file in cwd, then ~/halk/include]
+#INCLUDE 'io' AS '';          [bring everything in 'io' into global scope]
+
+
+
+let.  hello => 'hello, ';     [variables must be given a value at declaration]
+                              [constants are denoted with a '=>']
+
+let.  say_hello.to -> {
+   let.greeting -> 
+}

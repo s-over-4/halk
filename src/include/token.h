@@ -1,5 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
+
+
 typedef struct TOKEN_STRUC {
    enum {
       TOKEN_ID,       // keyword
@@ -21,5 +23,7 @@ typedef struct TOKEN_STRUC {
     char* value;
 } token_t;
 
-token_t* token_init(int type, char* value);
+extern token_t* token_init(int type, char* value);
+
+
 #endif

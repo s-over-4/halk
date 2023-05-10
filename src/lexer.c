@@ -75,7 +75,9 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                lexer_get_c_as_string(lexer)
             )
          ); break;
-         case '[': return lexer_get_comment(lexer); break;
+         case '[': 
+            return lexer_get_comment(lexer); 
+            break;
          case '#': return lexer_next_token(
             lexer,
             token_init(
@@ -97,6 +99,8 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                lexer_get_c_as_string(lexer)
             )
          ); break;
+         default:
+            exit(1);
       }
    }
 
@@ -155,7 +159,7 @@ token_t* lexer_next_token(lexer_t* lexer, token_t* token) {
 }
 
 char* lexer_get_c_as_string(lexer_t* lexer) {
-   char* str = calloc(2, sizeof(char));
+   char* str = calloc(2, 1 * sizeof(char));
    str[0] = lexer->c;
    str[1] = '\0';
 

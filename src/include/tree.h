@@ -19,19 +19,41 @@ typedef struct TREE_STRUC {
       TREE_SUBTREE,
    } type;
 
-   char*                var_def_name;
-   struct TREE_STRUC*   var_def_val;
+   union tree_union {
 
-   char*                var_name;
+      struct var_def_struc {
+         char*                      name;
+         struct TREE_STRUC*         val;
+         int                        is_const;
+      } var_def;
 
-   char*                fn_call_name;
-   struct TREE_STRUC**  fn_call_argv;
-   size_t               fn_call_argsize;
+      struct var_struc {
+         char*                      name;
+      } var;
 
-   char*                str_val;
+      struct fn_def_struc {
+         char*                      name;
+         struct TREE_STRUC**        val;
+         struct TREE_STRUC**        argv;
+         size_t                     argsize;
+      } fn_def;
 
-   struct TREE_STRUC*   subtree_val;
-   size_t               subtree_size;
+      struct fn_call_struc {
+         char*                      name;
+         struct TREE_STRUC**        argv;
+         size_t                     argsize;
+      } fn_call;
+
+      struct str_struc {
+         char*                      val;
+      } str;
+
+      struct subtree_struc {
+         struct TREE_STRUC*         val;
+         size_t                     size;
+      } subtree;
+
+   } data;
 
 } tree_t;
 

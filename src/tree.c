@@ -5,18 +5,31 @@ tree_t* tree_init(int type) {
 
    tree->type = type;
 
-   char*                var_def_name      = NULL;
-   struct TREE_STRUC*   var_def_val       = NULL;
-   char*                var_name          = NULL;
-
-   char*                fn_call_name      = NULL;
-   struct TREE_STRUC**  fn_call_argv      = NULL;
-   size_t               fn_call_argsize   = 0;
-
-   char*                str_val           = NULL;
-
-   struct TREE_STRUC*   subtree_val       = NULL;
-   size_t               subtree_size      = 0;
+   switch (type) {
+      case TREE_VAR_DEF:
+         tree->data.var_def.name    = NULL;
+         tree->data.var_def.val     = NULL;
+         break;
+      case TREE_VAR:
+         tree->data.var.name        = NULL;
+         break;
+      case TREE_FN_DEF:
+         tree->data.fn_def.name     = NULL;
+         tree->data.fn_def.val      = NULL;
+         tree->data.fn_def.argv     = NULL;
+         tree->data.fn_def.argsize  = 0;
+         break;
+      case TREE_FN_CALL:
+         tree->data.fn_call.name    = NULL;
+         tree->data.fn_call.argv    = NULL;
+         tree->data.fn_call.argsize = 0;
+         break;
+      case TREE_STR:
+         tree->data.str.val         = NULL;
+         tree->data.subtree.val     = NULL;
+         tree->data.subtree.size    = 0;
+         break;
+   }
 
    return tree;
 }
