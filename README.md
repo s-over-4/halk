@@ -28,7 +28,7 @@ One can only hope this feature will be added in the future.
 
 # Syntax
 
-*HALK* is a **dubiously-typed**, **procedural** programming language. 
+*HALK* is a **dubiously-typed**, **procedural**, **interpreted**  programming language. 
 Note that all syntax described is liable to sudden and violent change.
 
 ```HALK
@@ -69,5 +69,10 @@ fn.main -> {   [where our code will begin executing]
 };
 ```
 
+***HALK*** **progress:** 20%
 
-***HALK*** **progress:** 10%
+- [ ] Lexer
+- [ ] Abstract Syntax Tree
+- [ ] Parser
+- [ ] Doer
+- [ ] ?? profit ??

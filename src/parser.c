@@ -44,7 +44,7 @@ tree_t* parser_parse_token_id(parser_t* parser) {
 // parse a single chunk
 tree_t* parser_parse_chunk(parser_t* parser) {
    switch (parser->token->type) {
-      case TOKEN_ID: {
+      case TOKEN_KEYWORD: {
          return parser_parse_token_id(parser);
       }
    }
@@ -62,9 +62,9 @@ tree_t* parser_parse_chunks(parser_t* parser) {
 
    subtree->data.subtree.val[0] = tree_chunk;
 
-   while (parser->token->type == TOKEN_SEMI) {
+   while (parser->token->type == TOKEN_END) {
       // expect semicolon
-      parser_check_expect(parser, TOKEN_SEMI);
+      parser_check_expect(parser, TOKEN_END);
 
       // make room for new subtree
       subtree->data.subtree.size ++;
