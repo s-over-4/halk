@@ -14,7 +14,8 @@ As you have read these words, you are to install *HALK*.
 
 1. Clone *HALK* to a computer.
 2. `sudo make install`.
-3. Congratulations; You are now part of The.
+
+If you wish to remove all *HALK*-related items from your life, you can try `sudo make clean`.
 
 There is no turning back now.
 
@@ -71,7 +72,7 @@ fn.main -> {   [where our code will begin executing]
 
 ***HALK*** **progress:** 20%
 
-- [ ] Lexer
+- [x] Lexer
 - [ ] Abstract Syntax Tree
 - [ ] Parser
 - [ ] Doer
