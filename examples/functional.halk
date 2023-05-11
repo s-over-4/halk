@@ -1,0 +1,9 @@
+[the Y combinator, implemented in HALK. Note the
+use of '=>' instead of '->', to denote a function
+whom's arguments are immutable.]
+
+let.Y => {
+   λ.f => {
+      λ.x => f.x.x;
+   }.λ.x => f.x.x;
+}
