@@ -17,8 +17,6 @@ As you have read these words, you are to install *HALK*.
 
 If you wish to remove all *HALK*-related items from your life, you can try `sudo make clean`.
 
-There is no turning back now.
-
 # Usage
 
 Seeing as you have installed *HALK*, it only makes sense that you should attempt to make use of it.
