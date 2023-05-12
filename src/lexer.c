@@ -159,6 +159,7 @@ token_t* lexer_get_string(lexer_t* lexer) {
 
 token_t* lexer_get_comment(lexer_t* lexer) {
    lexer_next(lexer);
+
    char* comment_so_far = calloc(1, sizeof(char));
 
    while (lexer->c != ']') {
@@ -220,10 +221,12 @@ token_t* lexer_get_directive(lexer_t* lexer) {
 }
 
 token_t* lexer_get_keyword(lexer_t* lexer) {
+   lexer_next(lexer);
+
    char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
 
-   while (isalnum(lexer->c) || (lexer->c != '.' && lexer->c != ',')) {
+   while (isalnum(lexer->c)) {
       char* current = lexer_get_c_as_string(lexer);
       str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));
       strcat(str_so_far, current);
