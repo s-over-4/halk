@@ -17,6 +17,12 @@ typedef struct TOKEN_STRUC {
       TOKEN_RORD,                // ')'
       TOKEN_DIRECTIVE_DELIM,     // '#'
       TOKEN_DIRECTIVE,           // #DIRECTIVE;
+      TOKEN_FN_APPLY,            // '.'
+      TOKEN_LIST_DELIM,          // ','
+      TOKEN_MODULE_MEMBER_DELIM, // ':'
+      TOKEN_BLOCK_DELIM_START,   // '{'
+      TOKEN_BLOCK_DELIM_END,     // '}'
+      TOKEN_ANY,                 // '_'
       TOKEN_EOF,                 // '\0'
     } type;
 

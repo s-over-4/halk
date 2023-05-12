@@ -19,10 +19,9 @@ lexer_t* lexer_init(char* content) {
 }
 
 void lexer_next(lexer_t* lexer) {
-   // if not at end of line or file
    if (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
-      lexer->i += 1;                                  // advance index 1 character
-      lexer->c = lexer->content[lexer->i];            // set character w/ index
+      lexer->i += 1;
+      lexer->c = lexer->content[lexer->i]; 
    }
 }
 
@@ -37,20 +36,33 @@ void lexer_pass(lexer_t* lexer) {
 
 token_t* lexer_get_next_token(lexer_t* lexer) {
    while (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
-      if (lexer->c == ' ' ||
-            lexer->c == '\t' ||
-            lexer->c == '\n') {
-        lexer_pass(lexer); 
+      if (
+         lexer->c == ' '   ||
+         lexer->c == '\t'  ||
+         lexer->c == '\n'
+      ) {
+         lexer_pass(lexer); 
       }
 
-      if (isalnum(lexer->c))
+      if (
+            isalnum(lexer->c) ||
+            lexer->c == '_'
+      ) {
          return lexer_get_keyword(lexer);
+      }
 
       switch (lexer->c) {
-         case '"': 
+         case '\'': 
             return lexer_get_string(lexer); break;
          case '[': 
             return lexer_get_comment(lexer); break;
+         case ']': return lexer_next_token(
+            lexer,
+            token_init(
+               TOKEN_COMM_DELIM_END,
+               lexer_get_c_as_string(lexer)
+            )
+         ); break;
          case '=':
             return lexer_get_def_const(lexer); break;
          case '-':
@@ -76,8 +88,45 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                lexer_get_c_as_string(lexer)
             )
          ); break;
-         case '#': 
+         case '#':
+            return lexer_get_directive(lexer); break;
+         case '.': return lexer_next_token(
+             lexer,
+             token_init(
+                TOKEN_FN_APPLY,
+                lexer_get_c_as_string(lexer)
+                )
+             ); break;
+         case ',': return lexer_next_token(
+             lexer,
+             token_init(
+                TOKEN_LIST_DELIM,
+                lexer_get_c_as_string(lexer)
+                )
+             ); break;
+         case ':': return lexer_next_token(
+             lexer,
+             token_init(
+                TOKEN_MODULE_MEMBER_DELIM,
+                lexer_get_c_as_string(lexer)
+                )
+             ); break;
+         case '{': return lexer_next_token(
+             lexer,
+             token_init(
+                TOKEN_BLOCK_DELIM_START,
+                lexer_get_c_as_string(lexer)
+                )
+             ); break;
+         case '}': return lexer_next_token(
+             lexer,
+             token_init(
+                TOKEN_BLOCK_DELIM_END,
+                lexer_get_c_as_string(lexer)
+                )
+             ); break;
          default:
+            fputs("Unrecognized token.", stderr);
             exit(1);
       }
    }
@@ -91,7 +140,7 @@ token_t* lexer_get_string(lexer_t* lexer) {
    char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
 
-   while (lexer->c != '"') {
+   while (lexer->c != '\'') {
       char* current = lexer_get_c_as_string(lexer);
       str_so_far = realloc(
             str_so_far, 
@@ -110,14 +159,23 @@ token_t* lexer_get_string(lexer_t* lexer) {
 
 token_t* lexer_get_comment(lexer_t* lexer) {
    lexer_next(lexer);
+   char* comment_so_far = calloc(1, sizeof(char));
+
    while (lexer->c != ']') {
-      lexer_next(lexer);      // don't need to keep track of comments
-                              // for now. might change this later.
+      char* current = lexer_get_c_as_string(lexer);
+      comment_so_far = realloc(
+            comment_so_far, 
+            (strlen(comment_so_far) + strlen(current) * sizeof(char))
+      );
+
+      strcat(comment_so_far, current);
+
+      lexer_next(lexer);
    }
 
    lexer_next(lexer);   // skip over closing ]
 
-   return token_init(TOKEN_COMM, lexer_get_c_as_string(lexer));
+   return token_init(TOKEN_COMM, comment_so_far);
 }
 
 token_t* lexer_get_def_const(lexer_t* lexer) {
@@ -165,7 +223,7 @@ token_t* lexer_get_keyword(lexer_t* lexer) {
    char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
 
-   while (isalnum(lexer->c)) {
+   while (isalnum(lexer->c) || (lexer->c != '.' && lexer->c != ',')) {
       char* current = lexer_get_c_as_string(lexer);
       str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));
       strcat(str_so_far, current);

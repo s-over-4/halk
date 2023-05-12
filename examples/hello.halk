@@ -7,7 +7,7 @@
 
 let.hello -> 'hello, ';                                  [variables must be given a value at declaration]
 
-let.PI => math/PI;                                       [namespaces are accessed with a '/']
+let.PI => math:PI;                                       [namespaces are accessed with a ':'']
                                                          [constants are denoted with a '=>']
 
 fn.greeting,to -> {                                      [functions defined with: `fn.<name>,<argument>,..., -> {<body>};`] 
@@ -19,14 +19,16 @@ fn.greeting,to -> {                                      [functions defined with
 
 fn.sum_all._ -> {                                        [variadic functions are possible with the reserved '_' argument,
                                                          which is treated as an array]
-   return.foldl.+,0,_;  
+   return.foldl.sum,0,_;  
 };
 
 fn.fibonacci.n -> {
-   if.or.(num=?.n, 0), (num=?.n, 1) -> {                 [functions ending in '?' should be predicates]
+   if.or.(=.n, 0), (=.n, 1) -> {                 [functions ending in '?' should be predicates]
       return.1;
    };
-   return.+.(fibonacci. -.n, 1), (fibonacci. -.n, 2);    [parens can be used to group function application]
+   return.sum.
+      (fibonacci. sub.n, 1), 
+      (fibonacci. sub.n, 2);   
 };
 
 fn.main -> {   [where our code will begin executing]
