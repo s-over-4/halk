@@ -23,7 +23,7 @@ fn.sum_all,_ -> {                                        [variadic functions are
 };
 
 fn.fibonacci,n -> {
-   if.or.(=.n, 0), (=.n, 1) -> {                         [functions ending in '?' should be predicates]
+   if.or.(eq.n, 0), (eq.n, 1) -> {                       [functions ending in '?' should be predicates]
       return.1;
    };
    return.sum.
@@ -32,6 +32,6 @@ fn.fibonacci,n -> {
 };
 
 fn.main -> {                                             [where our code will begin executing]
-   greeting.[comments can be placed *anywhere*]"world.";
+   greeting.[comments can be placed *anywhere*]'world.';
    exit.0;                                               [exit with code 0 for success]
 };
