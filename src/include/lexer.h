@@ -34,5 +34,7 @@ extern token_t* lexer_next_token(lexer_t* lexer, token_t* token);
 
 extern char* lexer_get_c_as_string(lexer_t* lexer);
 
+extern void lexer_destroy(lexer_t* lexer);
+
 
 #endif

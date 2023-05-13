@@ -11,16 +11,20 @@ int main(int argc, char* argv[]) {
    char *source;
 
    fsource = fopen ("examples/hello.halk", "rb");
-   if (!fsource) { fputs("Source file not found.", stderr); exit(1); };
+   if (!fsource) { 
+      fputs("Source file not found.", stderr); 
+      exit(1); 
+   };
 
    fseek(fsource, 0L, SEEK_END);
    fsource_size = ftell(fsource);
    rewind(fsource);
 
    source = calloc(1, fsource_size + 1);
+
    if (!source) { 
       fclose(fsource); 
-      fputs("Memory allocation faled.", stderr);
+      fputs("Memory allocation failed.", stderr);
       exit(1); 
    }
 
@@ -31,12 +35,9 @@ int main(int argc, char* argv[]) {
       exit(1);
    }
 
-   lexer_t* lexer = lexer_init(
-         source
-   );
-
    fclose(fsource);
-   free(source);
+
+   lexer_t* lexer = lexer_init( source );
 
    printf("\n=== INPUT =======\n%s\n=== END INPUT ===\n", lexer->content);
 
@@ -45,6 +46,8 @@ int main(int argc, char* argv[]) {
    while ((token = lexer_get_next_token(lexer)) != NULL) {
       printf("===\ntoken type: %d\ntoken value: %s\n===\n", token->type, token->value);
    }
+
+   lexer_destroy(lexer);
 
    return 0;
 }

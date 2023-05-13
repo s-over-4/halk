@@ -1,7 +1,5 @@
-#include "include/lexer.h"
+#include "include/lexer.h" 
 #include "include/token.h"
-
-
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -40,16 +38,12 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          lexer->c == ' '   ||
          lexer->c == '\t'  ||
          lexer->c == '\n'
-      ) {
-         lexer_pass(lexer); 
-      }
+      ) { lexer_pass(lexer); }
 
       if (
             isalnum(lexer->c) ||
             lexer->c == '_'
-      ) {
-         return lexer_get_keyword(lexer);
-      }
+      ) { return lexer_get_keyword(lexer); }
 
       switch (lexer->c) {
          case '\'': 
@@ -221,19 +215,18 @@ token_t* lexer_get_directive(lexer_t* lexer) {
 }
 
 token_t* lexer_get_keyword(lexer_t* lexer) {
-   lexer_next(lexer);
-
    char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
 
    while (isalnum(lexer->c)) {
       char* current = lexer_get_c_as_string(lexer);
       str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));
-      strcat(str_so_far, current);
-
+      strcat(current, str_so_far);
+      free(current);
       lexer_next(lexer);
    }
 
+   lexer_next(lexer);
    return token_init(TOKEN_KEYWORD, str_so_far);
 }
 
@@ -250,4 +243,9 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
    
 
    return str;
+}
+
+void lexer_destroy(lexer_t* lexer) {
+   free(lexer->content);
+   free(lexer);
 }

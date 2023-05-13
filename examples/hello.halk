@@ -17,13 +17,13 @@ fn.greeting,to -> {                                      [functions defined with
                                                          do not prefix it with a namespace/]
 };
 
-fn.sum_all._ -> {                                        [variadic functions are possible with the reserved '_' argument,
+fn.sum_all,_ -> {                                        [variadic functions are possible with the reserved '_' argument,
                                                          which is treated as an array]
    return.foldl.sum,0,_;  
 };
 
-fn.fibonacci.n -> {
-   if.or.(=.n, 0), (=.n, 1) -> {                 [functions ending in '?' should be predicates]
+fn.fibonacci,n -> {
+   if.or.(=.n, 0), (=.n, 1) -> {                         [functions ending in '?' should be predicates]
       return.1;
    };
    return.sum.
@@ -31,7 +31,7 @@ fn.fibonacci.n -> {
       (fibonacci. sub.n, 2);   
 };
 
-fn.main -> {   [where our code will begin executing]
+fn.main -> {                                             [where our code will begin executing]
    greeting.[comments can be placed *anywhere*]"world.";
    exit.0;                                               [exit with code 0 for success]
 };
