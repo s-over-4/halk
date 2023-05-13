@@ -164,7 +164,6 @@ token_t* lexer_get_comment(lexer_t* lexer) {
       );
 
       strcat(comment_so_far, current);
-
       lexer_next(lexer);
    }
 
@@ -205,7 +204,6 @@ token_t* lexer_get_directive(lexer_t* lexer) {
       char* current = lexer_get_c_as_string(lexer);
       directive_so_far = realloc(directive_so_far, (strlen(directive_so_far) + strlen(current) * sizeof(char)));
       strcat(directive_so_far, current);
-
       lexer_next(lexer);
    }
 
@@ -215,19 +213,19 @@ token_t* lexer_get_directive(lexer_t* lexer) {
 }
 
 token_t* lexer_get_keyword(lexer_t* lexer) {
-   char* str_so_far = calloc(1, sizeof(char));
-   str_so_far[0] = '\0';
+   char* keyword_so_far = calloc(1, sizeof(char));
+   keyword_so_far[0] = '\0';
 
    while (isalnum(lexer->c)) {
       char* current = lexer_get_c_as_string(lexer);
-      str_so_far = realloc(str_so_far, (strlen(str_so_far) + strlen(current) * sizeof(char)));
-      strcat(current, str_so_far);
-      free(current);
+      keyword_so_far = realloc(keyword_so_far, (strlen(keyword_so_far) + strlen(current) * sizeof(char)));
+      strcat(keyword_so_far, current);
       lexer_next(lexer);
    }
 
    lexer_next(lexer);
-   return token_init(TOKEN_KEYWORD, str_so_far);
+
+   return token_init(TOKEN_KEYWORD, keyword_so_far);
 }
 
 token_t* lexer_next_token(lexer_t* lexer, token_t* token) {
