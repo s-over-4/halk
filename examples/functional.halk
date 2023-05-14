@@ -3,8 +3,21 @@ use of '=>' instead of '->', to denote a function
 whom's arguments are immutable.]
 
 let.Y => {
-   λ.f => {
-      λ.x => f.x.x;
-   }.λ.x => f.x.x;
+   λ.b => {
+      (λ.f => { b.λ.x => { (f.f).x } }).
+      (λ.f => { b.λ.x => { (f.f).x } });
+   }
 }
 
+let.Fact => {
+   Y.λ.fact => {λ.n => {
+      if.(zero?.n), {
+         1;
+      }, {
+         *.n, (fact. -.n, 1);
+      }
+   }}
+}
+
+(define Fact
+  (Y (λ (fact) (λ (n) (if (zero? n) 1 (* n (fact (- n 1))))))))
