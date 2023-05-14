@@ -1,4 +1,5 @@
 #include "include/parser.h"
+#include "include/token.h"
 
 
 #include <stdlib.h>
@@ -45,50 +46,77 @@ tree_t* parser_parse_token_id(parser_t* parser) {
 tree_t* parser_parse_chunk(parser_t* parser) {
    switch (parser->token->type) {
       case TOKEN_KEYWORD: {
-         return parser_parse_token_id(parser);
+         return parser_parse_keyword(parser);
       }
    }
 }
 
-// parse all in list of chunks
 tree_t* parser_parse_chunks(parser_t* parser) {
-   // initialize the subtree to return
    tree_t* subtree = tree_init(TREE_SUBTREE);
+   subtree->data.subtree.val = calloc(1, sizeof(struct TREE_STRUC));
 
-   // initialize the subtree_val with unit size
-   subtree->data.subtree.size = calloc(1, sizeof(struct TREE_STRUC));
-
-   tree_t* tree_chunk = parser_parse_chunk(parser);
-
-   subtree->data.subtree.val[0] = tree_chunk;
+   tree_t* chunk = parser_parse_chunk(parser);
+   subtree->data.subtree.val[0] = chunk;
 
    while (parser->token->type == TOKEN_END) {
-      // expect semicolon
       parser_check_expect(parser, TOKEN_END);
 
-      // make room for new subtree
-      subtree->data.subtree.size ++;
+      tree_t* chunk = parser_parse_chunk(parser);
+      subtree->data.subtree.size += 1;
       subtree->data.subtree.val = realloc(
-         subtree->data.subtree.val,
-         subtree->data.subtree.size * sizeof(struct TREE_STRUC)
+            subtree->data.subtree.val, 
+            subtree->data.subtree.size * sizeof(struct TREE_STRUC)
       );
-
-      // add to end of list
-      subtree->data.subtree.val[subtree->data.subtree.size - 1] = tree_chunk;
+      subtree->data.subtree.val[subtree->data.subtree.size - 1] = chunk;
+      
    }
 
    return subtree;
 }
 
-tree_t* parser_parse_expr(parser_t* parser);
+tree_t* parser_parse_expr(parser_t* parser) {};
 
-tree_t* parser_parse_fac(parser_t* parser);
+tree_t* parser_parse_fac(parser_t* parser) {};
 
-tree_t* parser_parse_term(parser_t* parser);
+tree_t* parser_parse_term(parser_t* parser) {};
 
-tree_t* parser_parse_fn_call(parser_t* parser);
+tree_t* parser_parse_fn_call(parser_t* parser) {};
 
-tree_t* parser_parse_var(parser_t* parser);
+tree_t* parser_parse_fn_def(parser_t* parser) {};
 
-tree_t* parser_parse_str(parser_t* parser);
+tree_t* parser_parse_var(parser_t* parser) {};
+
+tree_t* parser_parse_var_def(parser_t* parser) {
+   int var_is_const = 0;
+   parser_check_expect(parser, TOKEN_KEYWORD);        // let
+   char* var_name = parser->token->value;             // set variable name
+   parser_check_expect(parser, TOKEN_KEYWORD);        // expect variable name & advance
+   if (parser->token->type == TOKEN_DEFINE_CONST) {   // check either constant or mutable variable
+      var_is_const = 1;
+      parser_check_expect(parser, TOKEN_DEFINE_CONST);
+   } else {
+      parser_check_expect(parser, TOKEN_DEFINE_MUT);
+   }
+
+   tree_t* var_val = parser_parse_expr(parser);       // set the value
+   tree_t* var_def = tree_init(TREE_VAR_DEF);         // create the var
+
+   var_def->data.var_def.name = var_name;
+   var_def->data.var_def.val = var_val;
+   var_def->data.var_def.is_const = &var_is_const;
+
+   return var_def;
+};
+
+tree_t* parser_parse_str(parser_t* parser) {};
+
+tree_t* parser_parse_keyword(parser_t* parser) {
+   if (strcmp(parser->token->value, "let")) {
+      return parser_parse_var_def(parser);
+   } else if (strcmp(parser->token->value, "fn")) {
+      return parser_parse_fn_def(parser);
+   } else {
+      return parser_parse_var(parser);
+   }
+}
 

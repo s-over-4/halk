@@ -119,7 +119,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                 lexer_get_c_as_string(lexer)
                 )
              ); break;
-         case '\0': return token_init(TOKEN_END, lexer_get_c_as_string(lexer)); break;
+         case '\0': return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); break;
          default:
             fputs("Unrecognized token.", stderr);
             exit(1);
