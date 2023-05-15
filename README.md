@@ -1,6 +1,6 @@
 # HALK
 
-![halk.](./HALK_FINAL.svg)
+<img src="./HALK_FINAL.svg" width="64">
 
 *HALK* seeks to be a language.
 
