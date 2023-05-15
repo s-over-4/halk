@@ -1,5 +1,7 @@
 # HALK
 
+![halk.](./HALK_FINAL.svg)
+
 *HALK* seeks to be a language.
 
 I seek to fulfill its wishes.
