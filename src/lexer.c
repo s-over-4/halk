@@ -180,6 +180,20 @@ token_t* lexer_get_def_const(lexer_t* lexer) {
       lexer_next(lexer);
       return token_init(TOKEN_DEFINE_CONST, "=>");
    } else {
+      fputs("Unknown variable state.", stderr);
+      exit(1);
+   }
+}
+
+token_t* lexer_get_def_var(lexer_t* lexer) {
+   lexer_pass(lexer);
+
+   if (lexer_next(lexer), lexer->c == '=') {
+      return lexer_get_def_const(lexer);
+   } else if (lexer_next(lexer), lexer->c == '-') {
+      return lexer_get_def_mut(lexer); 
+   } else {
+      fputs("Unknown variable state.", stderr);
       exit(1);
    }
 }
@@ -191,6 +205,7 @@ token_t* lexer_get_def_mut(lexer_t* lexer) {
       lexer_next(lexer);
       return token_init(TOKEN_DEFINE_MUT, "->");
    } else {
+      fputs("Unknown variable state.", stderr);
       exit(1);
    }
 }

@@ -21,8 +21,9 @@ extern token_t* lexer_get_next_token(lexer_t* lexer);
 extern token_t* lexer_get_string(lexer_t* lexer);
 
 extern token_t* lexer_get_def_const(lexer_t* lexer);
-
 extern token_t* lexer_get_def_mut(lexer_t* lexer);
+
+extern token_t* lexer_get_def_var(lexer_t* lexer);
 
 extern token_t* lexer_get_comment(lexer_t* lexer);
 
