@@ -31,7 +31,7 @@ void parser_check_expect(parser_t* parser, int token_type) {
 
 // creates the abstract syntax tree
 tree_t* parser_parse(parser_t* parser) {
-   return parser_parse_chunks();
+   return parser_parse_chunks(parser);
 }
 
 tree_t* parser_parse_token_id(parser_t* parser) {
@@ -47,6 +47,11 @@ tree_t* parser_parse_chunk(parser_t* parser) {
    switch (parser->token->type) {
       case TOKEN_KEYWORD: {
          return parser_parse_keyword(parser);
+         break;
+      }
+      default: {
+         fputs("smthn smthn \"invalid syntax,\" idk.", stderr);
+         exit(1);
       }
    }
 }
