@@ -34,7 +34,7 @@ tree_t* parser_parse(parser_t* parser) {
 }
 
 tree_t* parser_parse_token_id(parser_t* parser) {
-   if (strcmp(parser->token->value, "var")) {
+   if (strcmp(parser->token->value, "let")) {
       return parser_parse_var(parser);
    } else { // if id not recognized, check for variables under that name
       return parser_parse_var_def(parser);
@@ -49,7 +49,7 @@ tree_t* parser_parse_chunk(parser_t* parser) {
          break;
       }
       default: {
-         log_dbg("Skiping non-keyword token");
+         log_dbg("Skipping non-keyword token");
          lexer_next(parser->lexer);         
          break;
       }
@@ -80,7 +80,18 @@ tree_t* parser_parse_chunks(parser_t* parser) {
    return subtree;
 }
 
-tree_t* parser_parse_expr(parser_t* parser) {};
+tree_t* parser_parse_expr(parser_t* parser) {
+   switch (parser->token->type) {
+      case TOKEN_STR: 
+         parser_parse_str(parser);
+         break;
+                     
+      default:
+         log_war("Skipping unknown token");
+         lexer_next(parser->lexer);
+               
+   }
+};
 
 tree_t* parser_parse_fac(parser_t* parser) {};
 
@@ -129,7 +140,15 @@ tree_t* parser_parse_var_def(parser_t* parser) {
    return var_def;
 };
 
-tree_t* parser_parse_str(parser_t* parser) {};
+tree_t* parser_parse_str(parser_t* parser) {
+   log_dbg("Entered str");
+   tree_t* str = tree_init(TREE_STR);
+   str->data.str.val = parser->token->value;
+   
+   parser_check_expect(parser, TOKEN_STR);
+
+   return str;
+};
 
 tree_t* parser_parse_keyword(parser_t* parser) {
    if (strcmp(parser->token->value, "let")) {

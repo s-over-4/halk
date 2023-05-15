@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
    long fsource_size;
    char *source;
 
-   fsource = fopen ("examples/hello.halk", "rb");
+   fsource = fopen ("examples/simple.halk", "rb");
    if (!fsource) { 
       log_err("Source file not found");
       exit(1); 
@@ -49,6 +49,7 @@ int main(int argc, char* argv[]) {
    log_inf("Tree root created");
 
    printf("TYPE: [%d]\n", tree->type);
+   printf("SIZE: [%d]\n", tree->data.subtree.size);
 
    fclose(fsource);
 
