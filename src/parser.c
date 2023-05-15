@@ -22,7 +22,7 @@ void parser_check_expect(parser_t* parser, int token_type) {
    if (parser->token->type == token_type) {
       parser->token = lexer_get_next_token(parser->lexer);
    } else {
-      printf("[ERRR] [%d]\n\tUnexpected token '%s' with type '%d'.", 
+      fprintf(stderr, "[ERRR] [%d]\n\tUnexpected token '%s' with type '%d'.", 
       parser->lexer->i, parser->token->value, parser->token->type);
 
       exit(1);
@@ -96,6 +96,7 @@ tree_t* parser_parse_var_def(parser_t* parser) {
    parser_check_expect(parser, TOKEN_KEYWORD);        // let
    char* var_name = parser->token->value;             // set variable name
    parser_check_expect(parser, TOKEN_KEYWORD);        // expect variable name & advance
+
    if (parser->token->type == TOKEN_DEFINE_CONST) {   // check either constant or mutable variable
       var_is_const = 1;
       parser_check_expect(parser, TOKEN_DEFINE_CONST);

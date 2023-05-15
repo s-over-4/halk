@@ -1,9 +1,12 @@
-#include "include/lexer.h" 
-#include "include/token.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
+
+
+#include "include/log.h"
+#include "include/lexer.h" 
+#include "include/token.h"
 
 
 lexer_t* lexer_init(char* content) {
@@ -121,7 +124,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
              ); break;
          case '\0': return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); break;
          default:
-            fputs("Unrecognized token.", stderr);
+            log_err("Unrecognized token");
             exit(1);
       }
    }
@@ -180,7 +183,7 @@ token_t* lexer_get_def_const(lexer_t* lexer) {
       lexer_next(lexer);
       return token_init(TOKEN_DEFINE_CONST, "=>");
    } else {
-      fputs("Unknown variable state.", stderr);
+      log_err("Unknown variable state.");
       exit(1);
    }
 }
@@ -193,7 +196,7 @@ token_t* lexer_get_def_var(lexer_t* lexer) {
    } else if (lexer_next(lexer), lexer->c == '-') {
       return lexer_get_def_mut(lexer); 
    } else {
-      fputs("Unknown variable state.", stderr);
+      log_err("Unknown variable state.");
       exit(1);
    }
 }
@@ -205,7 +208,7 @@ token_t* lexer_get_def_mut(lexer_t* lexer) {
       lexer_next(lexer);
       return token_init(TOKEN_DEFINE_MUT, "->");
    } else {
-      fputs("Unknown variable state.", stderr);
+      log_err("Unknown variable state.");
       exit(1);
    }
 }

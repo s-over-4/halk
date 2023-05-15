@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 
+#include "include/log.h"
 #include "include/lexer.h"
 #include "include/tree.h"
 
@@ -48,6 +49,8 @@ int main(int argc, char* argv[]) {
    }
 
    lexer_destroy(lexer);
+
+   log_inf("Lexer destroyed.");
 
    return 0;
 }
