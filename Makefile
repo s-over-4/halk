@@ -1,6 +1,5 @@
 exec = halk.out
 sources := $(wildcard src/*.c)
-sources := $(filter-out src/parser.c, $(sources)) # exclude the incomplete parser for now.
 objects = $(sources:.c=.o)
 flags = -g
 
