@@ -49,8 +49,9 @@ tree_t* parser_parse_chunk(parser_t* parser) {
          break;
       }
       default: {
-         fputs("smthn smthn \"invalid syntax,\" idk.", stderr);
-         exit(1);
+         log_dbg("Skiping non-keyword token");
+         lexer_next(parser->lexer);         
+         break;
       }
    }
 }

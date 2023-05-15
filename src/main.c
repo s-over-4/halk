@@ -4,6 +4,7 @@
 #include "include/log.h"
 #include "include/lexer.h"
 #include "include/tree.h"
+#include "include/parser.h"
 
 
 int main(int argc, char* argv[]) {
@@ -13,7 +14,7 @@ int main(int argc, char* argv[]) {
 
    fsource = fopen ("examples/hello.halk", "rb");
    if (!fsource) { 
-      fputs("Source file not found.", stderr); 
+      log_err("Source file not found");
       exit(1); 
    };
 
@@ -25,32 +26,33 @@ int main(int argc, char* argv[]) {
 
    if (!source) { 
       fclose(fsource); 
-      fputs("Memory allocation failed.", stderr);
+      log_err("Memory allocation failed");
       exit(1); 
    }
 
    if (1 != fread(source, fsource_size, 1, fsource)) {
       fclose(fsource); 
       free(source);
-      fputs("Could not read source file.", stderr); 
+      log_err("Could not read source file");
       exit(1);
    }
 
+   log_inf("Source file loaded");
+
+   lexer_t* lexer = lexer_init(source);
+   log_inf("Lexer created");
+
+   parser_t* parser = parser_init(lexer);
+   log_inf("Parser created");
+
+   tree_t* tree = parser_parse(parser);
+   log_inf("Tree root created");
+
+   printf("TYPE: [%d]\n", tree->type);
+
    fclose(fsource);
 
-   lexer_t* lexer = lexer_init( source );
-
-   printf("\n=== INPUT =======\n%s\n=== END INPUT ===\n", lexer->content);
-
-   token_t* token = NULL;
-
-   while ((token = lexer_get_next_token(lexer)) != NULL) {
-      printf("===\ntoken type: %d\ntoken value: %s\n===\n", token->type, token->value);
-   }
-
-   lexer_destroy(lexer);
-
-   log_inf("Lexer destroyed.");
+   log_inf("Source file closed");
 
    return 0;
 }

@@ -265,4 +265,6 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 void lexer_destroy(lexer_t* lexer) {
    free(lexer->content);
    free(lexer);
+
+
 }
