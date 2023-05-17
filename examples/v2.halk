@@ -1,0 +1,16 @@
+` new syntax `
+
+#include."IO.halk";           ` preprocessor directives start with '#' and end with ';' `
+#macro."PI","3.14159";        ` replace every instance of PI with 3.14159 `
+
+
+` mut:?<some type>:<some name> = <some value>; `
+
+str:hello = "Hello";          ` by default, variables are immutable `
+mut:str:world = "world"       ` one can create an immutable variable with mut: `
+
+void:say_hello.str:to = {     ` functions need no special keyword `
+   io.stdout.to;        
+}
+
+

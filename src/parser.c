@@ -21,6 +21,7 @@ parser_t* parser_init(lexer_t* lexer) {
 // check for expected token, or throw syntax error
 void parser_check_expect(parser_t* parser, int token_type) {
    if (parser->token->type == token_type) {
+      log_dbg(strcat("Got expected token", lexer_get_c_as_string(parser->lexer)));
       parser->token = lexer_get_next_token(parser->lexer);
    } else {
       log_err("Unexpected token");
