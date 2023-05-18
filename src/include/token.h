@@ -28,13 +28,18 @@ typedef struct TOKEN_STRUC {
     char* value;
 } token_t;
 
-int char_could_start_keyword(char* character);
-int char_could_split_keyword(char* character);
-
 char TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS[] = "abcdefghijklmnopqrstuvwxyz_";   // chars that can begin a var name
+int  TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS_LEN = 27; // maximum efficiency!
 char TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS[] = "1234567890_-";                  // chars that can be in the rest of the var name,
                                                                                  // not including the ones already defined to begin
                                                                                  // one.
+int  TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS_LEN = 12;
+char TOKEN_CHAR_IGNORE[] = " \t\n\r";  // characters to ignore while parsing tokens
+int  TOKEN_CHAR_IGNORE_LEN = 4;
+
+int char_could_start_keyword(char* character);
+int char_could_split_keyword(char* character);
+int char_can_ignore(char* character);
 
 
 #endif
