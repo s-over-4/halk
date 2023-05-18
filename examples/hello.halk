@@ -1,37 +1,40 @@
-[comments in square brackets]
+` comments in backticks `
 
-[preprocessor directives]
-#INCLUDE 'math.halk';                                    [looks for a 'math.halk' file in the cwd, then ~/halk/include]
-#INCLUDE 'io' AS '';                                     [bring everything in 'io' into global scope]
+` preprocessor directives `
+#INCLUDE.'math', 'm';                                    ` bring the math library into scope, under the namespace 'm' ` 
+#INCLUDE.'io', '';                                       ` bring the io library into global scope (with no namespace) `
 
 
-let.hello -> 'hello, ';                                  [variables must be given a value at declaration]
+str:hello = 'hello, ';                                   ` variables must be given a value at declaration `
 
-let.PI => math:PI;                                       [namespaces are accessed with a ':'']
-                                                         [constants are denoted with a '=>']
+int:PI = math/PI;                                        ` namespaces are accessed with a '/'' `
 
-fn.greeting,to -> {                                      [functions defined with: `fn.<name>,<argument>,..., -> {<body>};`] 
-   let.message -> strcat.hello,to;                       [functions are right-associative]
+void:greeting. str:to = {                                ` functions declared the same way as variables, but with a . after 
+                                                         the name, followed by arguments `
 
-   stdo.message;                                         [since 'io' was brought into global scope, we
-                                                         do not prefix it with a namespace/]
-};
+   str:message = strcat.hello, to;                       ` function application is right-associative `
 
-fn.sum_all,_ -> {                                        [variadic functions are possible with the reserved '_' argument,
-                                                         which is treated as an array]
-   return.foldl.sum,0,_;  
-};
+   stdo.message;                                         ` since 'io' was brought into global scope, we
+                                                         do not prefix it with a namespace/ `
+}
 
-fn.fibonacci,n -> {
-   if.or.(eq.n, 0), (eq.n, 1) -> {                       [functions ending in '?' should be predicates]
+int:sum_all. any[]:_  = {                                ` variadic functions are possible with the reserved '_' argument,
+                                                         which is treated as an array `
+   return.foldl.sum, 0, _;  
+}
+
+int:fibonacci. int:n = {
+   if.(eq.n, 0), {
       return.1;
-   };
-   return.sum.
-      (fibonacci. sub.n, 1), 
-      (fibonacci. sub.n, 2);   
-};
+   }, {
+      return.sum.
+         (fibonacci.(sub.n, 1)),
+         (fibonacci.(sub.n, 2));
+   }
+}
 
-fn.main -> {                                             [where our code will begin executing]
-   greeting.[comments can be placed *anywhere*]'world.';
-   exit.0;                                               [exit with code 0 for success]
-};
+int:main. str[]:args = {                                 ` where code will begin executing `
+   greeting.` comments can be placed *anywhere* `'world.';
+
+   return.0;
+}
