@@ -13,4 +13,6 @@ void:say_hello.str:to = {     ` functions need no special keyword `
    io.stdout.to;        
 }
 
-
+int:main.str[]:args = {       ` start executing here `
+   return.0;
+}
