@@ -9,6 +9,11 @@
 #include "include/token.h"
 
 
+// TODO:
+// lexer_valid(lexer) -> bool
+// whether at EOF, already defined just make it cleaner
+
+
 lexer_t* lexer_init(char* content) {
    lexer_t* lexer = calloc(1, sizeof(struct LEXER_STRUC));
 
@@ -27,26 +32,16 @@ void lexer_next(lexer_t* lexer) {
 }
 
 void lexer_pass(lexer_t* lexer) {
-   while (
-   lexer->c == ' ' ||
-   lexer->c == '\t' ||
-   lexer->c == '\n') {
+   while (char_can_ignore(&lexer->c)) {
       lexer_next(lexer);
    }
 }
 
 token_t* lexer_get_next_token(lexer_t* lexer) {
    while (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
-      if (
-         lexer->c == ' '   ||
-         lexer->c == '\t'  ||
-         lexer->c == '\n'
-      ) { lexer_pass(lexer); }
 
-      if (
-            isalnum(lexer->c) ||
-            lexer->c == '_'
-      ) { return lexer_get_keyword(lexer); }
+      if (char_can_ignore(&lexer->c)) { lexer_pass(lexer); }
+      if (char_could_start_keyword(&lexer->c)) { return lexer_get_keyword(lexer); }
 
       switch (lexer->c) {
          case '\'': 
