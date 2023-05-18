@@ -47,11 +47,11 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          case '\'': 
             return lexer_get_string(lexer); break;
          case '[': 
-            return lexer_get_comment(lexer); break;
+            return lexer_get_array(lexer); break;
          case ']': return lexer_next_token(
             lexer,
             token_init(
-               TOKEN_COMM_DELIM_END,
+               TOKEN_ARRAY_DELIM_END,
                lexer_get_c_as_string(lexer)
             )
          ); break;
@@ -62,21 +62,21 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          case ';': return lexer_next_token(
             lexer,
             token_init(
-               TOKEN_END,
+               TOKEN_EOF,
                lexer_get_c_as_string(lexer)
             )
          ); break;
          case '(': return lexer_next_token(
             lexer,
             token_init(
-               TOKEN_LORD,
+               TOKEN_LGROUP,
                lexer_get_c_as_string(lexer)
             )
          ); break;
          case ')': return lexer_next_token(
             lexer,
             token_init(
-               TOKEN_RORD,
+               TOKEN_RGROUP,
                lexer_get_c_as_string(lexer)
             )
          ); break;
@@ -99,7 +99,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          case ':': return lexer_next_token(
              lexer,
              token_init(
-                TOKEN_MODULE_MEMBER_DELIM,
+                TOKEN_VAR_DEF_ARGS_DELIM,
                 lexer_get_c_as_string(lexer)
                 )
              ); break;
