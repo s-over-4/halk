@@ -1,23 +1,13 @@
-[the Y combinator, implemented in HALK. Note the
-use of '=>' instead of '->', to denote a function
-whom's arguments are immutable.]
+` the Y-Combinator in HALK `
+` an empty : when not proceeded by a type is shorthand for any: `
 
-let.Y => {
-   λ.b => {
-      (λ.f => { b.λ.x => { (f.f).x } }).
-      (λ.f => { b.λ.x => { (f.f).x } });
+
+:Y = {
+   :λ.:f = {
+      :λ.:x = {
+         f.x.x
+      }. :λ.:x = {
+         f.x.x
+      }
    }
 }
-
-let.Fact => {
-   Y.λ.fact => {λ.n => {
-      if.(zero?.n), {
-         1;
-      }, {
-         *.n, (fact. -.n, 1);
-      }
-   }}
-}
-
-(define Fact
-  (Y (λ (fact) (λ (n) (if (zero? n) 1 (* n (fact (- n 1))))))))
