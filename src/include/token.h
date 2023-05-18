@@ -16,7 +16,8 @@ typedef struct TOKEN_STRUC {
       TOKEN_DIRECTIVE,           // #DIRECTIVE;
       TOKEN_FN_APPLY,            // .
       TOKEN_LIST_DELIM,          // ,
-      TOKEN_DEF_ARGS_DELIM,      // :
+      TOKEN_DEF_TAGS_DELIM,      // :
+      TOKEN_DEF,                 // def:def
       TOKEN_BLOCK_DELIM_START,   // {
       TOKEN_BLOCK_DELIM_END,     // }
       TOKEN_NAMESPACE_DELIM,     // /
@@ -27,6 +28,8 @@ typedef struct TOKEN_STRUC {
 
     char* value;
 } token_t;
+
+token_t* token_init(int type, char* val);
 
 char TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS[] = "abcdefghijklmnopqrstuvwxyz_";   // chars that can begin a var name
 int  TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS_LEN = 27; // maximum efficiency!

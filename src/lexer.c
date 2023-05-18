@@ -9,11 +9,6 @@
 #include "include/token.h"
 
 
-// TODO:
-// lexer_valid(lexer) -> bool
-// whether at EOF, already defined just make it cleaner
-
-
 lexer_t* lexer_init(char* content) {
    lexer_t* lexer = calloc(1, sizeof(struct LEXER_STRUC));
 
@@ -24,8 +19,13 @@ lexer_t* lexer_init(char* content) {
    return lexer;
 }
 
+void lexer_destroy(lexer_t* lexer) {
+   free(lexer->content);
+   free(lexer);
+}
+
 void lexer_next(lexer_t* lexer) {
-   if (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
+   if (LEXER_VALID) {
       lexer->i += 1;
       lexer->c = lexer->content[lexer->i]; 
    }
@@ -38,34 +38,36 @@ void lexer_pass(lexer_t* lexer) {
 }
 
 token_t* lexer_get_next_token(lexer_t* lexer) {
-   while (lexer->c != '\0' && lexer->i < strlen(lexer->content)) {
+   while (LEXER_VALID) {
 
-      if (char_can_ignore(&lexer->c)) { lexer_pass(lexer); }
-      if (char_could_start_keyword(&lexer->c)) { return lexer_get_keyword(lexer); }
+      if (char_can_ignore(&lexer->c)) { 
+         lexer_pass(lexer); 
+      }
+
+      if (char_could_start_keyword(&lexer->c)) { 
+         return lexer_get_keyword(lexer); 
+      }
 
       switch (lexer->c) {
-         case '\'': 
-            return lexer_get_string(lexer); break;
-         case '[': 
-            return lexer_get_array(lexer); break;
-         case ']': return lexer_next_token(
-            lexer,
-            token_init(
-               TOKEN_ARRAY_DELIM_END,
-               lexer_get_c_as_string(lexer)
-            )
-         ); break;
+         case '\'':
+            return lexer_get_string(lexer); 
+            break;
+         case '`': 
+            return lexer_get_comment(lexer); 
+            break;
+         case ';':
+            return lexer_next_token(
+                  lexer,
+                  token_init(
+                     TOKEN_EXPR_END,
+                     lexer_get_c_as_string(lexer)
+                     )
+                  );
+            break;
          case '=':
             return lexer_get_def_const(lexer); break;
          case '-':
             return lexer_get_def_mut(lexer); break;
-         case ';': return lexer_next_token(
-            lexer,
-            token_init(
-               TOKEN_EOF,
-               lexer_get_c_as_string(lexer)
-            )
-         ); break;
          case '(': return lexer_next_token(
             lexer,
             token_init(
@@ -127,121 +129,6 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
    return NULL;
 }
 
-token_t* lexer_get_string(lexer_t* lexer) {
-   lexer_next(lexer);
-   
-   char* str_so_far = calloc(1, sizeof(char));
-   str_so_far[0] = '\0';
-
-   while (lexer->c != '\'') {
-      char* current = lexer_get_c_as_string(lexer);
-      str_so_far = realloc(
-            str_so_far, 
-            (strlen(str_so_far) + strlen(current) * sizeof(char))
-      );
-
-      strcat(str_so_far, current);
-
-      lexer_next(lexer);
-   }
-
-   lexer_next(lexer);   // skip over closing "
-
-   return token_init(TOKEN_STR, str_so_far);
-}
-
-token_t* lexer_get_comment(lexer_t* lexer) {
-   lexer_next(lexer);
-
-   char* comment_so_far = calloc(1, sizeof(char));
-
-   while (lexer->c != ']') {
-      char* current = lexer_get_c_as_string(lexer);
-      comment_so_far = realloc(
-            comment_so_far, 
-            (strlen(comment_so_far) + strlen(current) * sizeof(char))
-      );
-
-      strcat(comment_so_far, current);
-      lexer_next(lexer);
-   }
-
-   lexer_next(lexer);   // skip over closing ]
-
-   return token_init(TOKEN_COMM, comment_so_far);
-}
-
-token_t* lexer_get_def_const(lexer_t* lexer) {
-   lexer_pass(lexer);
-
-   if (lexer_next(lexer), lexer->c == '>') {
-      lexer_next(lexer);
-      return token_init(TOKEN_DEFINE_CONST, "=>");
-   } else {
-      log_err("Unknown variable state.");
-      exit(1);
-   }
-}
-
-token_t* lexer_get_def_var(lexer_t* lexer) {
-   lexer_pass(lexer);
-
-   if (lexer_next(lexer), lexer->c == '=') {
-      return lexer_get_def_const(lexer);
-   } else if (lexer_next(lexer), lexer->c == '-') {
-      return lexer_get_def_mut(lexer); 
-   } else {
-      log_err("Unknown variable state.");
-      exit(1);
-   }
-}
-
-token_t* lexer_get_def_mut(lexer_t* lexer) {
-   lexer_pass(lexer);
-
-   if (lexer_next(lexer), lexer->c == '>') {
-      lexer_next(lexer);
-      return token_init(TOKEN_DEFINE_MUT, "->");
-   } else {
-      log_err("Unknown variable state.");
-      exit(1);
-   }
-}
-
-token_t* lexer_get_directive(lexer_t* lexer) {
-   lexer_next(lexer);
-   
-   char* directive_so_far = calloc(1, sizeof(char));
-   directive_so_far[0] = '\0';
-
-   while (lexer->c != ';') {
-      char* current = lexer_get_c_as_string(lexer);
-      directive_so_far = realloc(directive_so_far, (strlen(directive_so_far) + strlen(current) * sizeof(char)));
-      strcat(directive_so_far, current);
-      lexer_next(lexer);
-   }
-
-   lexer_next(lexer);
-
-   return token_init(TOKEN_DIRECTIVE, directive_so_far);
-}
-
-token_t* lexer_get_keyword(lexer_t* lexer) {
-   char* keyword_so_far = calloc(1, sizeof(char));
-   keyword_so_far[0] = '\0';
-
-   while (isalnum(lexer->c)) {
-      char* current = lexer_get_c_as_string(lexer);
-      keyword_so_far = realloc(keyword_so_far, (strlen(keyword_so_far) + strlen(current) * sizeof(char)));
-      strcat(keyword_so_far, current);
-      lexer_next(lexer);
-   }
-
-   lexer_next(lexer);
-
-   return token_init(TOKEN_KEYWORD, keyword_so_far);
-}
-
 token_t* lexer_next_token(lexer_t* lexer, token_t* token) {
    lexer_next(lexer);
 
@@ -253,13 +140,124 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
    str[0] = lexer->c;
    str[1] = '\0';
    
-
    return str;
 }
 
-void lexer_destroy(lexer_t* lexer) {
-   free(lexer->content);
-   free(lexer);
+// TODO: abstract away this kind of thing
+token_t* lexer_get_array(lexer_t* lexer) {
+   lexer_next(lexer);   // skip opening [
+   char* array_so_far = calloc(1, sizeof(char));
+   array_so_far[0] = '\0';
 
+   while (lexer->c != ']') {
+      char* current = lexer_get_c_as_string(lexer);
+      array_so_far = realloc(
+         array_so_far,
+         (strlen(array_so_far) + strlen(current) * sizeof(char))
+      );
 
+      strcat(array_so_far, current);
+      lexer_next(lexer);
+   }
+
+   lexer_next(lexer);   // skip over closing ]
+
+   return token_init(TOKEN_STR, array_so_far); // return the collected array
+}
+
+token_t* lexer_get_string(lexer_t* lexer) {
+   lexer_next(lexer);
+   char* str_so_far = calloc(1, sizeof(char));
+   str_so_far[0] = '\0';
+
+   while (lexer->c != '\'') {
+      char* current = lexer_get_c_as_string(lexer);
+      str_so_far = realloc(
+            str_so_far, 
+            (strlen(str_so_far) + strlen(current) * sizeof(char))
+      );
+
+      strcat(str_so_far, current);
+      lexer_next(lexer);
+   }
+
+   lexer_next(lexer);   // skip over closing '
+
+   return token_init(TOKEN_STR, str_so_far); // return the collected string
+}
+
+token_t* lexer_get_comment(lexer_t* lexer) {
+   lexer_next(lexer);
+
+   char* comment_so_far = calloc(1, sizeof(char));
+
+   while (lexer->c != '`') {
+      char* current = lexer_get_c_as_string(lexer);
+      comment_so_far = realloc(
+            comment_so_far, 
+            (strlen(comment_so_far) + strlen(current) * sizeof(char))
+      );
+
+      strcat(comment_so_far, current);
+      lexer_next(lexer);
+   }
+
+   lexer_next(lexer);   // skip over closing `
+
+   return token_init(TOKEN_COMM, comment_so_far);
+}
+
+token_t* lexer_get_directive(lexer_t* lexer) {
+   lexer_next(lexer);
+   char* directive_so_far = calloc(1, sizeof(char));
+   directive_so_far[0] = '\0';
+
+   while (lexer->c != ';') {
+      char* current = lexer_get_c_as_string(lexer);
+      directive_so_far = realloc(
+         directive_so_far, 
+         (strlen(directive_so_far) + strlen(current) * sizeof(char))
+      );
+
+      strcat(directive_so_far, current);
+      lexer_next(lexer);
+   }
+
+   lexer_next(lexer);   // skip over closing ;
+
+   return token_init(TOKEN_DIRECTIVE, directive_so_far);
+}
+
+token_t* lexer_get_keyword(lexer_t* lexer) {
+   char* keyword_so_far = calloc(1, sizeof(char));
+   keyword_so_far[0] = '\0';
+   while (char_could_split_keyword(&lexer->c)) {
+      char* current = lexer_get_c_as_string(lexer);
+      keyword_so_far = realloc(
+         keyword_so_far,
+         (strlen(keyword_so_far) + strlen(current) * sizeof(char))
+      );
+
+      strcat(keyword_so_far, current);
+      lexer_next(lexer);
+   }
+
+   return token_init(TOKEN_KEYWORD, keyword_so_far);
+}
+
+token_t* lexer_get_def(lexer_t* lexer) {
+   char* def_so_far = calloc(1, sizeof(char));
+   def_so_far[0] = '\0';
+   while (lexer->c != '=') {
+      char* current = lexer_get_c_as_string(lexer);
+      def_so_far = realloc(
+         def_so_far,
+         (strlen(def_so_far) + strlen(current) * sizeof(char))
+      );
+
+      strcat(def_so_far, current);
+      lexer_next(lexer);
+   }
+
+   return token_init(TOKEN_DEF, def_so_far);
 }
