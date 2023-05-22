@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 
 #include "include/log.h"
 #include "include/lexer.h"
-#include "include/tree.h"
-#include "include/parser.h"
+// #include "include/tree.h"
+// #include "include/parser.h"
 
 
 int main(int argc, char* argv[]) {
@@ -42,14 +43,24 @@ int main(int argc, char* argv[]) {
    lexer_t* lexer = lexer_init(source);
    log_inf("Lexer created");
 
-   parser_t* parser = parser_init(lexer);
-   log_inf("Parser created");
+   log_inf("== BEGIN INPUT ==");
+   log_inf(lexer->content);
+   log_inf("=== END INPUT ===");
 
-   tree_t* tree = parser_parse(parser);
-   log_inf("Tree root created");
+   token_t* token = NULL;
 
-   printf("TYPE: [%d]\n", tree->type);
-   printf("SIZE: [%d]\n", tree->data.subtree.size);
+   while ((token = lexer_get_next_token(lexer)) != NULL) {
+      printf("===\ntoken type: %d:\ntoken value: || %s ||\n===\n", token->type, token->value);
+   }
+
+   //parser_t* parser = parser_init(lexer);
+   //log_inf("Parser created");
+
+   //tree_t* tree = parser_parse(parser);
+   //log_inf("Tree root created");
+
+   //printf("TYPE: [%d]\n", tree->type);
+   //printf("SIZE: [%d]\n", tree->data.subtree.size);
 
    fclose(fsource);
 

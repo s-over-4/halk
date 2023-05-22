@@ -37,6 +37,16 @@ int char_could_split_keyword(char* character) {
    }
 }
 
+int char_could_start_int(char* character) {
+   for (int i = 0; i < 10; ++ i) {
+      if (TOKEN_CHAR_FIRST_CHAR_INT[i] == *character) {
+         return 1;
+      }
+   }
+
+   return 0;
+}
+
 int char_can_ignore(char* character) {
    for (int i = 0; i < TOKEN_CHAR_IGNORE_LEN; ++ i) {
       if (TOKEN_CHAR_IGNORE[i] == *character) {

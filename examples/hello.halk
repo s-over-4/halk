@@ -1,9 +1,9 @@
 ` comments in backticks `
 
 ` preprocessor directives `
-#INCLUDE.'math', 'm';                                    ` bring the math library into scope, under the namespace 'm' ` 
-#INCLUDE.'io', '';                                       ` bring the io library into global scope (with no namespace) `
-
+#INCLUDE##math#
+#INCLUDE##io#
+` source code begins here `
 
 str:hello = 'hello, ';                                   ` variables must be given a value at declaration `
 

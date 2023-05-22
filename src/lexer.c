@@ -6,7 +6,6 @@
 
 #include "include/log.h"
 #include "include/lexer.h" 
-#include "include/token.h"
 
 
 lexer_t* lexer_init(char* content) {
@@ -40,13 +39,17 @@ void lexer_pass(lexer_t* lexer) {
 token_t* lexer_get_next_token(lexer_t* lexer) {
    while (LEXER_VALID) {
 
-      if (char_can_ignore(&lexer->c)) { 
-         lexer_pass(lexer); 
+      if (char_can_ignore(&lexer->c)) { lexer_pass(lexer); }
+      if (char_could_start_int(&lexer->c)) {
+         return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_PRIM_INT,
+                  lexer_get_c_as_string(lexer)
+                  )
+               );
       }
-
-      if (char_could_start_keyword(&lexer->c)) { 
-         return lexer_get_keyword(lexer); 
-      }
+      if (char_could_start_keyword(&lexer->c)) {  return lexer_get_keyword(lexer); }
 
       switch (lexer->c) {
          case '\'':
@@ -65,9 +68,13 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                   );
             break;
          case '=':
-            return lexer_get_def_const(lexer); break;
-         case '-':
-            return lexer_get_def_mut(lexer); break;
+            return lexer_next_token(
+                  lexer,
+                  token_init(
+                     TOKEN_DEF_SET,
+                     lexer_get_c_as_string(lexer)
+                     )
+                  ); break;
          case '(': return lexer_next_token(
             lexer,
             token_init(
@@ -101,10 +108,17 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          case ':': return lexer_next_token(
              lexer,
              token_init(
-                TOKEN_VAR_DEF_ARGS_DELIM,
+                TOKEN_DEF_TAGS_DELIM,
                 lexer_get_c_as_string(lexer)
                 )
              ); break;
+         case '/': return lexer_next_token(
+                         lexer,
+                         token_init(
+                            TOKEN_NAMESPACE_DELIM,
+                            lexer_get_c_as_string(lexer)
+                            )
+                         ); break;
          case '{': return lexer_next_token(
              lexer,
              token_init(
@@ -119,9 +133,11 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                 lexer_get_c_as_string(lexer)
                 )
              ); break;
+         case '[': return lexer_get_array(lexer); break;
          case '\0': return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); break;
          default:
             log_err("Unrecognized token");
+            printf("%s", &lexer->c);
             exit(1);
       }
    }
@@ -162,7 +178,7 @@ token_t* lexer_get_array(lexer_t* lexer) {
 
    lexer_next(lexer);   // skip over closing ]
 
-   return token_init(TOKEN_STR, array_so_far); // return the collected array
+   return token_init(TOKEN_PRIM_STR, array_so_far); // return the collected array
 }
 
 token_t* lexer_get_string(lexer_t* lexer) {
@@ -183,13 +199,14 @@ token_t* lexer_get_string(lexer_t* lexer) {
 
    lexer_next(lexer);   // skip over closing '
 
-   return token_init(TOKEN_STR, str_so_far); // return the collected string
+   return token_init(TOKEN_PRIM_STR, str_so_far); // return the collected string
 }
 
 token_t* lexer_get_comment(lexer_t* lexer) {
    lexer_next(lexer);
 
    char* comment_so_far = calloc(1, sizeof(char));
+   comment_so_far[0] = '\0';
 
    while (lexer->c != '`') {
       char* current = lexer_get_c_as_string(lexer);
@@ -212,7 +229,7 @@ token_t* lexer_get_directive(lexer_t* lexer) {
    char* directive_so_far = calloc(1, sizeof(char));
    directive_so_far[0] = '\0';
 
-   while (lexer->c != ';') {
+   while (lexer->c != '#') {
       char* current = lexer_get_c_as_string(lexer);
       directive_so_far = realloc(
          directive_so_far, 
@@ -223,7 +240,7 @@ token_t* lexer_get_directive(lexer_t* lexer) {
       lexer_next(lexer);
    }
 
-   lexer_next(lexer);   // skip over closing ;
+   lexer_next(lexer);
 
    return token_init(TOKEN_DIRECTIVE, directive_so_far);
 }
@@ -241,6 +258,7 @@ token_t* lexer_get_keyword(lexer_t* lexer) {
       strcat(keyword_so_far, current);
       lexer_next(lexer);
    }
+
 
    return token_init(TOKEN_KEYWORD, keyword_so_far);
 }
