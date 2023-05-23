@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
    long fsource_size;
    char *source;
 
-   fsource = fopen ("examples/simple.halk", "rb");
+      fsource = fopen ("examples/hello.halk", "rb");
    if (!fsource) { 
       log_err("Source file not found");
       exit(1); 
