@@ -1,20 +1,26 @@
-exec = halk.out
-sources := $(wildcard src/*.c)
-objects = $(sources:.c=.o)
-sources := $(filter-out src/parser.c, $(sources)) # exclude the incomplete parser for now.
-flags = -g
+binname 			:= halk
+exec 				:= $(binname).out
+
+compiler 		:= clang
+flags 			:= -g
+
+sources 			:= $(wildcard src/*.c)
+sources 			:= $(filter-out src/parser.c, $(sources)) # exclude the incomplete parser for now.
+objects 			:= $(sources:.c=.o)
+
 
 $(exec): $(objects)
-	clang $(objects) $(flags) -o $(exec)
+	$(compiler) $(objects) $(flags) -o $(exec)
 
 %.o: %.c include/%.h
-	clang -c $(flags) $< -o $@
+	$(compiler) -c $(flags) $< -o $@
 
 install:
 	make
-	cp ./halk.out /usr/local/bin/halk
+	cp ./$(exec) /usr/local/bin/$(binname)
+
+uninstall:
+	rm -f /usr/local/bin/$(binname) 
 
 clean:
-	-rm *.out
-	-rm *.o
-	-rm src/*.o
+	rm -f *.out *.o src/*.o
