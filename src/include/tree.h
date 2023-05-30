@@ -10,6 +10,7 @@ typedef struct PRIM_STRUC {
    enum {
       STR,
       INT,
+      UNKWN,
       //ARR,
       //FLOAT,
       //STRUCT,
@@ -18,14 +19,18 @@ typedef struct PRIM_STRUC {
 
    union prim_union {
       struct str_struc {
-         unsigned int len;
+         unsigned int* len;
          char* val;
-      };
+      } prim_str;
 
       struct int_struc {
-         int val;
-      };
-   } with_value;
+         int* val;
+      } prim_int;
+
+      struct unkwn_struc {
+         void* val;
+      } prim_unkwn;
+   } val;
 } prim_t;
 
 typedef struct TREE_STRUC {
@@ -58,7 +63,7 @@ typedef struct TREE_STRUC {
          prim_t** args;
       } call;
 
-   } of_type;
+   } oftype;
 } tree_t;
 
 prim_t* prim_init(int type);
