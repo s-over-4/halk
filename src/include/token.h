@@ -12,9 +12,9 @@
 typedef struct TOKEN_STRUC {
    enum {
       TOKEN_KEYWORD,             // keyword
-      TOKEN_PRIM_STR_DELIM,           // '
-      TOKEN_PRIM_STR,                 // 'string'
-      TOKEN_PRIM_INT,                 // 'string'
+      TOKEN_PRIM_STR_DELIM,      // '
+      TOKEN_PRIM_STR,            // 'string'
+      TOKEN_PRIM_INT,            // 'string'
       TOKEN_COMM_DELIM,          // `
       TOKEN_COMM,                // `comment`
       TOKEN_EXPR_END,            // ;

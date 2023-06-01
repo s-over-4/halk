@@ -19,7 +19,7 @@ parser_t* parser_init(lexer_t* lexer) {
 }
 
 // check for expected token, or throw syntax error
-void parser_check_expect(parser_t* parser, int token_type) {
+void parser_token_expect(parser_t* parser, int token_type) {
    if (parser->token->type == token_type) {
       log_dbg(strcat("Got expected token", lexer_get_c_as_string(parser->lexer)));
       parser->token = lexer_get_next_token(parser->lexer);
@@ -31,14 +31,14 @@ void parser_check_expect(parser_t* parser, int token_type) {
 
 // creates the abstract syntax tree
 tree_t* parser_parse(parser_t* parser) {
-   return parser_parse_chunks(parser);
+   return parser_parse_hunks(parser);
 }
 
-tree_t* parser_parse_token_id(parser_t* parser) {
-   if (strcmp(parser->token->value, "let")) {
-      return parser_parse_var(parser);
-   } else { // if id not recognized, check for variables under that name
-      return parser_parse_var_def(parser);
+tree_t* parser_parse_token(parser_t* parser) {
+   if (parser_is_def_tag(parser->token->value)) {
+      return parser_parse_def(parser);
+   } else {
+      return parser_parse_call(parser);
    }
 }
 
@@ -166,3 +166,10 @@ tree_t* parser_parse_keyword(parser_t* parser) {
    }
 }
 
+
+int parser_is_def_tag(char* maybe_tag) {
+   if (strcmp(maybe_tag, "int") || 
+       strcmp(maybe_tag, "str")) {
+      return 1;
+   } else { return 0; }
+}

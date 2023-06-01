@@ -11,10 +11,6 @@ typedef struct PRIM_STRUC {
       STR,
       INT,
       UNKWN,
-      //ARR,
-      //FLOAT,
-      //STRUCT,
-      //NAMESPACE,
    } type; 
 
    union prim_union {
