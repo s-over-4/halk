@@ -1,32 +1,34 @@
 ` comments in backticks `
 
 ` preprocessor directives `
-#MACRO##PI##3.14159#
-#IFNDEF##HELLO#
-   #DEF##HELLO#
+#!PI# #3.14159#                                          ` define macros with #!<name># #<value># `
+#IFNDEF# #HELLO#                                         ` predefined macros are: IF, AND, OR, NOT, ELIF, ELSE, FI, INCLUDE `
+   #HELLO#                                               ` HELLO defined `
 #ENDIF#
+
+#INCLUDE# #io#                                           ` include the 'io' header `
+
 ` source code begins here `
 
-str:hello = 'hello, ';                                   ` variables must be given a value at declaration `
+:str:hello = 'hello, ';
 
-void:greeting. str:to = {                                ` functions declared the same way as variables, but with a . after 
+:void:greeting. :str:to = {                              ` functions declared the same way as variables, but with a . after 
                                                          the name, followed by arguments `
 
-   str:message = strcat.hello, to;                       ` function application is right-associative `
+   :str:message = strcat.hello, to;                      ` function application is right-associative `
 
-   stdo.message;                                         ` since 'io' was brought into global scope, we
-                                                         do not prefix it with a namespace/ `
+   io/stdo.message;                                      ` navigate namespaces with a '/' ` 
 }
 
-int:sum_all. int[]:_  = {                                ` variadic functions are possible with the reserved '_' argument,
+:int:sum_all. :int[]:_  = {                              ` variadic functions are possible with the reserved '_' argument,
                                                          which is treated as an array `
    return.foldl.sum, 0, _;  
 }
 
-namespace:new_namespace = {                              ` create a new namespace ` 
-   int:value = 1;
+:namespace:new_namespace = {                             ` create a new namespace ` 
+   :int:value = 1;
 
-   int:sum_all. int[]:_ = {
+   :int:sum_all. :int[]:_ = {
       return.foldl.sum,0,_;
    }
 }
@@ -36,7 +38,7 @@ check_expect.
    (sum_all. 1, 2, 3, 4), 
    (new_namespace/sum_all. 1, 2, 3, 4);
 
-int:fibonacci. int:n = {
+:int:fibonacci. :int:n = {
    if.(eq.n, 0), {
       return.1;
    }, {
@@ -46,8 +48,8 @@ int:fibonacci. int:n = {
    }
 }
 
-int:main. str[]:args = {                                 ` where code will begin executing `
-   greeting.'world.';                                    ` returns 'hello, world.' `
+:int:main. :str[]:args = {                               ` where code will begin executing `
+   greeting.'world.';                                    ` prints 'hello, world.' `
 
    return.0;
 }

@@ -1,5 +1,5 @@
 ` the Y-Combinator in HALK `
-` an empty : when not proceeded by a type is shorthand for any: `
+` an empty : when not proceeded by a type is shorthand for :any `
 
 
 :Y = {
