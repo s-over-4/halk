@@ -37,7 +37,7 @@ Examples can be found [here](examples/).
 ***HALK*** **progress:** 20%
 
 - [x] Lexer
-- [ ] Abstract Syntax Tree
-- [ ] Parser
+- [-] Abstract Syntax Tree
+- [x] Parser
 - [ ] Doer
 - [ ] ?? profit ??

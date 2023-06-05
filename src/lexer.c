@@ -53,10 +53,10 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
 
       switch (lexer->c) {
          case '\'':
-            return lexer_get_string(lexer); 
+            return lexer_get_str(lexer); 
             break;
          case '`': 
-            return lexer_get_comment(lexer); 
+            return lexer_get_com(lexer); 
             break;
          case ';':
             return lexer_next_token(
@@ -133,7 +133,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                 lexer_get_c_as_string(lexer)
                 )
              ); break;
-         case '[': return lexer_get_array(lexer); break;
+         case '[': return lexer_get_arr(lexer); break;
          case '\0': return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); break;
          default:
             log_err("Unrecognized token");
@@ -160,7 +160,7 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 }
 
 // TODO: abstract away this kind of thing
-token_t* lexer_get_array(lexer_t* lexer) {
+token_t* lexer_get_arr(lexer_t* lexer) {
    lexer_next(lexer);   // skip opening [
    char* array_so_far = calloc(1, sizeof(char));
    array_so_far[0] = '\0';
@@ -181,7 +181,7 @@ token_t* lexer_get_array(lexer_t* lexer) {
    return token_init(TOKEN_PRIM_STR, array_so_far); // return the collected array
 }
 
-token_t* lexer_get_string(lexer_t* lexer) {
+token_t* lexer_get_str(lexer_t* lexer) {
    lexer_next(lexer);
    char* str_so_far = calloc(1, sizeof(char));
    str_so_far[0] = '\0';
@@ -202,7 +202,7 @@ token_t* lexer_get_string(lexer_t* lexer) {
    return token_init(TOKEN_PRIM_STR, str_so_far); // return the collected string
 }
 
-token_t* lexer_get_comment(lexer_t* lexer) {
+token_t* lexer_get_com(lexer_t* lexer) {
    lexer_next(lexer);
 
    char* comment_so_far = calloc(1, sizeof(char));
@@ -263,19 +263,3 @@ token_t* lexer_get_keyword(lexer_t* lexer) {
    return token_init(TOKEN_KEYWORD, keyword_so_far);
 }
 
-token_t* lexer_get_def(lexer_t* lexer) {
-   char* def_so_far = calloc(1, sizeof(char));
-   def_so_far[0] = '\0';
-   while (lexer->c != '=') {
-      char* current = lexer_get_c_as_string(lexer);
-      def_so_far = realloc(
-         def_so_far,
-         (strlen(def_so_far) + strlen(current) * sizeof(char))
-      );
-
-      strcat(def_so_far, current);
-      lexer_next(lexer);
-   }
-
-   return token_init(TOKEN_DEF, def_so_far);
-}
