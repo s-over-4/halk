@@ -10,7 +10,7 @@
 #define TOKEN_CHAR_FIRST_CHAR_INT "0123456789"
 
 typedef struct TOKEN_STRUC {
-   enum {
+   enum TOKEN_ENUM {
       TOKEN_KEYWORD,             // keyword
       TOKEN_PRIM_STR_DELIM,      // '
       TOKEN_PRIM_STR,            // 'string'

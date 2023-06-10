@@ -1,14 +1,5 @@
-` comments in backticks `
 
-` preprocessor directives `
-#!PI# #3.14159#                                          ` define macros with #!<name># #<value># `
-#IFNDEF# #HELLO#                                         ` predefined macros are: IF, AND, OR, NOT, ELIF, ELSE, FI, INCLUDE `
-   #HELLO#                                               ` HELLO defined `
-#ENDIF#
-
-#INCLUDE# #io#                                           ` include the 'io' header `
-
-` source code begins here `
+:str:hello = 'qwertyuiopasdfghjklzxcvbnm1234567890lakjsdhfpqiuelljaksdfbvvvviu3o4448y5o23ilfn';
 
 :str:hello = 'hello, ';
 
