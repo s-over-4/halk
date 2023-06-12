@@ -1,6 +1,5 @@
 #include <stdlib.h>
 
-
 #include "include/token.h"
 
 

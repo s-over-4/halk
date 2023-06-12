@@ -1,20 +1,21 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
-#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS_LEN 53
-#define TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS "1234567890_-"
-#define TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS_LEN 12
-#define TOKEN_CHAR_IGNORE " \t\n\r"
-#define TOKEN_CHAR_IGNORE_LEN 4
-#define TOKEN_CHAR_FIRST_CHAR_INT "0123456789"
+#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
+#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS_LEN    53
+#define TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS        "1234567890_-"
+#define TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS_LEN    12
+#define TOKEN_CHAR_IGNORE                             " \t\n\r"
+#define TOKEN_CHAR_IGNORE_LEN                         4
+#define TOKEN_CHAR_FIRST_CHAR_INT                     "0123456789"
+
 
 typedef struct TOKEN_STRUC {
    enum TOKEN_ENUM {
       TOKEN_KEYWORD,             // keyword
       TOKEN_PRIM_STR_DELIM,      // '
       TOKEN_PRIM_STR,            // 'string'
-      TOKEN_PRIM_INT,            // 'string'
+      TOKEN_PRIM_INT,            // 42
       TOKEN_COMM_DELIM,          // `
       TOKEN_COMM,                // `comment`
       TOKEN_EXPR_END,            // ;

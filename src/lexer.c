@@ -3,7 +3,6 @@
 #include <ctype.h>
 #include <stdio.h>
 
-
 #include "include/log.h"
 #include "include/lexer.h" 
 
@@ -150,7 +149,6 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
 
 token_t* lexer_next_token(lexer_t* lexer, token_t* token) {
    lexer_next(lexer);
-
    return token;
 }
 
@@ -165,9 +163,7 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 // fskip: skip first char?
 // lskip: skip last char?
 token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int type) {
-   if (fskip) {
-      lexer_next(lexer);      // skip over starting character, e.g. opening quote or grave
-   }
+   if (fskip) { lexer_next(lexer); }
 
    size_t len = 0;            // length of collected token so far
    char* token = calloc(len, sizeof(char));
@@ -175,7 +171,7 @@ token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int 
 
    while (lexer->c != end_char) {
       char* current = lexer_get_c_as_string(lexer);
-      printf("[%p, %ld]\n", token, (strlen(token) + strlen(current) * sizeof(char)));
+      // printf("[%p, %ld]\n", token, (strlen(token) + strlen(current) * sizeof(char)));
       token = realloc(
          token,
          (len + strlen(current) * sizeof(char))
@@ -186,10 +182,7 @@ token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int 
       lexer_next(lexer);
    }
 
-   if (lskip) {
-      lexer_next(lexer);
-   }
-
+   if (lskip) { lexer_next(lexer); }
    token[len] = '\0';         // null terminate
 
    return token_init(type, token);
