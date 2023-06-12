@@ -1,6 +1,6 @@
 # HALK
 
-<img src="./HALK_FINAL.svg" width="384" align="right">
+<img src="./resources/HALK_FINAL.svg" width="384" align="right">
 
 *HALK* seeks to be a language.
 
@@ -15,9 +15,10 @@ As of yet, we are safe.
 As you have read these words, you are to install *HALK*.
 
 1. Clone *HALK* to a computer.
-2. `sudo make install`.
+2. `make install`.
 
-If you wish to remove all *HALK*-related items from your life, you can try `sudo make clean`.
+If you wish to remove all *HALK*-related items from your life, you can try `make clean`, followed 
+by `make uninstall`.
 
 # Usage
 
@@ -37,7 +38,7 @@ Examples can be found [here](examples/).
 ***HALK*** **progress:** 20%
 
 - [x] Lexer
-- [-] Abstract Syntax Tree
-- [x] Parser
+- [~] Abstract Syntax Tree
+- [ ] Parser
 - [ ] Doer
 - [ ] ?? profit ??
