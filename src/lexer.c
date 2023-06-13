@@ -171,7 +171,6 @@ token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int 
 
    while (lexer->c != end_char) {
       char* current = lexer_get_c_as_string(lexer);
-      // printf("[%p, %ld]\n", token, (strlen(token) + strlen(current) * sizeof(char)));
       token = realloc(
          token,
          (len + strlen(current) * sizeof(char))

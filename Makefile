@@ -13,10 +13,10 @@ $(name): $(objects)
 
 install:
 	make
-	cp ./$(name) $(XDG_DATA_HOME)/bin/$(name)
+	[ $(XDG_DATA_HOME) ] && cp ./$(name) $(XDG_DATA_HOME)/bin/$(name) || cp ./$(name) /usr/local/bin/$(name)
 
 uninstall:
-	rm -f $(XDG_DATA_HOME)/bin/$(name)
+	[ $(XDG_DATA_HOME) ] && rm -f $(XDG_DATA_HOME)/bin/$(name) || rm -f /usr/local/bin/$(name)
 
 clean:
 	rm -f ./$(name) ./src/*.o
@@ -26,3 +26,5 @@ me:
 
 a sandwich:
 	@exit
+
+.PHONY: install uninstall clean me a sandwich
