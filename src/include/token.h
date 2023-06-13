@@ -33,6 +33,7 @@ typedef struct TOKEN_STRUC {
       TOKEN_ARRAY_DELIM_START,   // [
       TOKEN_ARRAY_DELIM_END,     // ]
       TOKEN_DEF_SET,             // =
+      TOKEN_UNKNOWN,             // ???
       TOKEN_EOF,                 // \0
     } type;
 

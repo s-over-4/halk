@@ -59,21 +59,22 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             break;
          case ';':
             return lexer_next_token(
-                  lexer,
-                  token_init(
-                     TOKEN_EXPR_END,
-                     lexer_get_c_as_string(lexer)
-                     )
-                  );
+               lexer,
+               token_init(
+                  TOKEN_EXPR_END,
+                  lexer_get_c_as_string(lexer)
+               )
+            );
             break;
          case '=':
             return lexer_next_token(
-                  lexer,
-                  token_init(
-                     TOKEN_DEF_SET,
-                     lexer_get_c_as_string(lexer)
-                     )
-                  ); break;
+               lexer,
+               token_init(
+                  TOKEN_DEF_SET,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
          case '(': return lexer_next_token(
             lexer,
             token_init(
@@ -81,66 +82,80 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
                lexer_get_c_as_string(lexer)
             )
          ); break;
-         case ')': return lexer_next_token(
-            lexer,
-            token_init(
-               TOKEN_RGROUP,
-               lexer_get_c_as_string(lexer)
-            )
-         ); break;
+         case ')': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_RGROUP,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
          case '#':
             return lexer_collect(lexer, '#', 1, 1, TOKEN_DIRECTIVE);
             break;
-         case '.': return lexer_next_token(
-             lexer,
-             token_init(
-                TOKEN_FN_APPLY,
-                lexer_get_c_as_string(lexer)
-                )
-             ); break;
-         case ',': return lexer_next_token(
-             lexer,
-             token_init(
-                TOKEN_LIST_DELIM,
-                lexer_get_c_as_string(lexer)
-                )
-             ); break;
-         case ':': return lexer_next_token(
-             lexer,
-             token_init(
-                TOKEN_DEF_TAGS_DELIM,
-                lexer_get_c_as_string(lexer)
-                )
-             ); break;
-         case '/': return lexer_next_token(
-                         lexer,
-                         token_init(
-                            TOKEN_NAMESPACE_DELIM,
-                            lexer_get_c_as_string(lexer)
-                            )
-                         ); break;
-         case '{': return lexer_next_token(
-             lexer,
-             token_init(
-                TOKEN_BLOCK_DELIM_START,
-                lexer_get_c_as_string(lexer)
-                )
-             ); break;
-         case '}': return lexer_next_token(
-             lexer,
-             token_init(
-                TOKEN_BLOCK_DELIM_END,
-                lexer_get_c_as_string(lexer)
-                )
-             ); break;
+         case '.': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_FN_APPLY,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
+         case ',': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_LIST_DELIM,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
+         case ':': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_DEF_TAGS_DELIM,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
+         case '/': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_NAMESPACE_DELIM,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
+         case '{': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_BLOCK_DELIM_START,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
+         case '}': 
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_BLOCK_DELIM_END,
+                  lexer_get_c_as_string(lexer)
+               )
+            ); 
+            break;
          case '[':
             return lexer_collect(lexer, ']', 1, 1, TOKEN_PRIM_STR);
             break;
-         case '\0': return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); break;
+         case '\0': 
+            return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); 
+            break;
          default:
-            log_err("Unrecognized token");
-            printf("%s", &lexer->c);
-            exit(1);
+            return token_init(TOKEN_UNKNOWN, lexer_get_c_as_string(lexer));
       }
    }
 
@@ -165,7 +180,7 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int type) {
    if (fskip) { lexer_next(lexer); }
 
-   size_t len = 0;            // length of collected token so far
+   size_t len = 1;            // length of collected token so far
    char* token = calloc(len, sizeof(char));
    token[0] = '\0';
 
