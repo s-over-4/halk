@@ -23,7 +23,7 @@ extern void       lexer_destroy              (lexer_t* lexer);
 extern void       lexer_next                 (lexer_t* lexer);
 extern void       lexer_pass                 (lexer_t* lexer);
 extern token_t*   lexer_get_next_token       (lexer_t* lexer);    // chars -> tokens
-extern token_t*   lexer_next_token           (lexer_t* lexer, token_t* token);
+extern token_t*   lexer_next_token           (lexer_t* lexer, int token_type);
 extern char*      lexer_get_c_as_string      (lexer_t* lexer);
 
 // collectors
