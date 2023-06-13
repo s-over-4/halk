@@ -6,20 +6,20 @@ sources 			:= $(filter-out src/parser.c, $(sources)) # exclude the incomplete pa
 objects 			:= $(sources:.c=.o)
 
 $(name): $(objects)
-	$(cc) $(objects) $(flags) -o ./$(name)
+	$(cc) $(objects) $(flags) -o ./$(name).out
 
 %.o: %.c include/%.h
 	$(cc) -c $(flags) $< -o $@
 
 install:
 	make
-	cp ./$(name) /usr/local/bin/$(name)
+	cp ./$(name).out /usr/local/bin/$(name)
 
 uninstall:
 	rm -f /usr/local/bin/$(name)
 
 clean:
-	rm -f ./$(name) ./src/*.o
+	rm -f ./$(name).out ./src/*.o
 
 me:
 	@[ "$(USER)" = "root" ] && echo "Okay." || echo "What? Make it yourself."
