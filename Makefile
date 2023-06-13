@@ -13,10 +13,10 @@ $(name): $(objects)
 
 install:
 	make
-	[ $(XDG_DATA_HOME) ] && cp ./$(name) $(XDG_DATA_HOME)/bin/$(name) || cp ./$(name) /usr/local/bin/$(name)
+	cp ./$(name) $(HOME)/.local/bin/$(name)
 
 uninstall:
-	[ $(XDG_DATA_HOME) ] && rm -f $(XDG_DATA_HOME)/bin/$(name) || rm -f /usr/local/bin/$(name)
+	rm -f $(HOME)/.local/bin/$(name)
 
 clean:
 	rm -f ./$(name) ./src/*.o

@@ -2,10 +2,8 @@
 #include <stdlib.h>
 
 
-#include "include/log.h"
+#include "include/util.h"
 #include "include/lexer.h"
-// #include "include/tree.h"
-// #include "include/parser.h"
 
 
 int main(int argc, char* argv[]) {
