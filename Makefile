@@ -22,7 +22,7 @@ clean:
 	rm -f ./$(name) ./src/*.o
 
 me:
-	@[ "$(USER)" == "root" ] && echo "Okay." || echo "What? Make it yourself."
+	@[ "$(USER)" = "root" ] && echo "Okay." || echo "What? Make it yourself."
 
 a sandwich:
 	@exit
