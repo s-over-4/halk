@@ -13,8 +13,7 @@ int main(int argc, char* argv[]) {
 
    fsource = fopen("examples/hello.halk", "rb");
    if (!fsource) { 
-      log_err("Source file not found");
-      exit(1); 
+      die("source file not found: %s", "examples/hello.halk");
    };
 
    fseek(fsource, 0L, SEEK_END);
@@ -25,36 +24,34 @@ int main(int argc, char* argv[]) {
 
    if (!source) { 
       fclose(fsource); 
-      log_err("Memory allocation failed");
-      exit(1); 
+      die("calloc failed");
    }
 
    if (1 != fread(source, fsource_size, 1, fsource)) {
       fclose(fsource); 
       free(source);
-      log_err("Could not read source file");
-      exit(1);
+      die("could not read source");
    }
 
-   log_inf("Source file loaded");
+   log_inf("source file loaded");
 
    lexer_t* lexer = lexer_init(source);
-   log_inf("Lexer created");
+   log_inf("lexer created");
 
-   log_inf("== BEGIN INPUT ==");
-   log_inf(lexer->content);
-   log_inf("=== END INPUT ===");
+   log_inf("BEGIN INPUT");
+   log_raw(lexer->content);
+   log_inf("END INPUT");
 
    token_t* token = NULL;
 
    while ((token = lexer_get_next_token(lexer)) != NULL) {
-      printf("===\ntoken type: %d:\ntoken value: || %s ||\n===\n", token->type, token->value);
+      log_inf("token type: [%d]\ttoken value: [%s]", token->type, token->value);
    }
 
    fclose(fsource);
    free(source);
 
-   log_inf("Source file closed");
+   log_inf("source file closed");
 
    return 0;
 }
