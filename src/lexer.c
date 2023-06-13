@@ -155,7 +155,13 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); 
             break;
          default:
-            return token_init(TOKEN_UNKNOWN, lexer_get_c_as_string(lexer));
+            return lexer_next_token(
+               lexer,
+               token_init(
+                  TOKEN_UNKNOWN,
+                  lexer_get_c_as_string(lexer)
+               )
+            );
       }
    }
 

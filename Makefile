@@ -13,10 +13,10 @@ $(name): $(objects)
 
 install:
 	make
-	cp ./$(name) $(HOME)/.local/bin/$(name)
+	cp ./$(name) /usr/local/bin/$(name)
 
 uninstall:
-	rm -f $(HOME)/.local/bin/$(name)
+	rm -f /usr/local/bin/$(name)
 
 clean:
 	rm -f ./$(name) ./src/*.o

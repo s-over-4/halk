@@ -1,8 +1,6 @@
-
-:str:hello = 'qwertyuiopasdfghjklzxcvbnm1234567890lakjsdhfpqiuelljaksdfbvvvviu3o4448y5o23ilfn';
+**
 
 :str:hello = 'hello, ';
-
 :void:greeting. :str:to = {                              ` functions declared the same way as variables, but with a . after 
                                                          the name, followed by arguments `
 
