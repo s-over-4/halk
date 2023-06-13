@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
    long fsource_size;
    char *source;
 
-   fsource = fopen("examples/hello.halk", "rb");
+   fsource = fopen("examples/simple.halk", "rb");
    if (!fsource) { 
-      die("source file not found: %s", "examples/hello.halk");
+      die("source file not found");
    };
 
    fseek(fsource, 0L, SEEK_END);
@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 
    while ((token = lexer_get_next_token(lexer)) != NULL) {
       log_inf("token type: [%d]\ttoken value: [%s]", token->type, token->value);
+      free(token);
    }
 
    fclose(fsource);

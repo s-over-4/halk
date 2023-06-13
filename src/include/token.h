@@ -13,25 +13,21 @@
 typedef struct TOKEN_STRUC {
    enum TOKEN_ENUM {
       TOKEN_KEYWORD,             // keyword
-      TOKEN_PRIM_STR_DELIM,      // '
       TOKEN_PRIM_STR,            // 'string'
       TOKEN_PRIM_INT,            // 42
-      TOKEN_COMM_DELIM,          // `
       TOKEN_COMM,                // `comment`
       TOKEN_EXPR_END,            // ;
       TOKEN_LGROUP,              // (
       TOKEN_RGROUP,              // )
-      TOKEN_DIRECTIVE_DELIM,     // #
       TOKEN_DIRECTIVE,           // #DIRECTIVE#
       TOKEN_FN_APPLY,            // .
       TOKEN_LIST_DELIM,          // ,
-      TOKEN_DEF_TAGS_DELIM,      // :
-      TOKEN_DEF,                 // def:def
-      TOKEN_BLOCK_DELIM_START,   // {
-      TOKEN_BLOCK_DELIM_END,     // }
+      TOKEN_DEF_TAG,             // def:def
+      TOKEN_BLOCK_START,         // {
+      TOKEN_BLOCK_END,           // }
       TOKEN_NAMESPACE_DELIM,     // /
-      TOKEN_ARRAY_DELIM_START,   // [
-      TOKEN_ARRAY_DELIM_END,     // ]
+      TOKEN_ARRAY_START,         // [
+      TOKEN_ARRAY_END,           // ]
       TOKEN_DEF_SET,             // =
       TOKEN_UNKNOWN,             // ???
       TOKEN_EOF,                 // \0

@@ -71,16 +71,16 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return lexer_next_token(lexer, TOKEN_LIST_DELIM); 
             break;
          case ':': 
-            return lexer_next_token(lexer, TOKEN_DEF_TAGS_DELIM); 
+            return lexer_collect(lexer, ':', 1, 1, TOKEN_DEF_TAG); 
             break;
          case '/': 
             return lexer_next_token(lexer, TOKEN_NAMESPACE_DELIM); 
             break;
          case '{': 
-            return lexer_next_token(lexer, TOKEN_BLOCK_DELIM_START); 
+            return lexer_next_token(lexer, TOKEN_BLOCK_START); 
             break;
          case '}': 
-            return lexer_next_token(lexer, TOKEN_BLOCK_DELIM_END); 
+            return lexer_next_token(lexer, TOKEN_BLOCK_END); 
             break;
          case '[':
             return lexer_collect(lexer, ']', 1, 1, TOKEN_PRIM_STR);
@@ -115,7 +115,7 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int type) {
    if (fskip) { lexer_next(lexer); }
 
-   size_t len = 1;            // length of collected token so far
+   size_t len = 0;            // length of collected token so far
    char* token = calloc(len, sizeof(char));
    token[0] = '\0';
 
