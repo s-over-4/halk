@@ -38,6 +38,8 @@ typedef struct TOKEN_STRUC {
 
 token_t* token_init(int type, char* val);
 
+char* token_get_type(int type);
+
 int char_could_start_keyword(char* character);
 int char_could_split_keyword(char* character);
 int char_could_start_int(char* character);

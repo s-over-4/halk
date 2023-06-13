@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include "include/util.h"
+#include "include/token.h"
 #include "include/lexer.h"
 
 
 int main(int argc, char* argv[]) {
-   FILE *fsource;
+   FILE* fsource;
    long fsource_size;
-   char *source;
+   char* source;
 
-   fsource = fopen("examples/simple.halk", "rb");
+   fsource = fopen(argv[1], "rb");
    if (!fsource) { 
       die("source file not found");
    };
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
    token_t* token = NULL;
 
    while ((token = lexer_get_next_token(lexer)) != NULL) {
-      log_inf("token type: [%d]\ttoken value: [%s]", token->type, token->value);
+      log_inf("token type: [%s]\ttoken value: [%s]", token_get_type(token->type), token->value);
       free(token);
    }
 
