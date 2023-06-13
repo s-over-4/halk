@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-#include "include/log.h"
+#include "include/util.h"
 #include "include/parser.h"
 #include "include/token.h"
 
@@ -21,11 +21,10 @@ parser_t* parser_init(lexer_t* lexer) {
 // check for expected token, or throw syntax error
 void parser_token_expect(parser_t* parser, int token_type) {
    if (parser->token->type == token_type) {
-      log_dbg(strcat("Got expected token", lexer_get_c_as_string(parser->lexer)));
+      log_inf(strcat("Got expected token", lexer_get_c_as_string(parser->lexer)));
       parser->token = lexer_get_next_token(parser->lexer);
    } else {
-      log_err("Unexpected token");
-      exit(1);
+      die("Unexpected token type: [%d]", token_type);
    }
 }
 
@@ -50,7 +49,7 @@ tree_t* parser_parse_chunk(parser_t* parser) {
          break;
       }
       default: {
-         log_dbg("Skipping non-keyword token");
+         log_inf("Skipping non-keyword token");
          lexer_next(parser->lexer);         
          break;
       }
@@ -142,7 +141,7 @@ tree_t* parser_parse_var_def(parser_t* parser) {
 };
 
 tree_t* parser_parse_str(parser_t* parser) {
-   log_dbg("Entered str");
+   log_inf("Entered str");
    tree_t* str = tree_init(TREE_STR);
    str->data.str.val = parser->token->value;
    

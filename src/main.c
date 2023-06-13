@@ -53,16 +53,8 @@ int main(int argc, char* argv[]) {
       printf("===\ntoken type: %d:\ntoken value: || %s ||\n===\n", token->type, token->value);
    }
 
-   //parser_t* parser = parser_init(lexer);
-   //log_inf("Parser created");
-
-   //tree_t* tree = parser_parse(parser);
-   //log_inf("Tree root created");
-
-   //printf("TYPE: [%d]\n", tree->type);
-   //printf("SIZE: [%d]\n", tree->data.subtree.size);
-
    fclose(fsource);
+   free(source);
 
    log_inf("Source file closed");
 

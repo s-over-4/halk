@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "include/log.h"
+#include "include/util.h"
 #include "include/lexer.h" 
 
 
@@ -193,6 +193,7 @@ token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int 
 
       memcpy(token + len, current, strlen(current) * sizeof(char));
       len += strlen(current) * sizeof(char);
+      free(current);
       lexer_next(lexer);
    }
 
@@ -213,6 +214,7 @@ token_t* lexer_get_keyword(lexer_t* lexer) {
       );
 
       strcat(keyword_so_far, current);
+      free(current);
       lexer_next(lexer);
    }
 
