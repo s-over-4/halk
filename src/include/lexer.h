@@ -28,7 +28,7 @@ extern char*      lexer_get_c_as_string      (lexer_t* lexer);
 
 // collectors
 extern token_t*   lexer_get_arr              (lexer_t* lexer);
-extern token_t*   lexer_collect              (lexer_t* lexer, char end_char, int fskip, int lskip, int type);
+extern token_t*   lexer_collect              (lexer_t* lexer, int (*end_char)(char), int fskip, int lskip, int type);
 
 // special def collectors
 extern token_t*   lexer_get_directive        (lexer_t* lexer);

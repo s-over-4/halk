@@ -119,3 +119,10 @@ int char_can_ignore(char* character) {
 
    return 0;
 }
+
+
+int token_char_quote(char c) { return (c != '\''); }
+int token_char_grave(char c) { return (c != '`'); }
+int token_char_pound(char c) { return (c != '#'); }
+int token_char_colon(char c) { return (c != ':'); }
+int token_char_kywrd(char c) { return (char_could_split_keyword(&c)); }

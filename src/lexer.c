@@ -40,14 +40,14 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
 
       if (char_can_ignore(&lexer->c))           { lexer_pass(lexer); }
       if (char_could_start_int(&lexer->c))      { return lexer_next_token(lexer, TOKEN_PRIM_INT); }
-      if (char_could_start_keyword(&lexer->c))  { return lexer_get_keyword(lexer); }
+      if (char_could_start_keyword(&lexer->c))  { return lexer_collect(lexer, token_char_kywrd, 0, 1, TOKEN_KEYWORD); }
 
       switch (lexer->c) {
          case '\'':
-            return lexer_collect(lexer, '\'', 1, 1, TOKEN_PRIM_STR);
+            return lexer_collect(lexer, token_char_quote, 1, 1, TOKEN_PRIM_STR);
             break;
          case '`': 
-            return lexer_collect(lexer, '`', 1, 1, TOKEN_COMM);
+            return lexer_collect(lexer, token_char_grave, 1, 1, TOKEN_COMM);
             break;
          case ';':
             return lexer_next_token(lexer, TOKEN_EXPR_END);
@@ -62,7 +62,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return lexer_next_token(lexer, TOKEN_RGROUP); 
             break;
          case '#':
-            return lexer_collect(lexer, '#', 1, 1, TOKEN_DIRECTIVE);
+            return lexer_collect(lexer, token_char_pound, 1, 1, TOKEN_DIRECTIVE);
             break;
          case '.': 
             return lexer_next_token(lexer, TOKEN_FN_APPLY); 
@@ -71,7 +71,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return lexer_next_token(lexer, TOKEN_LIST_DELIM); 
             break;
          case ':': 
-            return lexer_collect(lexer, ':', 1, 1, TOKEN_DEF_TAG); 
+            return lexer_collect(lexer, token_char_colon, 1, 1, TOKEN_DEF_TAG); 
             break;
          case '/': 
             return lexer_next_token(lexer, TOKEN_NAMESPACE_DELIM); 
@@ -83,7 +83,10 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return lexer_next_token(lexer, TOKEN_BLOCK_END); 
             break;
          case '[':
-            return lexer_collect(lexer, ']', 1, 1, TOKEN_PRIM_STR);
+            return lexer_next_token(lexer, TOKEN_ARRAY_START);
+            break;
+         case ']':
+            return lexer_next_token(lexer, TOKEN_ARRAY_END);
             break;
          case '\0': 
             return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); 
@@ -103,7 +106,7 @@ token_t* lexer_next_token(lexer_t* lexer, int token_type) {
 }
 
 char* lexer_get_c_as_string(lexer_t* lexer) {
-   char* str = calloc(2, 1 * sizeof(char));
+   char* str = calloc(2, sizeof(char));
    str[0] = lexer->c;
    str[1] = '\0';
    
@@ -112,14 +115,14 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 
 // fskip: skip first char?
 // lskip: skip last char?
-token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int type) {
+token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lskip, int type) {
    if (fskip) { lexer_next(lexer); }
 
    size_t len = 0;            // length of collected token so far
    char* token = calloc(len, sizeof(char));
    token[0] = '\0';
 
-   while (lexer->c != end_char) {
+   while (end_char(lexer->c)) {
       char* current = lexer_get_c_as_string(lexer);
       token = realloc(
          token,
@@ -139,19 +142,21 @@ token_t* lexer_collect(lexer_t* lexer, char end_char, int fskip, int lskip, int 
 }
 
 token_t* lexer_get_keyword(lexer_t* lexer) {
-   char* keyword_so_far = calloc(1, sizeof(char));
-   keyword_so_far[0] = '\0';
+   size_t len = 0;
+   char* keyword = calloc(len, sizeof(char));
+   keyword[0] = '\0';
    while (char_could_split_keyword(&lexer->c)) {
       char* current = lexer_get_c_as_string(lexer);
-      keyword_so_far = realloc(
-         keyword_so_far,
-         (strlen(keyword_so_far) + strlen(current) * sizeof(char))
+      keyword = realloc(
+         keyword,
+         (len + strlen(current) * sizeof(char))
       );
 
-      strcat(keyword_so_far, current);
+      memcpy(keyword + len, current, strlen(current) * sizeof(char));
+      len += strlen(current) * sizeof(char);
       free(current);
       lexer_next(lexer);
    }
 
-   return token_init(TOKEN_KEYWORD, keyword_so_far);
+   return token_init(TOKEN_KEYWORD, keyword);
 }

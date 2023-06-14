@@ -45,5 +45,11 @@ int char_could_split_keyword(char* character);
 int char_could_start_int(char* character);
 int char_can_ignore(char* character);
 
+int token_char_quote(char c);
+int token_char_grave(char c);
+int token_char_pound(char c);
+int token_char_colon(char c);
+int token_char_kywrd(char c);
+
 
 #endif
