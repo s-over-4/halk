@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
    token_t* token = NULL;
 
    while ((token = lexer_get_next_token(lexer)) != NULL) {
-      log_inf("token type: [%s]\ttoken value: [%s]", token_get_type(token->type), token->value);
+      log_inf("token type: [%s]\t\ttoken value: [%s]", token_get_type(token->type), token->value);
       free(token);
    }
 

@@ -40,7 +40,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
 
       if (char_can_ignore(&lexer->c))           { lexer_pass(lexer); }
       if (char_could_start_int(&lexer->c))      { return lexer_next_token(lexer, TOKEN_PRIM_INT); }
-      if (char_could_start_keyword(&lexer->c))  { return lexer_collect(lexer, token_char_kywrd, 0, 1, TOKEN_KEYWORD); }
+      if (char_could_start_keyword(&lexer->c))  { return lexer_collect(lexer, token_char_kywrd, 0, 0, TOKEN_KEYWORD); }
 
       switch (lexer->c) {
          case '\'':
@@ -70,8 +70,8 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
          case ',': 
             return lexer_next_token(lexer, TOKEN_LIST_DELIM); 
             break;
-         case ':': 
-            return lexer_collect(lexer, token_char_colon, 1, 1, TOKEN_DEF_TAG); 
+         case ':':
+            return lexer_collect(lexer, token_char_kywrd, 1, 0, TOKEN_DEF_TAG);
             break;
          case '/': 
             return lexer_next_token(lexer, TOKEN_NAMESPACE_DELIM); 
@@ -118,7 +118,7 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lskip, int type) {
    if (fskip) { lexer_next(lexer); }
 
-   size_t len = 0;            // length of collected token so far
+   size_t len = 0;   // length of collected token so far
    char* token = calloc(len, sizeof(char));
    token[0] = '\0';
 
@@ -136,27 +136,9 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
    }
 
    if (lskip) { lexer_next(lexer); }
-   token[len] = '\0';         // null terminate
+
+   token[len] = '\0';   // null terminate
 
    return token_init(type, token);
 }
 
-token_t* lexer_get_keyword(lexer_t* lexer) {
-   size_t len = 0;
-   char* keyword = calloc(len, sizeof(char));
-   keyword[0] = '\0';
-   while (char_could_split_keyword(&lexer->c)) {
-      char* current = lexer_get_c_as_string(lexer);
-      keyword = realloc(
-         keyword,
-         (len + strlen(current) * sizeof(char))
-      );
-
-      memcpy(keyword + len, current, strlen(current) * sizeof(char));
-      len += strlen(current) * sizeof(char);
-      free(current);
-      lexer_next(lexer);
-   }
-
-   return token_init(TOKEN_KEYWORD, keyword);
-}
