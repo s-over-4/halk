@@ -126,12 +126,11 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
       char* current = lexer_get_c_as_string(lexer);
       token = realloc(
          token,
-         (len + strlen(current) * sizeof(char))
+         (len + sizeof(char) * strlen(current))
       );
 
-      memcpy(token + len, current, strlen(current) * sizeof(char));
-      len += strlen(current) * sizeof(char);
-      free(current);
+      memcpy(token + len, current, sizeof(char) * strlen(current));
+      len += sizeof(char) * strlen(current);
       lexer_next(lexer);
    }
 

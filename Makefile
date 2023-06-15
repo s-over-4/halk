@@ -1,12 +1,16 @@
 name 				:= halk
 cc 				:= cc
-flags 			:= -g
+flags 			:= -s
+devflags			:= -g
 sources 			:= $(wildcard src/*.c)
 sources 			:= $(filter-out src/parser.c, $(sources)) # exclude the incomplete parser for now.
 objects 			:= $(sources:.c=.o)
 
 $(name): $(objects)
 	$(cc) $(objects) $(flags) -o ./$(name).out
+
+dev: $(objects)
+	$(cc) $(objects) $(devflags) -o ./$(name).out
 
 %.o: %.c include/%.h
 	$(cc) -c $(flags) $< -o $@
