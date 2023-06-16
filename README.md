@@ -15,10 +15,10 @@ As of yet, we are safe.
 As you have read these words, you are to install *HALK*.
 
 1. Clone *HALK* to a computer.
-2. `make install`.
+2. `sudo make install`.
 
 If you wish to remove all *HALK*-related items from your life, you can try `make clean`, followed 
-by `make uninstall`.
+by `sudo make uninstall`.
 
 # Usage
 
