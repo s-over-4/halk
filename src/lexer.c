@@ -140,4 +140,3 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
 
    return token_init(type, token);
 }
-
