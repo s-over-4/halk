@@ -31,4 +31,4 @@ me:
 a sandwich:
 	@exit
 
-.PHONY: install uninstall clean me a sandwich
+.PHONY: install uninstall clean me a sandwich dev
