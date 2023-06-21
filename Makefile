@@ -1,13 +1,11 @@
-.PHONY: install uninstall clean me a sandwich dev
-
+.PHONY: install uninstall dev clean test me a sandwich 
 name 				:= halk
-cc 				:= cc
+cc 				:= gcc
 flags 			:= -s
-devflags			:= -g
+devflags			:= -ggdb -fsanitize=leak -fno-omit-frame-pointer
 sources 			:= $(wildcard src/*.c)
 sources 			:= $(filter-out src/parser.c, $(sources)) # exclude the incomplete parser for now.
 objects 			:= $(sources:.c=.o)
-tests				:= tests
 
 $(name): $(objects)
 	$(cc) $(objects) $(flags) -o ./$(name).out
@@ -27,9 +25,6 @@ uninstall:
 
 clean:
 	rm -f ./$(name).out ./src/*.o
-
-test:
-	@$(foreach file, $(wildcard $(tests)/*.test.sh), $(file);)
 
 # fun
 me:

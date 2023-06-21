@@ -51,5 +51,6 @@ int token_char_pound(char c);
 int token_char_colon(char c);
 int token_char_kywrd(char c);
 
+void token_destroy(token_t* token);
 
 #endif

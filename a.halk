@@ -1,0 +1,9 @@
+`asdjfh`
+
+:str:foo. :int:mut:bar, :str:baz = {
+   for.(),{bar!=0; -=.bar,1},{
+      io/print.baz;
+   }
+}
+
+

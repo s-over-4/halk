@@ -34,5 +34,4 @@ extern token_t*   lexer_collect              (lexer_t* lexer, int (*end_char)(ch
 extern token_t*   lexer_get_directive        (lexer_t* lexer);
 extern token_t*   lexer_get_keyword          (lexer_t* lexer);
 
-
 #endif

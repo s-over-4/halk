@@ -2,7 +2,6 @@
 
 #include "include/token.h"
 
-
 // token constructor
 token_t* token_init(int type, char* val) {
    token_t* token = calloc(1, sizeof(struct TOKEN_STRUC));
@@ -126,3 +125,8 @@ int token_char_grave(char c) { return (c != '`'); }
 int token_char_pound(char c) { return (c != '#'); }
 int token_char_colon(char c) { return (c != ':'); }
 int token_char_kywrd(char c) { return (char_could_split_keyword(&c)); }
+
+void token_destroy(token_t* token) {
+   free(token->value);
+   free(token);
+}

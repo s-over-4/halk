@@ -18,7 +18,6 @@ lexer_t* lexer_init(char* content) {
 }
 
 void lexer_destroy(lexer_t* lexer) {
-   free(lexer->content);
    free(lexer);
 }
 
@@ -92,7 +91,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); 
             break;
          default:
-            return lexer_next_token(lexer, TOKEN_UNKNOWN);
+            return token_init(TOKEN_UNKNOWN, lexer_get_c_as_string(lexer));
       }
    }
 
@@ -132,6 +131,8 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
       memcpy(token + len, current, sizeof(char) * strlen(current));
       len += sizeof(char) * strlen(current);
       lexer_next(lexer);
+
+      free(current);
    }
 
    if (lskip) { lexer_next(lexer); }
