@@ -7,7 +7,7 @@ prim_t* prim_init(int type) {
    prim->type = type;
    prim->is_mutable = 0;
 
-   switch(type) {
+   switch (type) {
       case STR:
          prim->val.prim_str.len = NULL;
          prim->val.prim_str.val = NULL;

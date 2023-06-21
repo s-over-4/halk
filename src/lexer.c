@@ -104,8 +104,11 @@ token_t* lexer_next_token(lexer_t* lexer, int token_type) {
    return token;
 }
 
+// get the current character as a string
 char* lexer_get_c_as_string(lexer_t* lexer) {
-   char* str = calloc(2, sizeof(char));
+   char* str;  // the string to return
+
+   str = calloc(2, sizeof(char));
    str[0] = lexer->c;
    str[1] = '\0';
    
@@ -115,14 +118,19 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
 // fskip: skip first char?
 // lskip: skip last char?
 token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lskip, int type) {
-   if (fskip) { lexer_next(lexer); }
+   size_t   len;     // length of collected token so far
+   char*    token;   // collected token so far
 
-   size_t len = 0;   // length of collected token so far
-   char* token = calloc(len, sizeof(char));
+   len = 1;
+   token = calloc(len, sizeof(char));
    token[0] = '\0';
 
+   if (fskip) { lexer_next(lexer); }
+
    while (end_char(lexer->c)) {
-      char* current = lexer_get_c_as_string(lexer);
+      char* current;
+
+      current = lexer_get_c_as_string(lexer);
       token = realloc(
          token,
          (len + sizeof(char) * strlen(current))

@@ -5,13 +5,13 @@
 #include "include/token.h"
 #include "include/lexer.h"
 
-
 int main(int argc, char* argv[]) {
    FILE*    fsource;
    long     fsource_size;
    char*    source;
    lexer_t* lexer;
    int      in_file;
+
 
    fsource = fopen(argv[1], "rb");
    if (!fsource)                                      { free(fsource); die("source file not found"); };
@@ -34,9 +34,12 @@ int main(int argc, char* argv[]) {
 
    while (in_file) {
       token_t* token;
+      char* type;
 
       token = lexer_get_next_token(lexer);
-      log_inf("token type: [%02d]\t\ttoken value: [%s]", token->type, token->value);
+      type = token_get_type(token->type);
+      
+      log_inf("token type: [%s]\t\ttoken value: [%s]", type, token->value);
       (token->type == TOKEN_EOF) && (in_file = 0);
 
       token_destroy(token);
