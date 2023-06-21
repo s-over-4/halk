@@ -18,10 +18,10 @@ dev: $(objects)
 
 install:
 	make
-	cp ./$(name).out /usr/local/bin/$(name)
+	cp ./$(name).out /usr/bin/$(name)
 
 uninstall:
-	rm -f /usr/local/bin/$(name)
+	rm -f /usr/bin/$(name)
 
 clean:
 	rm -f ./$(name).out ./src/*.o

@@ -4,15 +4,16 @@
 #include "include/util.h"
 #include "include/token.h"
 #include "include/lexer.h"
+#include "include/source.h"
 
 int main(int argc, char* argv[]) {
-   FILE*    fsource;
-   long     fsource_size;
+   //FILE*    fsource;
+   //long     fsource_size;
    char*    source;
    lexer_t* lexer;
    int      in_file;
 
-
+   /*
    fsource = fopen(argv[1], "rb");
    if (!fsource)                                      { free(fsource); die("source file not found"); };
    fseek(fsource, 0L, SEEK_END);
@@ -22,6 +23,9 @@ int main(int argc, char* argv[]) {
    if (!source)                                       { fclose(fsource); free(source); die("calloc failed"); }
    if (1 != fread(source, fsource_size, 1, fsource))  { fclose(fsource); free(source); die("could not read source"); }
    log_inf("source file loaded");
+   */
+
+   source = source_get(argv[1]); 
 
    lexer = lexer_init(source);
    log_inf("lexer created");
@@ -47,7 +51,7 @@ int main(int argc, char* argv[]) {
 
    // clean up
    lexer_destroy(lexer);
-   fclose(fsource);
+   //fclose(fsource);
    free(source);
 
    log_inf("source file closed");
