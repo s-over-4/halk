@@ -1,6 +1,6 @@
 # HALK
 
-<img src="./resources/HALK_FINAL.svg" width="384" align="right">
+<img src="./resources/HALK_FINAL.svg" width="350" align="right">
 
 *HALK* seeks to be a language.
 
@@ -27,18 +27,18 @@ You are mistaken.
 Usage of *HALK* is not yet a feature of *HALK*.
 One can only hope this feature will be added in the future.
 
-
 # Syntax
 
-*HALK* is a **dubiously-typed**, **procedural**, **interpreted**  programming language. 
+*HALK* is a **dubiously-typed**, **vaguely-functional**, **interpreted**  programming language, with syntax designed to be as
+**minimal** and **consistent** as possible.
 Note that all syntax described is liable to sudden and violent change.
 
-Examples can be found [here](examples/).
+Example programs can be found [here](examples/).
 
 ***HALK*** **progress:** 20%
 
 - [x] Lexer
-- [~] Abstract Syntax Tree
+- [ ] Abstract Syntax Tree
 - [ ] Parser
 - [ ] Doer
 - [ ] ?? profit ??

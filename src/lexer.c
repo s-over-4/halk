@@ -121,9 +121,8 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
    size_t   len;     // length of collected token so far
    char*    token;   // collected token so far
 
-   len = 1;
+   len = 0;
    token = calloc(len, sizeof(char));
-   token[0] = '\0';
 
    if (fskip) { lexer_next(lexer); }
 
@@ -133,11 +132,11 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
       current = lexer_get_c_as_string(lexer);
       token = realloc(
          token,
-         (len + sizeof(char) * strlen(current))
+         (len + sizeof(current))
       );
 
       memcpy(token + len, current, sizeof(char) * strlen(current));
-      len += sizeof(char) * strlen(current);
+      len += strlen(current) * sizeof(char);
       lexer_next(lexer);
 
       free(current);
