@@ -22,10 +22,31 @@ by `sudo make uninstall`.
 
 # Usage
 
-Seeing as you have installed *HALK*, it only makes sense that you should attempt to make use of it.
-You are mistaken.
-Usage of *HALK* is not yet a feature of *HALK*.
-One can only hope this feature will be added in the future.
+The *HALK* binary is placed in `/usr/local/bin`. Assuming that is in your PATH, one must simply
+
+```shell
+$ halk examples/simple.halk
+```
+
+while in this directory, or change the argument to any valid file path. Simply running *HALK* with no arguments allows one
+to lex arbitrary text from the command line. An example session is displayed below:
+
+```shell
+$ halk
+> :str:var = 'Hello, World.';
+> ^D
+[==] lexer created
+[==] BEGIN INPUT
+:str:var = 'Hello, World.';
+[==] END INPUT
+[==] token type: [TOKEN_DEF_TAG]    token value: [str]
+[==] token type: [TOKEN_DEF_TAG]    token value: [var]
+[==] token type: [TOKEN_DEF_SET]    token value: [=]
+[==] token type: [TOKEN_PRIM_STR]      token value: [Hello, World.]
+[==] token type: [TOKEN_EXPR_END]      token value: [;]
+[==] token type: [TOKEN_EOF]     token value: []
+[==] source file closed
+```
 
 # Syntax
 
