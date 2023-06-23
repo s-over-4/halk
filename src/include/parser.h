@@ -13,9 +13,10 @@ typedef struct PARSER_STRUC {
 
 // initialize a parser
 parser_t* parser_init(lexer_t* lexer);
+void parser_destroy(parser_t* parser);
 
 // check for expected token, or throw syntax error
-void parser_token_expect(parser_t* parser, int token_type);
+void parser_token_expect(parser_t* parser, int (*expected_token)(token_t*));
 
 // do the parse
 tree_t* parser_parse(parser_t* parser);
