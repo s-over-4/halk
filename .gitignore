@@ -1,14 +1,11 @@
-# binaries
+# organized by line width :)
+
 *.o
-*.out
-halk
-
-# swap files
-[._]*.s[a-v][a-z]
-[._]*.sw[a-p]
-[._]s[a-rt-v][a-z]
-[._]ss[a-gi-z]
-[._]sw[a-p]
-
-# tags
 tags
+*.out
+*.tmp.*
+[._]sw[a-p]
+[._]*.sw[a-p]
+[._]ss[a-gi-z]
+[._]*.s[a-v][a-z]
+[._]s[a-rt-v][a-z]
