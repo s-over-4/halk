@@ -3,7 +3,7 @@ BINDIR			:= $(PREFIX)/bin
 BIN 				:= halk
 TMPBIN			:= halk.out
 CC					:= gcc
-FLAGS				:=
+FLAGS				:= -O3
 DEVFLAGS			:= -ggdb -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 SRCS 				:= $(wildcard src/*.c)
 SRCS 				:= $(filter-out src/parser.c, $(SRCS)) # exclude the incomplete parser for now.
@@ -28,8 +28,7 @@ devoptions:
 HALK: $(OBJS)
 	$(CC) $(OBJS) $(FLAGS) -o $(TMPBIN)
 
-dev: $(OBJS)
-	@make devoptions
+dev: devoptions $(OBJS)
 	$(CC) $(OBJS) $(DEVFLAGS) -o $(TMPBIN)
 
 install:
