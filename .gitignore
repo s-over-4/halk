@@ -4,6 +4,7 @@
 tags
 *.out
 *.tmp.*
+*_notes.md
 [._]sw[a-p]
 [._]*.sw[a-p]
 [._]ss[a-gi-z]

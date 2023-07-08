@@ -49,7 +49,7 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
             return lexer_collect(lexer, token_char_grave, 1, 1, TOKEN_COMM);
             break;
          case ';':
-            return lexer_next_token(lexer, TOKEN_EXPR_END);
+            return lexer_next_token(lexer, TOKEN_STMNT_END);
             break;
          case '=':
             return lexer_next_token(lexer, TOKEN_DEF_SET); 

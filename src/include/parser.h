@@ -13,7 +13,8 @@ parser_t* parser_init(lexer_t* lexer);
 void parser_destroy(parser_t* parser);
 
 // expect token, or die 
-void parser_token_expect(parser_t* parser, int (*expected_token)(token_t*));
+void parser_token_expect(parser_t* parser, token_t* token);
+void parser_token_expectf(parser_t* parser, int (*expected_token)(token_t*));
 
 // do the parse
 tree_t* parser_parse(parser_t* parser);

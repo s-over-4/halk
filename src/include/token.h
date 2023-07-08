@@ -1,8 +1,8 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
-#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS_LEN    53
+#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS        "+-/*abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
+#define TOKEN_DEFNAME_FIRST_CHAR_ALLOWED_CHARS_LEN    57
 #define TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS        "1234567890_-"
 #define TOKEN_DEFNAME_SPLIT_CHAR_ALLOWED_CHARS_LEN    12
 #define TOKEN_CHAR_IGNORE                             " \t\n\r"
@@ -16,7 +16,7 @@ typedef struct TOKEN_STRUC {
       TOKEN_PRIM_STR,            // 'string'
       TOKEN_PRIM_INT,            // 42
       TOKEN_COMM,                // `comment`
-      TOKEN_EXPR_END,            // ;
+      TOKEN_STMNT_END,           // ;
       TOKEN_LGROUP,              // (
       TOKEN_RGROUP,              // )
       TOKEN_DIRECTIVE,           // #DIRECTIVE#

@@ -25,7 +25,7 @@ char* token_get_type(int type) {
       case TOKEN_COMM:
          return "TOKEN_COMM";
          break;
-      case TOKEN_EXPR_END:
+      case TOKEN_STMNT_END:
          return "TOKEN_EXPR_END";
          break;
       case TOKEN_LGROUP:

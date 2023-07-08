@@ -1,26 +1,31 @@
+NAME				:= HALK
 PREFIX			:= /usr/local
 BINDIR			:= $(PREFIX)/bin
-BIN 				:= halk
-TMPBIN			:= halk.out
+BIN 				:= $(shell echo $(NAME) | tr '[:upper:]' '[:lower:]')
+TMPBIN			:= $(BIN).out
 CC					:= gcc
-FLAGS				:= -O3
+FLAGS				:= -O3 -s
 DEVFLAGS			:= -ggdb -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 SRCS 				:= $(wildcard src/*.c)
-SRCS 				:= $(filter-out src/parser.c, $(SRCS)) # exclude the incomplete parser for now.
+#SRCS 				:= $(filter-out src/parser.c, $(SRCS)) # exclude the incomplete parser for now.
 OBJS 				:= $(SRCS:.c=.o)
 
 all: options HALK
 
 options:
-	@echo "HALK build options		"
-	@echo "==================		"
+	@$(eval $@_TITLE := "$(NAME) build options")
+	@$(eval $@_ULINE := $(shell echo "$($@_TITLE)" | tr '[:print:]' '='))
+	@echo "$($@_TITLE)"
+	@echo "$($@_ULINE)"
 	@echo "cc:				$(CC)		"
 	@echo "flags:			$(FLAGS)	"
 	@echo "								"
 
 devoptions:
-	@echo "HALK build options (development)		"
-	@echo "================================		"
+	@$(eval $@_TITLE := "$(NAME) build options \(development\)")
+	@$(eval $@_ULINE := $(shell echo "$($@_TITLE)" | tr '[:print:]' '='))
+	@echo "$($@_TITLE)"
+	@echo "$($@_ULINE)"
 	@echo "cc:				$(CC)							"
 	@echo "flags:			$(DEVFLAGS)					"
 	@echo "													"

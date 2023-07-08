@@ -5,6 +5,7 @@
 
 typedef struct TREE_STRUC {
    enum {
+      TREE_COMP,
       TREE_DEF,
       TREE_CALL,
       TREE_TYPE_STR,
@@ -12,25 +13,30 @@ typedef struct TREE_STRUC {
    } type;
 
    union {
-      struct {                           // === DEFINITIONS ===
+      struct {                               // === "COMPOUND" ===
+         struct TREE_STRUC**  value;
+         size_t               size;
+      } comp;
+
+      struct {                               // === DEFINITIONS ===
          char*                name;          // name of definition
          int                  mutability;    // mutability of definition
          struct TREE_STRUC*   value;         // value of definition
       } def;
 
-      struct {                          // === CALLS ===
+      struct {                               // === CALLS ===
          char*                target;        // name of definition being called
          struct TREE_STRUC**  args;          // arguments passed to definition
          size_t               args_size;     // size of arguments
       } call;
 
                                              // === TYPES ===
-      struct {                      // strings
+      struct {                               // strings
          char*                value;
       } type_str; 
 
-      struct {                   // integers
-         int*                 value;
+      struct {                               // integers
+         int                  value;
       } type_int;
    } data;
 } tree_t;

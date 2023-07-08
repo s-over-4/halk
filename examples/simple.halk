@@ -1,2 +1,3 @@
 :str:mut:var = 'Hello';
+
 io/fprint.stdio, var;
