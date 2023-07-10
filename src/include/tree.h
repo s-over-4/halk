@@ -19,9 +19,11 @@ typedef struct TREE_STRUC {
       } comp;
 
       struct {                               // === DEFINITIONS ===
-         char*                name;          // name of definition
-         int                  mutability;    // mutability of definition
+         char*                type;          // the definition type
+         char**               tags;          // the definition tags
+         char*                name;          // the definition name
          struct TREE_STRUC*   value;         // value of definition
+                                             // :D lines line up :D
       } def;
 
       struct {                               // === CALLS ===
