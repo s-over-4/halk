@@ -51,10 +51,11 @@ tree_t* parser_parse_expr(parser_t* parser) {
          return parser_parse_call(parser);
          break;
       default:
-         die("BAD TOKEN");
+         die("BAD TOKEN"); /* TODO: make more informative error msgs */
    }
 
    return NULL; /* unreachable */
+                /* hopefully */
 }
 
 tree_t* parser_parse_exprs(parser_t* parser) {
