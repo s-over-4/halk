@@ -5,6 +5,7 @@
 #include "include/token.h"
 #include "include/lexer.h"
 #include "include/source.h"
+#include "include/hlkt.h"
 
 int main(int argc, char* argv[]) {
    char*    source;
@@ -14,6 +15,7 @@ int main(int argc, char* argv[]) {
    source = source_get(argv[1]); 
 
    lexer = lexer_init(source);
+   HLKT_ASS(lexer);
    log_inf("lexer created");
 
    log_inf("BEGIN INPUT");
@@ -37,10 +39,9 @@ int main(int argc, char* argv[]) {
 
    // clean up
    lexer_destroy(lexer);
-   //fclose(fsource);
    free(source);
 
-   log_inf("source file closed");
+   HLKT_LOG();
 
    return 0;
 }

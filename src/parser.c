@@ -99,7 +99,7 @@ tree_t* parser_parse_def(parser_t* parser) {
 
    def->data.def.name = parser->token->value;
 
-   def->data.def.
+//   def->data.def.
 
    while (parser->token->type == TOKEN_DEF_TAG) {
       

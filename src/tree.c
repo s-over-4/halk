@@ -12,7 +12,6 @@ tree_t* tree_init(int type) {
          tree->data.comp.size          = 0;
          break;
       case TREE_DEF:
-         tree->data.def.mutability     = 0;
          tree->data.def.name           = (void*) 0;
          tree->data.def.value          = (void*) 0;
          break;

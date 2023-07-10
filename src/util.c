@@ -3,7 +3,7 @@
 void die(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stderr, "[\e[31m==\e[0m] ERROR ");
+   fprintf(stderr, "[\e[31;1m==\e[0m] FATAL ERROR ");
 
    va_start(ap, fmt);
    vfprintf(stderr, fmt, ap);
@@ -11,6 +11,18 @@ void die(const char* fmt, ...) {
    fprintf(stderr, "\n");
 
    exit(1);
+}
+
+void log_err(const char* fmt, ...) {
+   va_list ap;
+
+   fprintf(stderr, "[\e[31m==\e[0m] ERROR ");
+
+   va_start(ap, fmt);
+   vfprintf(stderr, fmt, ap);
+   va_end(ap);
+
+   fprintf(stderr, "\n");
 }
 
 void log_inf(const char* fmt, ...) {
@@ -35,7 +47,7 @@ void log_raw(const char* fmt, ...) {
 void log_war(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stderr, "[\e[33m==\e[0m] WARNING");
+   fprintf(stderr, "[\e[33m==\e[0m] WARNING ");
 
    va_start(ap, fmt);
    vfprintf(stderr, fmt, ap);
