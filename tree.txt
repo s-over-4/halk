@@ -1,0 +1,29 @@
+The Expr
+========
+       [ block ] ⇐ a block is a list of exprs
+        │    ┌┘
+        │    │
+       [ expr ] ── [ lit ] ⇐ a literal value; "base case" for the tree
+        │    │      ├── type
+     ┌──┘    └──┐   └─ value
+[ def ]        [ call ]
+ │                   │
+ ├─ [target] ← id    ├─ [target] ← id ⇐ an id is a pointer to another part of the tree
+ └── [value] ← expr  └──── [arg] ← expr
+
+Example Expr Tree
+=================
+[ block ]
+ │
+ ├─ [ def ]
+ │   │
+ │   ├─ [target] → hello
+ │   └── [value] → [ lit ]
+ │                  ├── type → str
+ │                  └─ value → Hello, World
+ ├─ [ call ]
+ │   │
+ │   ├─ [target] → print
+ │   └──── [arg] → hello
+ ...
+
