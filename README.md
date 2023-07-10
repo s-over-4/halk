@@ -29,7 +29,7 @@ $ halk examples/simple.halk
 ```
 
 while in this directory, or change the argument to any valid file path. Simply running *HALK* with no arguments allows one
-to lex arbitrary text from the command line. An example session is displayed below:
+to lex(?) arbitrary text from the command line. An example session is displayed below:
 
 ```shell
 $ halk
@@ -59,7 +59,7 @@ Example programs can be found [here](examples/).
 ***HALK*** **progress:** 20%
 
 - [x] Lexer
-- [ ] Abstract Syntax Tree
+- [x] Abstract Syntax Tree
 - [ ] Parser
 - [ ] Doer
 - [ ] ?? profit ??
