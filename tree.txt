@@ -1,15 +1,16 @@
 The Expr
 ========
-       [ block ] ⇐ a block is a list of exprs
+       [ block ] ⇐ A list of exprs.
         │    ┌┘
         │    │
-       [ expr ] ── [ lit ] ⇐ a literal value; "base case" for the tree
+       [ expr ] ── [ lit ] ⇐ A literal value; "base case" for the tree.
         │    │      ├── type
      ┌──┘    └──┐   └─ value
 [ def ]        [ call ]
  │                   │
- ├─ [target] ← id    ├─ [target] ← id ⇐ an id is a pointer to another part of the tree
- └── [value] ← expr  └──── [arg] ← expr
+ ├─ [target] ← id    ├─ [target] ← id ⇐ An id is a pointer to another part of the tree.
+ └── [value] ← expr  │                  It also contains the flags used in the definition.
+                     └──── [arg] ← expr
 
 Example Expr Tree
 =================
