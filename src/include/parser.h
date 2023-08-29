@@ -4,6 +4,8 @@
 #include "lexer.h"
 #include "tree.h"
 
+#include <stdarg.h>
+
 typedef struct PARSER_STRUC {
    lexer_t* lexer;      // lexer used by the parser
    token_t* token;      // current token
@@ -12,9 +14,8 @@ typedef struct PARSER_STRUC {
 parser_t* parser_init(lexer_t* lexer);
 void parser_destroy(parser_t* parser);
 
-// expect token, or die 
-void parser_token_expect(parser_t* parser, int token);
-void parser_token_expectf(parser_t* parser, int (*expected_token)(token_t*));
+// expect token(s), or die 
+void parser_token_expect(parser_t* parser, int token, ...);
 
 // do the parse
 tree_t* parser_parse(parser_t* parser);

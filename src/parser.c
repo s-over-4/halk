@@ -20,24 +20,19 @@ parser_t* parser_init(lexer_t* lexer) {
 
 void parser_destroy(parser_t* parser) { free(parser); }
 
-void parser_token_expect(parser_t* parser, int token) {
-   token == parser->token->type?
-      parser->token = lexer_get_next_token(parser->lexer):
-      die(
-         "unexpected token\n\ttype: [%s]\n\tvalue: [%s]", 
-         token_get_type(parser->token->type),
-         parser->token->value
-      );
-}
-
-void parser_token_expectf(parser_t* parser, int (*expected_token)(token_t*)) {
-   expected_token(parser->token)?
-      parser->token = lexer_get_next_token(parser->lexer):
-      die(
-         "unexpected token\n\ttype: [%s]\n\tvalue: [%s]", 
-         token_get_type(parser->token->type),
-         parser->token->value
-      );
+void parser_token_expect(parser_t* parser, int tokens, ...) {
+   va_list ap;
+   va_start(ap, tokens);
+   for (int i = 0; i < tokens; ++i) {
+      va_arg(ap, int) == parser->token->type?
+         parser->token = lexer_get_next_token(parser->lexer):
+         die(
+            "unexpected token\n\ttype: [%s]\n\tvalue: [%s]", 
+            token_get_type(parser->token->type),
+            parser->token->value
+         );
+   }
+   va_end(ap);
 }
 
 tree_t* parser_parse(parser_t* parser) { return parser_parse_exprs(parser); }
@@ -73,7 +68,7 @@ tree_t* parser_parse_exprs(parser_t* parser) {
       parser_token_expect(parser, TOKEN_STMNT_END);
 
       statement = parser_parse_expr(parser);
-      comp->data.comp.size += 1;
+      comp->data.comp.size ++;
       comp->data.comp.value = realloc(
          comp->data.comp.value,
          comp->data.comp.size * sizeof(struct TREE_STRUC)
@@ -97,12 +92,12 @@ tree_t* parser_parse_def(parser_t* parser) {
 
    def->type = TREE_DEF;
 
-   def->data.def.name = parser->token->value;
-
-//   def->data.def.
-
    while (parser->token->type == TOKEN_DEF_TAG) {
-      
+      def->data.def.tags_size ++;
+      def->data.def.tags = realloc(
+         def->data.def.args,
+         def->data.def.args_size + sizeof(parser->token->value)
+      );
    } 
 
 }

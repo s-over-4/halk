@@ -104,9 +104,9 @@ token_t* lexer_next_token(lexer_t* lexer, int token_type) {
    return token;
 }
 
-// get the current character as a string
+/* get the current character as a string */
 char* lexer_get_c_as_string(lexer_t* lexer) {
-   char* str;  // the string to return
+   char* str;  /* the string to return */
 
    str = calloc(2, sizeof(char));
    str[0] = lexer->c;
@@ -115,11 +115,13 @@ char* lexer_get_c_as_string(lexer_t* lexer) {
    return str;
 }
 
-// fskip: skip first char?
-// lskip: skip last char?
+/* 
+   fskip: skip first char?
+   lskip: skip last char?
+*/
 token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lskip, int type) {
-   size_t   len;     // length of collected token so far
-   char*    token;   // collected token so far
+   size_t   len;     /* length of collected token so far */
+   char*    token;   /* collected token so far */
 
    len = 0;
    token = calloc(len, sizeof(char));
@@ -144,7 +146,7 @@ token_t* lexer_collect(lexer_t* lexer, int (*end_char)(char), int fskip, int lsk
 
    if (lskip) { lexer_next(lexer); }
 
-   token[len] = '\0';   // null terminate
+   token[len] = '\0';   /* null terminate */
 
    return token_init(type, token);
 }
