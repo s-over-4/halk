@@ -60,6 +60,7 @@ Example programs can be found [here](examples/).
 
 - [x] Lexer
 - [x] Abstract Syntax Tree
+- [ ] Preprocessor
 - [ ] Parser
 - [ ] Doer
 - [ ] ?? profit ??
