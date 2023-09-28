@@ -3,17 +3,24 @@
 
 #include "include/util.h"
 #include "include/token.h"
+#include "include/pp.h"
 #include "include/lexer.h"
 #include "include/source.h"
 #include "include/hlkt.h"
 
 int main(int argc, char* argv[]) {
    char*    source;
-   lexer_t* lexer;
-   int      in_file;
+   /*lexer_t* lexer;*/
+   /*int      in_file;*/
+   pp_t*    pp;
 
    source = source_get(argv[1]); 
 
+   pp = pp_init(source);
+   HLKT_ASS(pp);
+   log_inf("preprocessor created");
+
+   /*
    lexer = lexer_init(source);
    HLKT_ASS(lexer);
    log_inf("lexer created");
@@ -23,22 +30,16 @@ int main(int argc, char* argv[]) {
    log_inf("END INPUT");
 
    in_file = 1;
+   */
 
-   while (in_file) {
-      token_t* token;
-      char* type;
+   pp_run(pp);
 
-      token = lexer_get_next_token(lexer);
-      type = token_get_type(token->type);
-      
-      log_inf("token type: [%s]\t\ttoken value: [%s]", type, token->value);
-      (token->type == TOKEN_EOF) && (in_file = 0);
-
-      token_destroy(token);
-   }
+   log_raw("%s\n%s", source, pp->psrc);
 
    // clean up
-   lexer_destroy(lexer);
+   /*lexer_destroy(lexer);*/
+   pp_destroy(pp);
+
    free(source);
 
    HLKT_LOG();
