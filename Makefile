@@ -17,18 +17,18 @@ options:
 	@$(eval $@_ULINE := $(shell echo "$($@_TITLE)" | tr '[:print:]' '='))
 	@echo "$($@_TITLE)"
 	@echo "$($@_ULINE)"
-	@echo "cc:				$(CC)		"
-	@echo "flags:			$(FLAGS)	"
-	@echo "								"
+	@echo "cc:            $(CC)"
+	@echo "flags:         $(FLAGS)"
+	@echo ""
 
 devoptions:
 	@$(eval $@_TITLE := "$(NAME) build options \(development\)")
 	@$(eval $@_ULINE := $(shell echo "$($@_TITLE)" | tr '[:print:]' '='))
 	@echo "$($@_TITLE)"
 	@echo "$($@_ULINE)"
-	@echo "cc:				$(CC)							"
-	@echo "flags:			$(DEVFLAGS)					"
-	@echo "													"
+	@echo "cc:           $(CC)"
+	@echo "flags:        $(DEVFLAGS)"
+	@echo ""
 
 HALK: $(OBJS)
 	$(CC) $(OBJS) $(FLAGS) -o $(TMPBIN)
@@ -49,7 +49,6 @@ clean:
 %.o: %.c include/%.h
 	$(CC) -c $(FLAGS) $< -o $@
 
-# fun
 me:
 	@[ "$(USER)" = "root" ] && echo "Okay." || echo "What? Make it yourself."
 

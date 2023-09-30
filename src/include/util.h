@@ -7,10 +7,18 @@
 #include <stdio.h>
 
 
-void die(const char* fmt, ...);
-void log_err(const char* fmt, ...);
-void log_inf(const char* fmt, ...);
-void log_raw(const char* fmt, ...);
-void log_war(const char* fmt, ...);
+/* die and leave message */
+void die(const char*, ...);
+/* log an error */
+void log_err(const char*, ...);
+/* log some information */
+void log_inf(const char*, ...);
+/* log something with no formatting */
+void log_raw(const char*, ...);
+/* log a warning */
+void log_war(const char*, ...);
+
+/* does c appear in s? */
+int appears_in_str(char*, char*);
 
 #endif

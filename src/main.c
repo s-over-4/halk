@@ -10,37 +10,39 @@
 
 int main(int argc, char* argv[]) {
    char*    source;
-   /*lexer_t* lexer;*/
-   /*int      in_file;*/
+
+   lexer_t* lexer;
    pp_t*    pp;
 
    source = source_get(argv[1]); 
+   HLKT_ASS(source);
+   log_inf("source gotten");
+   log_inf("source: %s", source);
 
    pp = pp_init(source);
    HLKT_ASS(pp);
    log_inf("preprocessor created");
+
+   pp_run(pp);
+   free(source);
+   source = pp->psrc;
+   pp_destroy(pp);
+   HLKT_ASS(source);
+   log_inf("preprocessor ran");
+   log_inf("preprocessed source: %s", source);
 
    /*
    lexer = lexer_init(source);
    HLKT_ASS(lexer);
    log_inf("lexer created");
 
-   log_inf("BEGIN INPUT");
-   log_raw(lexer->content);
-   log_inf("END INPUT");
+   lexer_run(lexer);
 
-   in_file = 1;
+   lexer_destroy(lexer);
    */
-
-   pp_run(pp);
-
-   log_raw("%s\n%s", source, pp->psrc);
-
-   // clean up
-   /*lexer_destroy(lexer);*/
-   pp_destroy(pp);
-
    free(source);
+   /*free(pp->psrc);*/
+
 
    HLKT_LOG();
 

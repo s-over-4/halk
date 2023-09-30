@@ -4,25 +4,23 @@
 
    #cde# #VALUE#           leave code as is
 
-   #ddo# #ID?# #DIR#       if defined, don't skip next directive (Defined DO)
-   #udo# #ID?# #DIR#       if undefined, skip next directive (UnDefined Do)
+   #ddo# #ID?# #DIR#       if defined, do #DIR# (Defined DO)
+   #udo# #ID?# #DIR#       if undefined, do #DIR# (UnDefined Do)
 
    #inc# #FPATH#           include a file
 
-   #ID#                    call a macro or flag
+   #ID#                    call a macro
 `
 
 ` example usage: `
 
 #def# #VERSION# #"31.4.1"#
 
-#ddo# #BSD#
-   #inc# #bsd_support.halk#
+#ddo# #BSD# #inc# #bsd_support.halk#
 
-#udo# #OS#
-   #run# #
-      some-error-func."os not specified";
-   #
+#udo# #OS# #
+   some-error-func."os not specified";
+#
 
 #def# #OSTYPE# #
    os/shell."sysctl kernel.ostype"
