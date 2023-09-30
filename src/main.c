@@ -31,7 +31,6 @@ int main(int argc, char* argv[]) {
    log_inf("preprocessor ran");
    log_inf("preprocessed source: %s", source);
 
-   /*
    lexer = lexer_init(source);
    HLKT_ASS(lexer);
    log_inf("lexer created");
@@ -39,7 +38,6 @@ int main(int argc, char* argv[]) {
    lexer_run(lexer);
 
    lexer_destroy(lexer);
-   */
    free(source);
    /*free(pp->psrc);*/
 
