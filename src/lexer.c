@@ -3,9 +3,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "include/util.h"
 #include "include/lexer.h" 
-
 
 lexer_t* lexer_init(char* content) {
    lexer_t* lexer = calloc(1, sizeof(struct LEXER_STRUC));
@@ -23,7 +21,7 @@ void lexer_destroy(lexer_t* lexer) {
 
 void lexer_next(lexer_t* lexer) {
    if (LEXER_VALID) {
-      lexer->i += 1;
+      lexer->i ++;
       lexer->c = lexer->content[lexer->i]; 
    }
 }
@@ -42,56 +40,52 @@ token_t* lexer_get_next_token(lexer_t* lexer) {
       if (char_could_start_keyword(&lexer->c))  { return lexer_collect(lexer, token_char_kywrd, 0, 0, TOKEN_KEYWORD); }
 
       switch (lexer->c) {
-         case '\'':
+         case SYNTAX_STR_DELIM:
             return lexer_collect(lexer, token_char_quote, 1, 1, TOKEN_PRIM_STR);
             break;
-         case '`': 
-            return lexer_collect(lexer, token_char_grave, 1, 1, TOKEN_COMM);
-            break;
-         case ';':
+         case SYNTAX_EXPR_END: 
             return lexer_next_token(lexer, TOKEN_STMNT_END);
             break;
-         case '=':
+         case SYNTAX_SET:
             return lexer_next_token(lexer, TOKEN_DEF_SET); 
             break;
-         case '(': 
+         case SYNTAX_LGROUP: 
             return lexer_next_token(lexer, TOKEN_LGROUP); 
             break;
-         case ')': 
+         case SYNTAX_RGROUP: 
             return lexer_next_token(lexer, TOKEN_RGROUP); 
             break;
-         case '#':
-            return lexer_collect(lexer, token_char_pound, 1, 1, TOKEN_DIRECTIVE);
-            break;
-         case '.': 
+         case SYNTAX_APPLY: 
             return lexer_next_token(lexer, TOKEN_FN_APPLY); 
             break;
-         case ',': 
+         case SYNTAX_LIST_DELIM: 
             return lexer_next_token(lexer, TOKEN_LIST_DELIM); 
             break;
-         case ':':
+         case SYNTAX_TAG_DELIM:
             return lexer_collect(lexer, token_char_kywrd, 1, 0, TOKEN_DEF_TAG);
             break;
-         case '/': 
+         case SYNTAX_NAMESPACE_DELIM: 
             return lexer_next_token(lexer, TOKEN_NAMESPACE_DELIM); 
             break;
-         case '{': 
+         case SYNTAX_LBLOCK: 
             return lexer_next_token(lexer, TOKEN_BLOCK_START); 
             break;
-         case '}': 
+         case SYNTAX_RBLOCK: 
             return lexer_next_token(lexer, TOKEN_BLOCK_END); 
             break;
-         case '[':
+         case SYNTAX_LLIST:
             return lexer_next_token(lexer, TOKEN_ARRAY_START);
             break;
-         case ']':
+         case SYNTAX_RLIST:
             return lexer_next_token(lexer, TOKEN_ARRAY_END);
             break;
          case '\0': 
+         case EOF:
             return token_init(TOKEN_EOF, lexer_get_c_as_string(lexer)); 
             break;
          default:
-            return token_init(TOKEN_UNKNOWN, lexer_get_c_as_string(lexer));
+            return lexer_next_token(lexer, TOKEN_UNKNOWN);
+            break;
       }
    }
 

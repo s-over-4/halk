@@ -58,3 +58,27 @@ void log_war(const char* fmt, ...) {
 
    fprintf(stderr, "\n");
 }
+
+void* ecalloc(size_t nmemb, size_t size) {
+   void* p;
+
+   if (! (p = calloc(nmemb, size))) { die("failed to calloc:"); }
+
+   return p;
+}
+
+void* emalloc(size_t size) {
+   void* p;
+
+   if (! (p = malloc(size))) { die("failed to malloc:"); }
+
+   return p;
+}
+
+void* erealloc(void* dest, size_t size) {
+   void* p;
+
+   if (! (p = realloc(dest, size))) { die("failed to realloc:"); }
+
+   return p;
+}

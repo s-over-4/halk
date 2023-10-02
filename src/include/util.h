@@ -18,7 +18,11 @@ void log_raw(const char*, ...);
 /* log a warning */
 void log_war(const char*, ...);
 
-/* does c appear in s? */
-int appears_in_str(char*, char*);
+/* if calloc() returns null, die */
+void* ecalloc(size_t, size_t);
+/* if malloc() returns null, die */
+void* emalloc(size_t);
+/* if realloc() returns null, die */
+void* erealloc(void*, size_t);
 
 #endif

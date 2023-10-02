@@ -13,7 +13,7 @@
 typedef struct TOKEN_STRUC {
    enum TOKEN_ENUM {
       TOKEN_KEYWORD,             // keyword
-      TOKEN_PRIM_STR,            // 'string'
+      TOKEN_PRIM_STR,            // "string"
       TOKEN_PRIM_INT,            // 42
       TOKEN_COMM,                // `comment`
       TOKEN_STMNT_END,           // ;

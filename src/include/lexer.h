@@ -1,10 +1,11 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "util.h"
+#include "syntax.h"
 #include "token.h"
 
 #define LEXER_VALID (lexer->c != '\0' && lexer->i < strlen(lexer->content))
-
 
 /* the lexer struct */
 typedef struct LEXER_STRUC {
