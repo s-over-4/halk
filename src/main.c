@@ -9,40 +9,41 @@
 #include "include/hlkt.h"
 
 int main(int argc, char* argv[]) {
-   char*    source;
-
-   lexer_t* lexer;
+   char*    src;     /* the source "code" */
    pp_t*    pp;
+   lexer_t* lexer;
 
-   source = source_get(argv[1]); 
-   HLKT_ASS(source);
+   /* get source */
+   src = source_get(argv[1]); 
+   HLKT_ASS(src);
    log_inf("source gotten");
-   log_inf("source: %s", source);
 
-   pp = pp_init(source);
+   /* create pre-processor */
+   pp = pp_init(src);
    HLKT_ASS(pp);
    log_inf("preprocessor created");
 
+   /* pre-process source */
    pp_run(pp);
-   free(source);
-   source = pp->psrc;
-   pp_destroy(pp);
-   HLKT_ASS(source);
+   free(src);
+   src = pp->psrc;
+   HLKT_ASS(src);
    log_inf("preprocessor ran");
-   log_inf("preprocessed source: %s", source);
 
-   /*
-   lexer = lexer_init(source);
+   /* create lexer */
+   lexer = lexer_init(src);
    HLKT_ASS(lexer);
    log_inf("lexer created");
 
+   /* run lexer */
    lexer_run(lexer);
+   log_inf("lexer ran");
 
+   /* clean up */
+   pp_destroy(pp);
    lexer_destroy(lexer);
-   */
-   free(source);
-   /*free(pp->psrc);*/
-
+   token_destroy(lexer->tokenl);
+   free(src);
 
    HLKT_LOG();
 

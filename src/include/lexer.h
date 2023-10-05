@@ -9,46 +9,52 @@
 
 /* the lexer struct */
 typedef struct LEXER_STRUC {
-   /* current character in content */
-   char c;
-
-   /* index of c */
-   unsigned int i;
-
    /* source being read */
-   char* content;
+   char* src;
+
+   /* what the lexer is looking at right now */
+   enum LEXER_STATE {
+      /* normal 1-character token */
+      LEXER_STATE_REG,
+      /* character */
+      LEXER_STATE_CHR,
+      /* string */
+      LEXER_STATE_STR,
+      /* definition */
+      LEXER_STATE_DEF,
+      /* call */
+      LEXER_STATE_CAL
+   } state;
+
+   /* the linked list of tokens generated */
+   token_t* tokenl;
+   int tokenc;
 } lexer_t;
 
+/* create lexer from source */
+lexer_t* lexer_init (char* src);
 
-/* create lexer from source code */
-extern lexer_t*   lexer_init                 (char* content);
+/* destroy lexer **but not src or tokenl** */
+void lexer_destroy (lexer_t* lexer);
 
-/* destroy the lexer */
-extern void       lexer_destroy              (lexer_t* lexer);
+/* add token to tokenv */
+void lexer_add_token(lexer_t* lexer, token_t* token);
+/* add the current character as a token to tokenl -- utility function for
+   lexer_do_reg() */
+void lexer_add_current_char(lexer_t* lexer, int type);
 
-/* move lexer forward one char */
-extern void       lexer_next                 (lexer_t* lexer);
+/* handle regular state */
+void lexer_do_reg(lexer_t*);
+/* handle character state */
+void lexer_do_chr(lexer_t*);
+/* handle string state */
+void lexer_do_str(lexer_t*);
+/* handle definition state */
+void lexer_do_def(lexer_t*);
+/* handle call state */
+void lexer_do_cal(lexer_t*);
 
-/* skip useless characters */
-extern void       lexer_pass                 (lexer_t* lexer);
-
-/* create tokens */
-extern token_t*   lexer_get_next_token       (lexer_t* lexer);
-
-/* create token and move 1 char */
-extern token_t*   lexer_next_token           (lexer_t* lexer, int token_type);
-
-/* create string from lexer->c */
-extern char*      lexer_get_c_as_string      (lexer_t* lexer);
-
-/*
-   int fskip: skip first char?
-
-   int lskip: skip last char?
-*/
-extern token_t*   lexer_collect              (lexer_t* lexer, int (*end_char)(char), int fskip, int lskip, int type);
-
-/* run lexer from source */
-lexer_t* lexer_run(lexer_t*);
+/* run lexer */
+void lexer_run(lexer_t*);
 
 #endif

@@ -7,7 +7,7 @@ CC					:= gcc
 FLAGS				:= -O3 -s
 DEVFLAGS			:= -ggdb -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 SRCS 				:= $(wildcard src/*.c)
-#SRCS 				:= $(filter-out src/parser.c, $(SRCS)) # exclude the incomplete parser for now.
+SRCS 				:= $(filter-out src/parser.c, $(SRCS)) # exclude the incomplete parser for now.
 OBJS 				:= $(SRCS:.c=.o)
 
 all: options HALK
