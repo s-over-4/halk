@@ -46,7 +46,7 @@ $ halk
 **minimal** and **consistent** as possible.
 Note that all syntax described is liable to sudden and violent change.
 
-Example programs can be found [here](tree/examples).
+Example programs can be found [here](../tree/examples).
 
 - [x] Preprocessor
 - [ ] Lexer
