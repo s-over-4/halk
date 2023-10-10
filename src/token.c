@@ -14,6 +14,12 @@ token_t* token_init(int type, char* val) {
 }
 
 void token_destroy(token_t* token) {
+   if (token->nxt) {
+      token_destroy(token->nxt);
+      token->nxt = NULL;
+   }
+
+   free(token->val);
    free(token);
 }
 

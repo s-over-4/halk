@@ -2,6 +2,7 @@
 #define TOKEN_H
 
 #include "util.h"
+#include "hlkt.h"
 
 /* token struct */
 typedef struct TOKEN_STRUC {
@@ -35,7 +36,7 @@ typedef struct TOKEN_STRUC {
 
 /* creates a token */
 token_t* token_init(int type, char* val);
-/* destroys a token **and all tokens contained in nxt** */
+/* destroys a token **and all tokens contained in nxt** **Make sure to set the nxt of any parent tokens to NULL** */
 void token_destroy(token_t* token);
 
 /* return pointer to the last token */

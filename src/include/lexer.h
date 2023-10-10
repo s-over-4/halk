@@ -28,6 +28,9 @@ typedef struct LEXER_STRUC {
 
    /* the linked list of tokens generated */
    token_t* tokenl;
+   /* pointer to the last token in tokenl */
+   token_t* tokenl_last;
+   /* number of tokens in tokenl */
    int tokenc;
 } lexer_t;
 
@@ -37,7 +40,7 @@ lexer_t* lexer_init (char* src);
 /* destroy lexer **but not src or tokenl** */
 void lexer_destroy (lexer_t* lexer);
 
-/* add token to tokenv */
+/* add token to tokenl */
 void lexer_add_token(lexer_t* lexer, token_t* token);
 /* add the current character as a token to tokenl -- utility function for
    lexer_do_reg() */

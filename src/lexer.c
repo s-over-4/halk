@@ -13,6 +13,7 @@ lexer_t* lexer_init(char* src) {
    lexer->src = src;
    lexer->state = LEXER_STATE_REG;
    lexer->tokenl = NULL;
+   lexer->tokenl_last = NULL;
    lexer->tokenc = 0;
 
    return lexer;
@@ -25,8 +26,13 @@ void lexer_destroy(lexer_t* lexer) {
 void lexer_add_token(lexer_t* lexer, token_t* token) {
    token_t* t;
 
-   t = token_last(lexer->tokenl)->nxt;
-   t = token;
+   if (lexer->tokenl) {
+      lexer->tokenl_last->nxt = token;
+      lexer->tokenl_last = token;
+   } else {
+      lexer->tokenl = token;
+      lexer->tokenl_last = token;
+   }
 
    log_inf("token/v:%s\t/t:%d", token->val, token->type);
 
@@ -53,7 +59,6 @@ void lexer_do_reg(lexer_t* lexer) {
          break;
       default:
          lexer_add_current_char(lexer, TOKEN_UNKNOWN);
-         
    }
 }
 

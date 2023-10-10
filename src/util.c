@@ -1,29 +1,16 @@
 #include "include/util.h"
 
 
-void die(const char* fmt, ...) {
+void log_dbg(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stderr, "[\e[31;1m==\e[0m] FATAL ERROR ");
+   fprintf(stdout, "\e[3m\e[37m[==] ");
 
    va_start(ap, fmt);
-   vfprintf(stderr, fmt, ap);
-   va_end(ap);
-   fprintf(stderr, "\n");
-
-   exit(1);
-}
-
-void log_err(const char* fmt, ...) {
-   va_list ap;
-
-   fprintf(stderr, "[\e[31m==\e[0m] ERROR ");
-
-   va_start(ap, fmt);
-   vfprintf(stderr, fmt, ap);
+   vfprintf(stdout, fmt, ap);
    va_end(ap);
 
-   fprintf(stderr, "\n");
+   fprintf(stdout, "\e[0m\n");
 }
 
 void log_inf(const char* fmt, ...) {
@@ -58,6 +45,31 @@ void log_war(const char* fmt, ...) {
    va_end(ap);
 
    fprintf(stderr, "\n");
+}
+
+void log_err(const char* fmt, ...) {
+   va_list ap;
+
+   fprintf(stderr, "[\e[31m==\e[0m] ERROR ");
+
+   va_start(ap, fmt);
+   vfprintf(stderr, fmt, ap);
+   va_end(ap);
+
+   fprintf(stderr, "\n");
+}
+
+void die(const char* fmt, ...) {
+   va_list ap;
+
+   fprintf(stderr, "[\e[31;1m==\e[0m] FATAL ERROR ");
+
+   va_start(ap, fmt);
+   vfprintf(stderr, fmt, ap);
+   va_end(ap);
+   fprintf(stderr, "\n");
+
+   exit(1);
 }
 
 void* ecalloc(size_t nmemb, size_t size) {

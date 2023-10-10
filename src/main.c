@@ -2,11 +2,11 @@
 #include <stdlib.h>
 
 #include "include/util.h"
+#include "include/hlkt.h"
+#include "include/source.h"
 #include "include/token.h"
 #include "include/pp.h"
 #include "include/lexer.h"
-#include "include/source.h"
-#include "include/hlkt.h"
 
 int main(int argc, char* argv[]) {
    char*    src;     /* the source "code" */
@@ -16,33 +16,37 @@ int main(int argc, char* argv[]) {
    /* get source */
    src = source_get(argv[1]); 
    HLKT_ASS(src);
-   log_inf("source gotten");
+   log_dbg("source gotten");
+   log_inf("source: %s", src);
 
    /* create pre-processor */
    pp = pp_init(src);
    HLKT_ASS(pp);
-   log_inf("preprocessor created");
+   log_dbg("preprocessor created");
 
    /* pre-process source */
    pp_run(pp);
    free(src);
    src = pp->psrc;
+   log_dbg(pp->psrc);
+   /* destroy pre-processor */
+   pp_destroy(pp);
    HLKT_ASS(src);
-   log_inf("preprocessor ran");
+   log_dbg("preprocessor ran");
 
    /* create lexer */
    lexer = lexer_init(src);
    HLKT_ASS(lexer);
-   log_inf("lexer created");
+   HLKT_ASS(lexer->src == src);
+   log_dbg("lexer created");
 
    /* run lexer */
    lexer_run(lexer);
-   log_inf("lexer ran");
+   log_dbg("lexer ran");
 
-   /* clean up */
-   pp_destroy(pp);
+   /* clean up lexer stuff */
+   if (lexer->tokenl) { token_destroy(lexer->tokenl); } /* temp until parser eats tokens */
    lexer_destroy(lexer);
-   token_destroy(lexer->tokenl);
    free(src);
 
    HLKT_LOG();

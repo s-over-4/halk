@@ -5,7 +5,7 @@ BIN 				:= $(shell echo $(NAME) | tr '[:upper:]' '[:lower:]')
 TMPBIN			:= $(BIN).out
 CC					:= gcc
 FLAGS				:= -O3 -s
-DEVFLAGS			:= -ggdb -fsanitize=leak,address,undefined -fno-omit-frame-pointer
+DEVFLAGS			:= -g -ggdb -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 SRCS 				:= $(wildcard src/*.c)
 SRCS 				:= $(filter-out src/parser.c, $(SRCS)) # exclude the incomplete parser for now.
 OBJS 				:= $(SRCS:.c=.o)
@@ -47,7 +47,10 @@ clean:
 	rm -f $(TMPBIN) src/*.o
 
 %.o: %.c include/%.h
-	$(CC) -c $(FLAGS) $< -o $@
+	$(CC) -c $(DEVFLAGS) $< -o $@
+
+%.o: %.c
+	$(CC) -c $(DEVFLAGS) $< -o $@
 
 me:
 	@[ "$(USER)" = "root" ] && echo "Okay." || echo "What? Make it yourself."
