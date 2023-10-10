@@ -1,37 +1,29 @@
-# HALK
-
-<img src="./res/HALK_FINAL.svg" width="350" align="right">
-
-*HALK* seeks to be a language.
-
-I seek to fulfill its wishes.
-
-As of yet, *HALK* is nothing.
-
-As of yet, we are safe.
-
 # Installation
 
 As you have read these words, you are to install *HALK*.
 
-1. Clone *HALK* to a computer.
-2. `sudo make install`.
+```
+$ sudo make install
+```
 
-If you wish to remove all *HALK*-related items from your life, you can try `make clean`, followed 
-by `sudo make uninstall`.
+If you wish to remove all *HALK*-related items from your life, you can try
+
+```
+$ sudo make uninstall
+```
 
 # Usage
 
-The *HALK* binary is placed in `/usr/local/bin`. Assuming that is in your PATH, one must simply
+One must simply
 
-```shell
+```
 $ halk examples/simple.halk
 ```
 
-while in this directory, or change the argument to any valid file path. Simply running *HALK* with no arguments allows one
-to lex(?) arbitrary text from the command line. An example session is displayed below:
+. Simply running *HALK* with no arguments allows one to send arbitrary text.
+An example session is displayed below:
 
-```shell
+```
 $ halk
 > :str:var = 'Hello, World.';
 > ^D
@@ -54,13 +46,11 @@ $ halk
 **minimal** and **consistent** as possible.
 Note that all syntax described is liable to sudden and violent change.
 
-Example programs can be found [here](examples/).
+Example programs can be found [here](tree/examples).
 
-***HALK*** **progress:** 20%
-
-- [x] Lexer
-- [x] Abstract Syntax Tree
-- [ ] Preprocessor
+- [x] Preprocessor
+- [ ] Lexer
+- [ ] Abstract Syntax Tree
 - [ ] Parser
 - [ ] Doer
 - [ ] ?? profit ??
