@@ -20,10 +20,10 @@ One must simply
 $ halk examples/simple.halk
 ```
 
-. Simply running *HALK* with no arguments allows one to send arbitrary text.
+. Running *HALK* with no arguments allows one to send arbitrary text.
 An example session is displayed below:
 
-```
+```text
 $ halk
 > :str:var = 'Hello, World.';
 > ^D
