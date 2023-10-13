@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
    pp_run(pp);
    free(src);
    src = pp->psrc;
-   log_dbg(pp->psrc);
+   log_inf("pre-processed source: %s", pp->psrc);
    /* destroy pre-processor */
    pp_destroy(pp);
    HLKT_ASS(src);

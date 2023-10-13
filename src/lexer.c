@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 #include "include/lexer.h" 
+#include "include/syntax.h"
+#include "include/token.h"
 
 lexer_t* lexer_init(char* src) {
    lexer_t* lexer;
@@ -57,9 +59,58 @@ void lexer_do_reg(lexer_t* lexer) {
       case SYNTAX_APPLY:
          lexer_add_current_char(lexer, TOKEN_APPLY);
          break;
+      case SYNTAX_TAG_DELIM:
+         lexer_add_current_char(lexer, TOKEN_TAG_DELIM);
+         break;
+      case SYNTAX_NAMESPACE_DELIM:
+         lexer_add_current_char(lexer, TOKEN_NAMESPACE_DELIM);
+         break;
+      case SYNTAX_SET:
+         lexer_add_current_char(lexer, TOKEN_SET);
+         break;
+      case SYNTAX_LLIST:
+         lexer_add_current_char(lexer, TOKEN_LLIST);
+         break;
+      case SYNTAX_RLIST:
+         lexer_add_current_char(lexer, TOKEN_RLIST);
+         break;
+      case SYNTAX_LGROUP:
+         lexer_add_current_char(lexer, TOKEN_LGROUP);
+         break;
+      case SYNTAX_RGROUP:
+         lexer_add_current_char(lexer, TOKEN_RGROUP);
+         break;
+      case SYNTAX_EXPR_END:
+         lexer_add_current_char(lexer, TOKEN_EXPR_END);
+         break;
+      case SYNTAX_STR_DELIM:
+         lexer_add_current_char(lexer, TOKEN_STR_DELIM);
+         break;
+      case SYNTAX_CHAR_DELIM:
+         lexer_add_current_char(lexer, TOKEN_CHAR_DELIM);
+         break;
+      case SYNTAX_LIST_DELIM:
+         lexer_add_current_char(lexer, TOKEN_LIST_DELIM);
+         break;
       default:
          lexer_add_current_char(lexer, TOKEN_UNKNOWN);
    }
+}
+
+void lexer_do_chr(lexer_t* lexer) {
+   if (*lexer->src == '\'') {
+      lexer->state = LEXER_STATE_REG;
+   } else {
+      token_t* t;
+
+      t = token_init(TOKEN_CHAR, *lexer->src);
+
+      lexer_add_token(lexer, t);
+   }
+}
+
+void lexer_do_str(lexer_t* lexer) {
+
 }
 
 void lexer_run(lexer_t* lexer) {

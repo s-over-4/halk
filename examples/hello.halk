@@ -1,42 +1,36 @@
-:str:hello = 'hello, ';
-:void:greeting. :str:to = {                              ` functions declared the same way as variables, but with a . after 
-                                                         the name, followed by arguments `
+` comments in backticks `
 
-   :str:message = strcat.hello, to;                      ` function application is right-associative `
+#inc# #somefile.halk#   ` include a file `
+#inc# #stdio#           ` include the 'stdio' header (file path stored in the macro #stdio#) `
 
-   io/stdo.message;                                      ` navigate namespaces with a '/' ` 
-}
+:str:hello = "Hello";                                    ` define a variable 'hello' with the type 'str' `
 
-:int:sum_all. :int[]:_  = {                              ` variadic functions are possible with the reserved '_' argument,
-                                                         which is treated as an array `
-   return.foldl.sum, 0, _;  
-}
+:str:greet.:str:target = strcat.hello, ", ", target;     ` define a function 'greet' that returns a 'str' and accepts an 
+                                                         argument 'target', also of type 'str' `
 
-:namespace:new_namespace = {                             ` create a new namespace ` 
-   :int:value = 1;
+` some more functions `
+:void:add1. :int:n = n = +. n, 1;
+:int:fac.:int:n=if.(==.n,0),1,*.n,fac.-.n,1;
 
-   :int:sum_all. :int[]:_ = {
-      return.foldl.sum,0,_;
+:int:fib. :int:n = if. (<=. n, 1),                       ` multiple lines can be used for clarity ` 
+                       n,
+                       +. fib.(-. n, 1), fib. -. n, 2);
+
+
+:void:print_greet.:str:target = stdio/pln.greet.target;  ` namespaces `
+
+:namespace:people = {                                    ` create namespace `
+   struct.person, :int:age, :str:name;                   ` create a struct -- syntax not finalized `
+   
+   :str:person_report. :struct:person = {
+      :str:age = int->str.person.age;
+      :str:name = person.name;
+
+      strcat. "NAME:\t", name, "\nAGE:\t", age;
    }
-}
 
-check_expect.(sum_all. 1, 2, 3, 4), 10;                  ` tests `
-check_expect.
-   (sum_all. 1, 2, 3, 4), 
-   (new_namespace/sum_all. 1, 2, 3, 4);
-
-:int:fibonacci. :int:n = {
-   if.(eq.n, 0), {
-      return.1;
-   }, {
-      return.sum.
-         (fibonacci.(sub.n, 1)),
-         (fibonacci.(sub.n, 2));
+   :void:person_birthday. :struct:person = {
+      stdio/pln. "Happy birthday, ", person.name;
+      person.age = +.person.age, 1;
    }
-}
-
-:int:main. :str[]:args = {                               ` where code will begin executing `
-   greeting.'world.';                                    ` prints 'hello, world.' `
-
-   return.0;
 }

@@ -19,11 +19,11 @@
 #ddo# #BSD# #inc# #bsd_support.halk#
 
 #udo# #OS# #
-   some-error-func."os not specified";
+   some_error_func."os not specified";
 #
 
 #def# #OSTYPE# #
    os/shell."sysctl kernel.ostype"
 #
 
-io/print.#OSTYPE#
+stdio/pln.#OSTYPE#
