@@ -92,7 +92,14 @@ void lexer_do_reg(lexer_t* lexer) {
          lexer->state = LEXER_STATE_STR;
          break;
       default:
-         lexer_add_current_char(lexer, TOKEN_UNKNOWN);
+         if (isdigit(*lexer->src)) {
+            lexer_add_current_char(lexer, TOKEN_INT);
+            lexer->state = LEXER_STATE_INT;
+         } else {
+            lexer_add_current_char(lexer, TOKEN_UNKNOWN);
+            lexer->state = LEXER_STATE_REG;
+         }
+
    }
 }
 
@@ -121,11 +128,21 @@ void lexer_do_str(lexer_t* lexer) {
    }
 }
 
+void lexer_do_int(lexer_t* lexer) {
+   if (isdigit(*lexer->src)) {
+      lexer_add_current_char_to_last_token(lexer, TOKEN_INT);
+      if (! isdigit(*(lexer->src + 1))) { lexer->state = LEXER_STATE_REG; }
+   } else {
+      log_err("???");
+   }
+}
+
 void lexer_run(lexer_t* lexer) {
    while (*lexer->src) {
       if (lexer->state == LEXER_STATE_REG) { lexer_do_reg(lexer); }
       else if (lexer->state == LEXER_STATE_TAG) { lexer_do_tag(lexer); }
       else if (lexer->state == LEXER_STATE_STR) { lexer_do_str(lexer); }
+      else if (lexer->state == LEXER_STATE_INT) { lexer_do_int(lexer); }
       lexer->src ++;
    }
 

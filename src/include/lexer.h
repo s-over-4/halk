@@ -18,14 +18,14 @@ typedef struct LEXER_STRUC {
       LEXER_STATE_REG,
       /* definition tag */
       LEXER_STATE_TAG,
-      /* escaped character in string */
-      LEXER_STATE_ESC,
       /* string */
       LEXER_STATE_STR,
-      /* definition */
-      LEXER_STATE_DEF,
-      /* call */
-      LEXER_STATE_CAL
+      /* escaped character in string */
+      LEXER_STATE_STR_ESC,
+      /* integer */
+      LEXER_STATE_INT,
+      /* keyword */
+      LEXER_STATE_KWD,
    } state;
 
    /* the linked list of tokens generated */
@@ -52,19 +52,19 @@ void lexer_add_current_char(lexer_t* lexer, int type);
 void lexer_add_current_char_to_last_token(lexer_t* lexer, int type);
 
 /* handle regular state */
-void lexer_do_reg(lexer_t*);
+void lexer_do_reg(lexer_t* lexer);
 /* handle definition tag state*/
-void lexer_do_tag(lexer_t*);
-/* handle character state */
-void lexer_do_chr(lexer_t*);
+void lexer_do_tag(lexer_t* lexer);
+/* TODO: handle character state */
+void lexer_do_chr(lexer_t* lexer);
 /* handle string state */
-void lexer_do_str(lexer_t*);
-/* handle definition state */
-void lexer_do_def(lexer_t*);
-/* handle call state */
-void lexer_do_cal(lexer_t*);
+void lexer_do_str(lexer_t* lexer);
+/* handle integer */
+void lexer_do_int(lexer_t* lexer);
+/* handle keywords */
+void lexer_do_kwd(lexer_t* lexer);
 
 /* run lexer */
-void lexer_run(lexer_t*);
+void lexer_run(lexer_t* lexer);
 
 #endif
