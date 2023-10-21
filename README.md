@@ -20,24 +20,31 @@ One must simply
 $ halk examples/simple.halk
 ```
 
-. Running *HALK* with no arguments allows one to send arbitrary text.
+. Running *HALK* with no arguments allows one to lex(?) arbitrary text through stdin.
 An example session is displayed below:
 
 ```text
 $ halk
-> :str:var = 'Hello, World.';
-> ^D
+:str:var = "Hello, World";
+[==] HLKT: test passed: src/main.c/main/18
+[==] source gotten
+[==] source: :str:var = "Hello, World";
+
+[==] HLKT: test passed: src/main.c/main/24
+[==] preprocessor created
+[==] pre-processed source: :str:var="Hello, World";
+[==] HLKT: test passed: src/main.c/main/34
+[==] preprocessor ran
+[==] HLKT: test passed: src/main.c/main/39
+[==] HLKT: test passed: src/main.c/main/40
 [==] lexer created
-[==] BEGIN INPUT
-:str:var = 'Hello, World.';
-[==] END INPUT
-[==] token type: [TOKEN_DEF_TAG]    token value: [str]
-[==] token type: [TOKEN_DEF_TAG]    token value: [var]
-[==] token type: [TOKEN_DEF_SET]    token value: [=]
-[==] token type: [TOKEN_PRIM_STR]      token value: [Hello, World.]
-[==] token type: [TOKEN_EXPR_END]      token value: [;]
-[==] token type: [TOKEN_EOF]     token value: []
-[==] source file closed
+[==] token/t=9	/v=str
+[==] token/t=9	/v=var
+[==] token/t=4	/v==
+[==] token/t=2	/v=Hello, World
+[==] token/t=3	/v=;
+[==] lexer ran
+[==] HLKT: all 5 tests passed
 ```
 
 # Syntax
@@ -49,7 +56,7 @@ Note that all syntax described is liable to sudden and violent change.
 Example programs can be found [here](../tree/examples).
 
 - [x] Preprocessor
-- [ ] Lexer
+- [x] Lexer
 - [ ] Abstract Syntax Tree
 - [ ] Parser
 - [ ] Doer

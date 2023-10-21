@@ -4,44 +4,26 @@
 #include <stdlib.h>
 
 typedef struct TREE_STRUC {
-   enum {
-      TREE_COMP,
-      TREE_DEF,
-      TREE_CALL,
-      TREE_TYPE_STR,
+   enum TREE_TYPE {
       TREE_TYPE_INT,
+      TREE_TYPE_STR,
+      TREE_TYPE_DEF,
+      TREE_TYPE_CAL,
+      TREE_TYPE_COND,
    } type;
 
    union {
-      struct {                               // === "COMPOUND" ===
-         struct TREE_STRUC**  value;
-         size_t               size;
-      } comp;
+      struct {
+         int val;
+      } tree_int_t;
 
-      struct {                               // === DEFINITIONS ===
-         char*                type;          // the definition type
-         char**               tags;          // the definition tags
-         size_t               tags_size;     // the number of tags
-         char*                name;          // the definition name
-         struct TREE_STRUC**  args;          // the arguments the definition will accept
-         size_t               args_size;     // the number of arguments
-         struct TREE_STRUC*   value;         // value of definition
-      } def;
+      struct {
+         char* val;
+      } tree_str_t;
 
-      struct {                               // === CALLS ===
-         char*                target;        // name of definition being called
-         struct TREE_STRUC**  args;          // arguments passed to definition
-         size_t               args_size;     // the number of arguments
-      } call;
-
-                                             // === TYPES ===
-      struct {                               // strings
-         char*                value;
-      } type_str; 
-
-      struct {                               // integers
-         int                  value;
-      } type_int;
+      struct {
+         char* id;
+      } tree_def_t;
    } data;
 } tree_t;
 

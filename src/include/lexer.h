@@ -16,8 +16,10 @@ typedef struct LEXER_STRUC {
    enum LEXER_STATE {
       /* normal 1-character token */
       LEXER_STATE_REG,
-      /* character */
-      LEXER_STATE_CHR,
+      /* definition tag */
+      LEXER_STATE_TAG,
+      /* escaped character in string */
+      LEXER_STATE_ESC,
       /* string */
       LEXER_STATE_STR,
       /* definition */
@@ -46,8 +48,13 @@ void lexer_add_token(lexer_t* lexer, token_t* token);
    lexer_do_reg() */
 void lexer_add_current_char(lexer_t* lexer, int type);
 
+/* add first character of lexer's src to the value of the last token in tokenl, if it exists. otherwise, create new token and add it */
+void lexer_add_current_char_to_last_token(lexer_t* lexer, int type);
+
 /* handle regular state */
 void lexer_do_reg(lexer_t*);
+/* handle definition tag state*/
+void lexer_do_tag(lexer_t*);
 /* handle character state */
 void lexer_do_chr(lexer_t*);
 /* handle string state */
