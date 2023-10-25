@@ -3,27 +3,30 @@
 
 #include <stdlib.h>
 
-typedef struct TREE_STRUC {
+typedef enum {
+      LEAF_TYPE_INT,
+      LEAF_TYPE_STR,
+} leaf_t;
+
+typedef struct ARG_T_STRUCT {
+   leaf_t type;
+   char* id;
+   struct ARG_T_STRUCT* nxt;
+} arg_t;
+
+typedef struct TREE_T_STRUCT {
    enum TREE_TYPE {
-      TREE_TYPE_INT,
-      TREE_TYPE_STR,
       TREE_TYPE_DEF,
       TREE_TYPE_CAL,
-      TREE_TYPE_COND,
    } type;
 
    union {
       struct {
-         int val;
-      } tree_int_t;
-
-      struct {
-         char* val;
-      } tree_str_t;
-
-      struct {
+         leaf_t type;
          char* id;
-      } tree_def_t;
+         arg_t* arg;
+         struct TREE_T_STRUCT* val;
+      } tree_def;
    } data;
 } tree_t;
 

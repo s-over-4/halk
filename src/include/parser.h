@@ -9,13 +9,19 @@
 typedef struct PARSER_STRUC {
    lexer_t* lexer;      // lexer used by the parser
    token_t* token;      // current token
+
+   enum {
+      DEF,
+      CAL
+   } state;
+
 } parser_t;
 
 parser_t* parser_init(lexer_t* lexer);
 void parser_destroy(parser_t* parser);
 
-// expect token(s), or die 
-void parser_token_expect(parser_t* parser, int token, ...);
+// expect tokens, or die 
+void parser_token_expect(parser_t* parser, int token_type, ...);
 
 // do the parse
 tree_t* parser_parse(parser_t* parser);

@@ -9,28 +9,10 @@
                                                          argument 'target', also of type 'str' `
 
 ` some more functions `
-:void:add1. :int:n = n = +. n, 1;
-:int:fac.:int:n=if.(==.n,0),1,*.n,fac.-.n,1;
+:void:add1.:int:n+=. n, 1;
+:int:fac.:int:n=?.(=.n,0),1,*.n,fac.-.n,1;
 
-:int:fib. :int:n = if. (<=. n, 1),                       ` multiple lines can be used for clarity ` 
-                       n,
-                       +. fib.(-. n, 1), fib. -. n, 2);
+:int:fib. :int:n = ?. (<=. n, 1),                        ` multiple lines can be used for clarity ` 
+                      n,
+                      +. fib.(-. n, 1), fib. -. n, 2);
 
-
-:void:print_greet.:str:target = stdio/pln.greet.target;  ` namespaces `
-
-:namespace:people = {                                    ` create namespace `
-   struct.person, :int:age, :str:name;                   ` create a struct -- syntax not finalized `
-   
-   :str:person_report. :struct:person = {
-      :str:age = int->str.person.age;
-      :str:name = person.name;
-
-      strcat. "NAME:\t", name, "\nAGE:\t", age;
-   }
-
-   :void:person_birthday. :struct:person = {
-      stdio/pln. "Happy birthday, ", person.name;
-      person.age = +.person.age, 1;
-   }
-}
