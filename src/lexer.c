@@ -94,12 +94,16 @@ void lexer_do_reg(lexer_t* lexer) {
       default:
          if (isdigit(*lexer->src)) {
             lexer_add_current_char(lexer, TOKEN_INT);
-            lexer->state = LEXER_STATE_INT;
+            if (isdigit(*(lexer->src + 1))) { lexer->state = LEXER_STATE_INT; }
+
+         } else if (strchr(SYNTAX_KWD_CHARS, *lexer->src)) {
+            lexer_add_current_char(lexer, TOKEN_KWD);
+            if (strchr(SYNTAX_KWD_CHARS, *(lexer->src + 1))) { lexer->state = LEXER_STATE_KWD; }
+
          } else {
             lexer_add_current_char(lexer, TOKEN_UNKNOWN);
             lexer->state = LEXER_STATE_REG;
          }
-
    }
 }
 
@@ -133,8 +137,18 @@ void lexer_do_int(lexer_t* lexer) {
       lexer_add_current_char_to_last_token(lexer, TOKEN_INT);
       if (! isdigit(*(lexer->src + 1))) { lexer->state = LEXER_STATE_REG; }
    } else {
-      log_err("???");
+      log_err("int state at non-int token");
    }
+}
+
+void lexer_do_kwd(lexer_t* lexer) {
+   if (strchr(SYNTAX_KWD_CHARS, *lexer->src)) {
+      lexer_add_current_char_to_last_token(lexer, TOKEN_KWD);
+      if (! strchr(SYNTAX_KWD_CHARS, *(lexer->src + 1))) { lexer->state = LEXER_STATE_REG; }
+   } else {
+      log_err("keyword state at non-keyword token");
+   }
+   
 }
 
 void lexer_run(lexer_t* lexer) {
@@ -143,8 +157,10 @@ void lexer_run(lexer_t* lexer) {
       else if (lexer->state == LEXER_STATE_TAG) { lexer_do_tag(lexer); }
       else if (lexer->state == LEXER_STATE_STR) { lexer_do_str(lexer); }
       else if (lexer->state == LEXER_STATE_INT) { lexer_do_int(lexer); }
+      else if (lexer->state == LEXER_STATE_KWD) { lexer_do_kwd(lexer); }
       lexer->src ++;
    }
 
+   /* print tokens *AFTER* they've been discovered */
    token_print(lexer->tokenl);
 }

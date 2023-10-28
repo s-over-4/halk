@@ -14,11 +14,14 @@
 #define SYNTAX_APPLY             '.'
 #define SYNTAX_LIST_DELIM        ','
 #define SYNTAX_TAG_DELIM         ':'
-#define SYNTAX_NAMESPACE_DELIM   '/'
+#define SYNTAX_NAMESPACE_DELIM   '!'
 #define SYNTAX_LBLOCK            '{'
 #define SYNTAX_RBLOCK            '}'
 #define SYNTAX_RLIST             '['
 #define SYNTAX_LLIST             ']'
 #define SYNTAX_ESC               '\\'
+
+/* characters that can appear in keywords */
+#define SYNTAX_KWD_CHARS         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_~|&+-/*<>=%^$@?"
 
 #endif

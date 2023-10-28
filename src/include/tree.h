@@ -27,6 +27,11 @@ typedef struct TREE_T_STRUCT {
          arg_t* arg;
          struct TREE_T_STRUCT* val;
       } tree_def;
+
+      struct {
+         char* id;
+         arg_t* arg;
+      } tree_cal;
    } data;
 } tree_t;
 

@@ -24,6 +24,7 @@ typedef struct TOKEN_STRUC {
       TOKEN_RLIST,
       TOKEN_LLIST,
       TOKEN_ESC,
+      TOKEN_KWD,
       TOKEN_INT
    } type;
 
