@@ -20,7 +20,7 @@ One must simply
 $ halk examples/simple.halk
 ```
 
-. Running *HALK* with no arguments allows one to lex(?) arbitrary text through stdin. An 
+. Running *HALK* without an argument allows one to lex(?) arbitrary text through stdin. An
 example session is displayed below:
 
 ```text
@@ -49,8 +49,8 @@ $ halk
 
 # Syntax
 
-*HALK* is a **dubiously-typed**, **vaguely-functional**, **interpreted**  programming language, 
-with syntax designed to be as **minimal** and **consistent** as possible. Note that all syntax 
+*HALK* is a **dubiously-typed**, **vaguely-functional**, **interpreted**  programming language,
+with syntax designed to be as **minimal** and **consistent** as possible. Note that all syntax
 described is liable to sudden and violent change.
 
 Example programs can be found [here](../tree/examples).
