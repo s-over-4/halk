@@ -5,7 +5,7 @@ REG_CFLAGS := -std=c99 -O3 -s
 DBG_CFLAGS := -Og -ggdb -pedantic -Wall -Wno-deprecated-declarations -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 CFLAGS     := ${REG_CFLAGS}
 SRCS       := $(wildcard src/*.c)
-SRCS       := $(filter-out src/parser.c, $(SRCS))
+# SRCS       := $(filter-out src/parser.c, $(SRCS))
 OBJS       := $(SRCS:.c=.o)
 
 all: halk
