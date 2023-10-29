@@ -1,9 +1,6 @@
 #ifndef PP_H
 #define PP_H
 
-#include <stdlib.h>
-#include <string.h>
-
 #include "util.h"
 #include "syntax.h"
 

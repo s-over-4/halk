@@ -1,6 +1,4 @@
 #include "include/source.h"
-#include "include/util.h"
-#include <stdio.h>
 
 char* source_get(char* arg) {
    return arg? 

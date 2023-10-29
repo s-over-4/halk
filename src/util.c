@@ -1,6 +1,5 @@
 #include "include/util.h"
 
-
 void log_dbg(const char* fmt, ...) {
    va_list ap;
 

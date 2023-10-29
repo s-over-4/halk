@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include "include/token.h"
 
 token_t* token_init(int type, char val) {

@@ -1,7 +1,5 @@
 #include "include/tree.h"
 
-#include "include/util.h"
-
 tree_t* tree_init(int type) {
    tree_t* tree;
 

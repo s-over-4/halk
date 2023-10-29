@@ -1,11 +1,10 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
-
 
 /* log some debug information */
 void log_dbg(const char*, ...);

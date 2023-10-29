@@ -1,9 +1,7 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include "util.h"
 
 char* source_get(char* arg);
 char* source_get_from_stdin();

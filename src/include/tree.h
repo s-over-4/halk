@@ -1,7 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include <stdlib.h>
+#include "util.h"
 
 typedef struct TREE {
    enum TREE_TYPE {
