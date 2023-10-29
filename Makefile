@@ -6,7 +6,6 @@ DBG_CFLAGS := -Og -ggdb -pedantic -Wall -Wno-deprecated-declarations -fsanitize=
 CFLAGS     := ${REG_CFLAGS}
 SRCS       := $(wildcard src/*.c)
 SRCS       := $(filter-out src/parser.c, $(SRCS))
-SRCS       := $(filter-out src/tree.c, $(SRCS))
 OBJS       := $(SRCS:.c=.o)
 
 all: halk

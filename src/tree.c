@@ -1,35 +1,41 @@
 #include "include/tree.h"
 
+#include "include/util.h"
+
 tree_t* tree_init(int type) {
    tree_t* tree;
 
-   tree = calloc(1, sizeof(struct TREE_STRUC));
+   tree = emalloc(sizeof(struct TREE));
+
    tree->type = type;
    
-   switch (type) {
-      case TREE_COMP:
-         tree->data.comp.value         = NULL;
-         tree->data.comp.size          = 0;
+   switch (tree->type) {
+      case TREE_TYPE_LINT:
+         tree->data.lint.val = 0;
          break;
-      case TREE_DEF:
-         tree->data.def.type           = NULL;
-         tree->data.def.tags           = NULL;
-         tree->data.def.tags_size      = 0;
-         tree->data.def.name           = NULL;
-         tree->data.def.args           = NULL;
-         tree->data.def.tags_size      = 0;
-         tree->data.def.value          = NULL;
+      case TREE_TYPE_LSTR:
+         tree->data.lstr.len = 0;
          break;
-      case TREE_CALL:
-         tree->data.call.target        = NULL;
-         tree->data.call.args          = NULL;
-         tree->data.call.args_size     = 0;
+      case TREE_TYPE_TAG:
+         tree->data.tag.val = NULL;
+         tree->data.tag.nxt = NULL;
          break;
-      case TREE_TYPE_STR: 
-         tree->data.type_str.value     = NULL; 
-         break; 
-      case TREE_TYPE_INT: 
-         tree->data.type_int.value     = 0; 
+      case TREE_TYPE_DARG:
+         tree->data.darg.tag = NULL;
+         tree->data.darg.nxt = NULL;
+         break;
+      case TREE_TYPE_CARG:
+         tree->data.carg.val = NULL;
+         tree->data.carg.nxt = NULL;
+         break;
+      case TREE_TYPE_DEF:
+         tree->data.def.tag = NULL;
+         tree->data.def.arg = NULL;
+         tree->data.def.val = NULL;
+         break;
+      case TREE_TYPE_CAL:
+         tree->data.cal.target = NULL;
+         tree->data.cal.arg = NULL;
          break;
    }
 
