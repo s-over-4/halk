@@ -22,15 +22,15 @@ dbg_options:
 	@echo "DBG_CFLAGS: ${DBG_CFLAGS}"
 	@echo
 
+%.o: %.c include/%.h
+	${CC} -c $< -o $@
+
 halk: reg_options ${OBJS}
 	${CC} ${OBJS} ${REG_CFLAGS} -o ${BIN}.out
 
 dbg: CFLAGS += ${DBG_CFLAGS}
 dbg: dbg_options ${OBJS}
 	${CC} ${OBJS} ${DBG_CFLAGS} -o ${BIN}.out
-
-%.o: %.c include/%.h
-	${CC} -c ${CFLAGS} $< -o $@
 
 install: all
 	mkdir -p ${PREFIX}
@@ -47,6 +47,6 @@ me a:
 	@exit
 
 sandwich:
-	@[ "$(USER)" = "root" ] && echo "Okay." || echo "What? Make(1) it yourself."
+	@[ $(id -u) -eq 0 ] && echo "Okay." || echo "What? Make(1) it yourself."
 
 .PHONY: all reg_options dbg_options dbg install uninstall clean 
