@@ -43,3 +43,22 @@ tree_t* tree_init(int type) {
 void tree_destroy(tree_t* tree) {
    free(tree);
 }
+
+tree_targ_t* tree_targ_init(tree_t* tree) {
+   tree_targ_t* targ;
+
+   targ = emalloc(sizeof(tree_targ_t));
+   targ->tree = tree;
+   targ->nxt = NULL;
+
+   return targ;
+}
+
+void tree_targ_destroy(tree_targ_t* targ) {
+   if (targ->nxt) {
+      tree_targ_destroy(targ->nxt);
+      targ->nxt = NULL;
+   }
+
+   free(targ);
+} 

@@ -11,42 +11,44 @@ typedef struct MACRO_STRUC {
 } macro_t;
 
 /* 
-   preprocessor struct
+   The preprocessor struct.
 
-   TODO: keep track of macros
+   TODO: Keep track of macros.
 */
 typedef struct PP_STRUC {
-   /* original source */
+   /* Original source. */
    char* src;
 
-   /* pre-processed source */
+   /* Pre-processed source. */
    char* psrc;
 
-   /* what the preprocessor is looking at right now */
+   /* What the preprocessor is looking at right now. */
    enum PP_STATE {
-      PP_STATE_REG,  /* regular */
-      PP_STATE_STR,  /* string */
-      PP_STATE_COM,  /* comment */
-      PP_STATE_ESC,  /* escaped character in string */
-      /* PP_STATE_MCO, */  /* macro */
+      PP_STATE_REG,  /* Regular. */
+      PP_STATE_STR,  /* String. */
+      PP_STATE_COM,  /* Comment. */
+      PP_STATE_ESC,  /* Escaped character in string. */
+      /* PP_STATE_MCO, */  /* Macro. */
    } state;
 } pp_t;
 
-/* creates a new preprocessor from some source code */
+/* Creates a new preprocessor from some source code. */
 pp_t* pp_init(char*);
 
-/* destroys the preprocessor **but not the pre-processed source** */
+/*
+   Destroys a preprocessor.
+   - Does not free the pre-processed source.
+*/
 void pp_destroy(pp_t*);
 
-/* copy over the current character from src to psrc */
+/* Copy over the current character from src to psrc. */
 void pp_cpy_char(pp_t*);
 
 void pp_do_reg(pp_t*);
 void pp_do_str(pp_t*);
 void pp_do_com(pp_t*);
 
-/* run the preprocessor */
+/* Run the preprocessor. */
 void pp_run(pp_t*);
 
 #endif
-

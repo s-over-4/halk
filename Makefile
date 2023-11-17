@@ -2,33 +2,36 @@ BIN        := halk
 PREFIX     := /usr/local/bin
 CC         := gcc
 REG_CFLAGS := -std=c99 -O3 -s
-DBG_CFLAGS := -Og -ggdb -pedantic -Wall -Wno-deprecated-declarations -fsanitize=leak,address,undefined -fno-omit-frame-pointer
+DBG_CFLAGS := -std=c99 -Og -ggdb -pedantic 
+DBG_CFLAGS += -Wall -Wno-deprecated-declarations 
+DBG_CFLAGS += -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 CFLAGS     := ${REG_CFLAGS}
 SRCS       := $(wildcard src/*.c)
-# SRCS       := $(filter-out src/parser.c, $(SRCS))
 OBJS       := $(SRCS:.c=.o)
+
+.PHONY: all reg_options dbg_options halk dbg install uninstall clean me a sandwich
 
 all: halk
 
 reg_options:
 	@echo "HALK build options:"
 	@echo "CC:         ${CC}"
-	@echo "REG_CFLAGS: ${REG_CFLAGS}"
+	@echo "CFLAGS:     ${REG_CFLAGS}"
 	@echo
 
 dbg_options:
 	@echo "HALK build options (dbg):"
 	@echo "CC:         ${CC}"
-	@echo "DBG_CFLAGS: ${DBG_CFLAGS}"
+	@echo "CFLAGS:     ${DBG_CFLAGS}"
 	@echo
 
-%.o: %.c include/%.h
+%.o: %.c
 	${CC} -c $< -o $@
 
 halk: reg_options ${OBJS}
 	${CC} ${OBJS} ${REG_CFLAGS} -o ${BIN}.out
 
-dbg: CFLAGS += ${DBG_CFLAGS}
+dbg: CFLAGS := ${DBG_CFLAGS}
 dbg: dbg_options ${OBJS}
 	${CC} ${OBJS} ${DBG_CFLAGS} -o ${BIN}.out
 
@@ -45,8 +48,5 @@ clean:
 
 me a:
 	@exit
-
 sandwich:
-	@[ "${USER}" = "root" ] && echo "Okay." || echo "What? Make(1) it yourself."
-
-.PHONY: all reg_options dbg_options dbg install uninstall clean 
+	@[ "${USER}" = "root" ] && echo "Okay." || echo "What? Make it yourself."

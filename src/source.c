@@ -1,5 +1,5 @@
 #include "include/source.h"
-
+#include <unistd.h>
 char* source_get(char* arg) {
    return arg? 
       source_get_from_fpath(arg):

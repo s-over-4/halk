@@ -1,7 +1,7 @@
 #ifndef SYNTAX_H
 #define SYNTAX_H
 
-/* Syntax Definitions */
+/* syntax Definitions. */
 
 #define SYNTAX_CHAR_DELIM        '\''
 #define SYNTAX_STR_DELIM         '"'
@@ -21,7 +21,7 @@
 #define SYNTAX_LLIST             ']'
 #define SYNTAX_ESC               '\\'
 
-/* characters that can appear in keywords */
+/* Characters that can appear in keywords. */
 #define SYNTAX_KWD_CHARS         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_~|&+-/*<>=%^$@?"
 
 #endif

@@ -3,8 +3,8 @@
 
 #include "util.h"
 
-static int hlkt_run     = 0;     /* number of tests run */
-static int hlkt_failed  = 0;     /* number of tests that have failed */
+static int hlkt_run     = 0;     /* Number of tests run. */
+static int hlkt_failed  = 0;     /* Number of tests that have failed. */
 
 #define HLKT_HIDE(stuff) do { stuff } while (0)
 
