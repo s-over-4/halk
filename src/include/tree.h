@@ -64,4 +64,10 @@ typedef struct TREE {
 tree_t* tree_init(int type);
 void tree_destroy(tree_t* tree);
 
+/* TODO:
+
+   Array of targets, for now just linear but implement something better in the future
+   tree_targ_t struct contains pointer to a tree_t
+*/
+
 #endif

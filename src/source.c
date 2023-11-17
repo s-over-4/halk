@@ -31,10 +31,18 @@ char* source_get_from_fpath(char* path) {
 
 char* source_get_from_stdin() {
    char* src;
+   size_t l;
 
    src = ecalloc(256, sizeof(char));
+   l = 0;
 
-   src = fgets(src, 256, stdin);
+   while (fgets(src + l, 20, stdin) != NULL) {
+      l += strlen(src + l);
+   }
+
+   (src[l - 1] == '\n') && (src[l - 1] = '\0');
+
+//   src = fgets(src, 256, stdin);
 
    return src;
 }

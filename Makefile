@@ -47,6 +47,6 @@ me a:
 	@exit
 
 sandwich:
-	@[ $(id -u) -eq 0 ] && echo "Okay." || echo "What? Make(1) it yourself."
+	@[ "${USER}" = "root" ] && echo "Okay." || echo "What? Make(1) it yourself."
 
 .PHONY: all reg_options dbg_options dbg install uninstall clean 
