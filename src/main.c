@@ -7,11 +7,13 @@
 #include "include/token.h"
 #include "include/pp.h"
 #include "include/lexer.h"
+#include "include/parser.h"
 
 int main(int argc, char* argv[]) {
    char*    src;     /* the source "code" */
    pp_t*    pp;
    lexer_t* lexer;
+   parser_t* parser;
 
    /* get source */
    src = source_get(argv[1]); 

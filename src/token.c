@@ -3,7 +3,7 @@
 token_t* token_init(int type, char val) {
    token_t* token;
 
-   token = emalloc(sizeof(struct TOKEN_STRUC));
+   token = emalloc(sizeof(token_t));
    token->type = type;
    token->val = emalloc(2);
    *token->val = val;

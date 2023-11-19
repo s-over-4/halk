@@ -25,15 +25,15 @@ dbg_options:
 	@echo "CFLAGS:     ${DBG_CFLAGS}"
 	@echo
 
-%.o: %.c
-	${CC} -c $< -o $@
-
 halk: reg_options ${OBJS}
 	${CC} ${OBJS} ${REG_CFLAGS} -o ${BIN}.out
 
 dbg: CFLAGS := ${DBG_CFLAGS}
 dbg: dbg_options ${OBJS}
 	${CC} ${OBJS} ${DBG_CFLAGS} -o ${BIN}.out
+
+%.o: %.c
+	${CC} -c $< -o $@
 
 install: all
 	mkdir -p ${PREFIX}

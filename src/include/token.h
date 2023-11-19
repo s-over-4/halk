@@ -4,35 +4,37 @@
 #include "util.h"
 #include "hlkt.h"
 
+typedef enum TOKEN_TYPE {
+   TOKEN_UNKNOWN,
+   TOKEN_CHAR,
+   TOKEN_STR,
+   TOKEN_EXPR_END,
+   TOKEN_SET,
+   TOKEN_LGROUP,
+   TOKEN_RGROUP,
+   TOKEN_APPLY,
+   TOKEN_LIST_DELIM,
+   TOKEN_TAG,
+   TOKEN_NAMESPACE_DELIM,
+   TOKEN_LBLOCK,
+   TOKEN_RBLOCK,
+   TOKEN_RLIST,
+   TOKEN_LLIST,
+   TOKEN_ESC,
+   TOKEN_KWD,
+   TOKEN_INT
+} token_type_t;
+
 /* Token struct. */
-typedef struct TOKEN_STRUC {
+typedef struct TOKEN {
    /* Token type. */
-   enum TOKEN_TYPE {
-      TOKEN_UNKNOWN,
-      TOKEN_CHAR,
-      TOKEN_STR,
-      TOKEN_EXPR_END,
-      TOKEN_SET,
-      TOKEN_LGROUP,
-      TOKEN_RGROUP,
-      TOKEN_APPLY,
-      TOKEN_LIST_DELIM,
-      TOKEN_TAG,
-      TOKEN_NAMESPACE_DELIM,
-      TOKEN_LBLOCK,
-      TOKEN_RBLOCK,
-      TOKEN_RLIST,
-      TOKEN_LLIST,
-      TOKEN_ESC,
-      TOKEN_KWD,
-      TOKEN_INT
-   } type;
+   token_type_t type;
 
    /* Token value. */
    char* val;
 
    /* Next token. */
-   struct TOKEN_STRUC* nxt;
+   struct TOKEN* nxt;
 } token_t;
 
 /* Creates a token. */

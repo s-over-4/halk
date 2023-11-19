@@ -30,8 +30,6 @@ void log_raw(const char* fmt, ...) {
    va_start(ap, fmt);
    vfprintf(stdout, fmt, ap);
    va_end(ap);
-   
-   fprintf(stderr, "\n");
 }
 
 void log_war(const char* fmt, ...) {
