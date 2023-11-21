@@ -123,6 +123,12 @@ void tree_print(tree_t* tree, int nest) {
             log_raw("%s %d\n", spaces, tree->data.lint.val);
          break;
       case TREE_TYPE_LSTR:
+         NEST("[lstr]");
+         NEST("val:");
+            log_raw("%s %s\n", spaces, tree->data.lstr.val);
+         NEST("len:");
+            log_raw("%s %d\n", spaces, tree->data.lstr.len);
+         break;
       case TREE_TYPE_TAG:
       case TREE_TYPE_DARG:
       case TREE_TYPE_CARG:

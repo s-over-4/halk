@@ -37,19 +37,19 @@ int parser_match(parser_t* parser, token_type_t type);
 /* Steps the parser forward by one token, then check whether the new token matches the given type. */
 int parser_nxt_token_match(parser_t* parser, token_type_t type);
 
-/* 
-   Parse a single literal value.
-   - Only does integers for now.
-*/
-tree_t* parser_parse_lit(parser_t* parser);
+/* Return the tree for an integer. */
+tree_t* parser_parse_lint(parser_t* parser);
 
-/* Return a tree for a single semicolon-separated expression.*/
+/* Return the tree for a string.  */
+tree_t* parser_parse_lstr(parser_t* parser);
+
+/* Return the tree for an expression.*/
 tree_t* parser_parse_expr(parser_t* parser);
 
-/* Return a tree for a single curly-brace-separated expression. */
+/* Return the tree for an expression. */
 tree_t* parser_parse_block(parser_t* parser);
 
-
+/* Parse. */
 tree_t* parser_parse(parser_t* parser);
 
 /* Parse with the given parser. */

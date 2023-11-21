@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
    /* Clean up parser stuff. */
    token_destroy(lexer->tokenl);
    tree_destroy(parser->tree);
-   parser_destroy(parser);
    lexer_destroy(lexer);
+   parser_destroy(parser);
    free(src);
 
    HLKT_LOG();

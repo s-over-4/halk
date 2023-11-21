@@ -38,7 +38,7 @@ int parser_nxt_token_match(parser_t* parser, token_type_t type) {
    return parser_match(parser, type);
 }
 
-tree_t* parser_parse_lit(parser_t* parser) {
+tree_t* parser_parse_lint(parser_t* parser) {
    tree_t* lint;
 
    lint = tree_init(TREE_TYPE_LINT);
@@ -47,13 +47,35 @@ tree_t* parser_parse_lit(parser_t* parser) {
    return lint;
 }
 
+tree_t* parser_parse_lstr(parser_t* parser) {
+   tree_t* lstr;
+
+   lstr = tree_init(TREE_TYPE_LSTR);
+   lstr->data.lstr.len = strlen(parser->token->val);
+   lstr->data.lstr.val = ecalloc(lstr->data.lstr.len + 1, sizeof(char));
+   lstr->data.lstr.val[lstr->data.lstr.len] = '\0';
+   strcpy(lstr->data.lstr.val, parser->token->val);
+
+   return lstr;
+}
+
 tree_t* parser_parse_expr(parser_t* parser) {
    tree_t* expr;
 
    expr = tree_init(TREE_TYPE_EXPR);
 
    /* For now this is the only type of expression. */
-   expr->data.expr.val = parser_parse_lit(parser);
+
+   switch (parser->token->type) {
+      case TOKEN_INT:
+         expr->data.expr.val = parser_parse_lint(parser);
+         break;
+      case TOKEN_STR:
+         expr->data.expr.val = parser_parse_lstr(parser);
+         break;
+      default:
+         return expr;
+   }
 
    return expr;
 }
