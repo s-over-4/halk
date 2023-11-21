@@ -51,32 +51,32 @@ typedef struct TREE {
       /* Tags. */
       struct TREE_DATA_TAG {
          char* val;
-         struct TREE_DATA_TAG* nxt;
+         struct TREE* nxt; /* TAG* */
       } tag;
 
       /* Definition arguments. */
       struct TREE_DATA_DARG {
-         struct TREE_DATA_TAG* tag;
-         struct TREE_DATA_DARG* nxt;
+         struct TREE* tag; /* TAG* */
+         struct TREE* nxt; /* DARG */
       } darg;
 
       /* Call arguments. */
       struct TREE_DATA_CARG {
          struct TREE* val;
-         struct TREE_DATA_CARG* nxt;
+         struct TREE* nxt; /* CARG */
       } carg;
       
       /* Definitions. */
       struct TREE_DATA_DEF {
-         struct TREE_DATA_TAG* tag;
-         struct TREE_DATA_DARG* arg;
+         struct TREE* tag; /* TAG */
+         struct TREE* arg; /* DARG */
          struct TREE* val;
       } def;
 
       /* Calls. */
       struct TREE_DATA_CAL {
          char* target;
-         struct TREE_DATA_CARG* arg;
+         struct TREE* arg; /* CARG */
       } cal;
 
    } data;

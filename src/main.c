@@ -52,11 +52,9 @@ int main(int argc, char* argv[]) {
    tree_print(parser->tree, 0);
 
    /* Clean up parser stuff. */
+   token_destroy(lexer->tokenl);
    tree_destroy(parser->tree);
    parser_destroy(parser);
-
-   /* clean up lexer stuff */
-   if (lexer->tokenl) { token_destroy(lexer->tokenl); } /* temp until parser eats tokens */
    lexer_destroy(lexer);
    free(src);
 
