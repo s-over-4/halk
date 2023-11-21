@@ -5,6 +5,7 @@
 
 typedef enum TREE_TYPE {
       TREE_TYPE_BLOCK,
+      TREE_TYPE_EXPR,
       TREE_TYPE_LINT,
       TREE_TYPE_LSTR,
       TREE_TYPE_TAG,
@@ -29,6 +30,12 @@ typedef struct TREE {
          */
          struct TREE* nxt;
       } block;
+
+      /* Expression. */
+      struct TREE_DATA_EXPR {
+         /* The contents of the expression. */
+         struct TREE* val;
+      } expr;
 
       /* Literal integer. */
       struct TREE_DATA_LINT {

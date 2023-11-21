@@ -25,17 +25,79 @@ int parser_nxt_token(parser_t* parser) {
 }
 
 int parser_match(parser_t* parser, token_type_t type) {
-   return parser->token->type == type;
+   if (parser->token->type == type) {
+      return 1;
+   } else {
+      log_err("Unexpected token.");
+      return 0;
+   }
 }
 
-void parser_parse_lit(parser_t* parser) {
+int parser_nxt_token_match(parser_t* parser, token_type_t type) {
+   parser_nxt_token(parser);
+   return parser_match(parser, type);
 }
 
-void parser_parser_expr(parser_t* parser) {
+tree_t* parser_parse_lit(parser_t* parser) {
+   tree_t* lint;
+
+   lint = tree_init(TREE_TYPE_LINT);
+   lint->data.lint.val = atoi(parser->token->val);
+
+   return lint;
 }
 
-void parser_parse_blk(parser_t* parser) {
+tree_t* parser_parse_expr(parser_t* parser) {
+   tree_t* expr;
+
+   expr = tree_init(TREE_TYPE_EXPR);
+
+   /* For now this is the only type of expression. */
+   expr->data.expr.val = parser_parse_lit(parser);
+
+   return expr;
 }
 
-void parser_parse(parser_t* parser) {
+tree_t* parser_parse_block(parser_t* parser) {
+   tree_t* block;
+
+   block = tree_init(TREE_TYPE_BLOCK);
+
+   if (parser->token->type == TOKEN_EXPR_END) {
+      if (parser_nxt_token(parser)) {
+         block->data.block.val = parser_parse_expr(parser);
+      } else {
+         block->data.block.val = NULL;
+      }
+
+      if (parser_nxt_token(parser)) {
+         block->data.block.nxt = parser_parse_block(parser);
+      } else {
+         block->data.block.nxt = NULL;
+      }
+
+      return block;
+   }
+
+   if (parser->token) {
+      block->data.block.val = parser_parse_expr(parser);
+   } else {
+      block->data.block.val = NULL;
+   }
+
+   if (parser_nxt_token(parser)) {
+      block->data.block.nxt = parser_parse_block(parser);
+   } else {
+      block->data.block.nxt = NULL;
+   }
+
+   return block;
+}
+
+tree_t* parser_parse(parser_t* parser) {
+   return parser_parse_block(parser);
+}
+
+void parser_run(parser_t* parser) {
+   parser->tree = parser_parse(parser);
 }

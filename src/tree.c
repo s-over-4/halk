@@ -12,6 +12,9 @@ tree_t* tree_init(int type) {
          tree->data.block.val = NULL;
          tree->data.block.nxt = NULL;
          break;
+      case TREE_TYPE_EXPR:
+         tree->data.expr.val = NULL;
+         break;
       case TREE_TYPE_LINT:
          tree->data.lint.val = 0;
          break;
@@ -70,6 +73,11 @@ void tree_print(tree_t* tree, int nest) {
          NEST(" - nxt:");
             tree_print(tree->data.block.nxt, nest + 3);
          break;
+      case TREE_TYPE_EXPR:
+         NEST("[expression]");
+         NEST(" - val:");
+            tree_print(tree->data.expr.val, nest + 3);
+            break;
       case TREE_TYPE_LINT:
          log_raw("%s[lint]: %d\n", spaces, tree->data.lint.val);
          break;

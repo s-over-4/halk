@@ -46,6 +46,15 @@ int main(int argc, char* argv[]) {
    lexer_run(lexer);
    log_dbg("lexer ran");
 
+   /* Create the parser from the lexer's tokens. */
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+   tree_print(parser->tree, 0);
+
+   /* Clean up parser stuff. */
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+
    /* clean up lexer stuff */
    if (lexer->tokenl) { token_destroy(lexer->tokenl); } /* temp until parser eats tokens */
    lexer_destroy(lexer);
