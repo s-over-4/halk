@@ -38,9 +38,9 @@ tree_t* tree_init(int type) {
          tree->data.def.arg = NULL;
          tree->data.def.val = NULL;
          break;
-      case TREE_TYPE_CAL:
-         tree->data.cal.target = NULL;
-         tree->data.cal.arg = NULL;
+      case TREE_TYPE_CALL:
+         tree->data.call.target = NULL;
+         tree->data.call.arg = NULL;
          break;
    }
 
@@ -80,9 +80,9 @@ void tree_destroy(tree_t* tree) {
          free(tree->data.def.arg);
          tree_destroy(tree->data.def.val);
          break;
-      case TREE_TYPE_CAL:
-         free(tree->data.cal.target);
-         tree_destroy(tree->data.cal.arg);
+      case TREE_TYPE_CALL:
+         free(tree->data.call.target);
+         tree_destroy(tree->data.call.arg);
          break;
    }
 
@@ -129,11 +129,23 @@ void tree_print(tree_t* tree, int nest) {
          NEST("len:");
             log_raw("%s %d\n", spaces, tree->data.lstr.len);
          break;
+      case TREE_TYPE_CALL:
+         NEST("[call]");
+         NEST("target:");
+            log_raw("%s %s\n", spaces, tree->data.call.target);
+         NEST("arg:")
+            tree_print(tree->data.call.arg, nest + 1);
+         break;
+      case TREE_TYPE_CARG:
+         NEST("[carg]");
+         NEST("val:");
+            tree_print(tree->data.carg.val, nest + 1);
+         NEST("nxt:");
+            tree_print(tree->data.carg.nxt, nest + 1);
+         break;
       case TREE_TYPE_TAG:
       case TREE_TYPE_DARG:
-      case TREE_TYPE_CARG:
       case TREE_TYPE_DEF:
-      case TREE_TYPE_CAL:
          NEST("???");
          break;
    }

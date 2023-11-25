@@ -1,8 +1,8 @@
 BIN        := halk
 PREFIX     := /usr/local/bin
 CC         := gcc
-REG_CFLAGS := -std=c99 -O3 -s
-DBG_CFLAGS := -std=c99 -Og -ggdb -pedantic 
+REG_CFLAGS := -ansi -O3 -s
+DBG_CFLAGS := -ansi -Og -ggdb -pedantic 
 DBG_CFLAGS += -Wall -Wno-deprecated-declarations 
 DBG_CFLAGS += -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 CFLAGS     := ${REG_CFLAGS}

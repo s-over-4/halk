@@ -12,7 +12,7 @@ typedef enum TREE_TYPE {
       TREE_TYPE_DARG,
       TREE_TYPE_CARG,
       TREE_TYPE_DEF,
-      TREE_TYPE_CAL,
+      TREE_TYPE_CALL,
 } tree_type_t;
 
 /* The Abstract Syntax Tree (AST) structure. */
@@ -74,10 +74,10 @@ typedef struct TREE {
       } def;
 
       /* Calls. */
-      struct TREE_DATA_CAL {
+      struct TREE_DATA_CALL {
          char* target;
          struct TREE* arg; /* CARG */
-      } cal;
+      } call;
 
    } data;
 } tree_t;

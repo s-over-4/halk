@@ -1,5 +1,6 @@
 #include "include/parser.h"
 #include "include/token.h"
+#include "include/tree.h"
 
 parser_t* parser_init(token_t* token) {
    parser_t* parser;
@@ -51,10 +52,11 @@ tree_t* parser_parse_lstr(parser_t* parser) {
    tree_t* lstr;
 
    lstr = tree_init(TREE_TYPE_LSTR);
+
    lstr->data.lstr.len = strlen(parser->token->val);
-   lstr->data.lstr.val = ecalloc(lstr->data.lstr.len + 1, sizeof(char));
-   lstr->data.lstr.val[lstr->data.lstr.len] = '\0';
-   strcpy(lstr->data.lstr.val, parser->token->val);
+   /* Swap pointers to allow for future token destruction. */
+   lstr->data.lstr.val = parser->token->val;
+   parser->token->val = NULL;
 
    return lstr;
 }
@@ -64,14 +66,15 @@ tree_t* parser_parse_expr(parser_t* parser) {
 
    expr = tree_init(TREE_TYPE_EXPR);
 
-   /* For now this is the only type of expression. */
-
    switch (parser->token->type) {
       case TOKEN_INT:
          expr->data.expr.val = parser_parse_lint(parser);
          break;
       case TOKEN_STR:
          expr->data.expr.val = parser_parse_lstr(parser);
+         break;
+      case TOKEN_KWD:
+         expr->data.expr.val = parser_parse_call(parser);
          break;
       default:
          return expr;
@@ -114,6 +117,30 @@ tree_t* parser_parse_block(parser_t* parser) {
    }
 
    return block;
+}
+
+tree_t* parser_parse_carg(parser_t* parser) {
+   tree_t* carg;
+
+   carg = tree_init(TREE_TYPE_CARG);
+
+   carg->data.carg.val = parser_parse_expr(parser);
+   carg->data.carg.nxt = NULL;
+
+   return carg;
+}
+
+tree_t* parser_parse_call(parser_t* parser) {
+   tree_t* call;
+
+   call = tree_init(TREE_TYPE_CALL);
+
+   call->data.call.target = parser->token->val;
+   parser->token->val = NULL;
+   parser_nxt_token_match(parser, TOKEN_APPLY) || (call->data.call.arg = NULL);
+   call->data.call.arg = (parser_nxt_token(parser) ? parser_parse_carg(parser) : NULL);
+
+   return call;
 }
 
 tree_t* parser_parse(parser_t* parser) {
