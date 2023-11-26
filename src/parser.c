@@ -125,7 +125,8 @@ tree_t* parser_parse_carg(parser_t* parser) {
    carg = tree_init(TREE_TYPE_CARG);
 
    carg->data.carg.val = parser_parse_expr(parser);
-   carg->data.carg.nxt = NULL;
+   
+   carg->data.carg.nxt = (parser_nxt_token_match(parser, TOKEN_LIST_DELIM) && parser_nxt_token(parser) ? parser_parse_carg(parser) : NULL);
 
    return carg;
 }
