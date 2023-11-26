@@ -53,8 +53,8 @@ int main(int argc, char* argv[]) {
 
    /* Clean up parser stuff. */
    token_destroy(lexer->tokenl);
-   tree_destroy(parser->tree);
    lexer_destroy(lexer);
+   tree_destroy(parser->tree);
    parser_destroy(parser);
    free(src);
 

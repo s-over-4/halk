@@ -19,6 +19,7 @@ tree_t* tree_init(int type) {
          tree->data.lint.val = 0;
          break;
       case TREE_TYPE_LSTR:
+         tree->data.lstr.val = NULL;
          tree->data.lstr.len = 0;
          break;
       case TREE_TYPE_TAG:
@@ -72,7 +73,7 @@ void tree_destroy(tree_t* tree) {
          tree_destroy(tree->data.darg.nxt);
          break;
       case TREE_TYPE_CARG:
-         free(tree->data.carg.val);
+         tree_destroy(tree->data.carg.val);
          tree_destroy(tree->data.carg.nxt);
          break;
       case TREE_TYPE_DEF:

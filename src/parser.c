@@ -56,7 +56,7 @@ tree_t* parser_parse_lstr(parser_t* parser) {
    lstr->data.lstr.len = strlen(parser->token->val);
    /* Swap pointers to allow for future token destruction. */
    lstr->data.lstr.val = parser->token->val;
-   parser->token->val = NULL;
+   parser->token->val = NULL; 
 
    return lstr;
 }
