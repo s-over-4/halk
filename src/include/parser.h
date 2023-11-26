@@ -49,6 +49,12 @@ tree_t* parser_parse_expr(parser_t* parser);
 /* Return the tree for an expression. */
 tree_t* parser_parse_block(parser_t* parser);
 
+/* Return the tree for a definition's arguments. */
+tree_t* parser_parse_darg(parser_t* parser);
+
+/* Return the tree for a definition. */
+tree_t* parser_parse_def(parser_t* parser);
+
 /* Return the tree for a call's arguments. */
 tree_t* parser_parse_carg(parser_t* parser);
 

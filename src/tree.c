@@ -69,7 +69,7 @@ void tree_destroy(tree_t* tree) {
          tree_destroy(tree->data.tag.nxt);
          break;
       case TREE_TYPE_DARG:
-         free(tree->data.darg.tag);
+         tree_destroy(tree->data.darg.val);
          tree_destroy(tree->data.darg.nxt);
          break;
       case TREE_TYPE_CARG:

@@ -26,12 +26,7 @@ int parser_nxt_token(parser_t* parser) {
 }
 
 int parser_match(parser_t* parser, token_type_t type) {
-   if (parser->token->type == type) {
-      return 1;
-   } else {
-      log_err("Unexpected token.");
-      return 0;
-   }
+   return parser->token->type == type;
 }
 
 int parser_nxt_token_match(parser_t* parser, token_type_t type) {
@@ -117,6 +112,24 @@ tree_t* parser_parse_block(parser_t* parser) {
    }
 
    return block;
+}
+
+tree_t* parser_parse_darg(parser_t* parser) {
+   tree_t* darg;
+
+   darg = tree_init(TREE_TYPE_DARG);
+
+   darg->data.darg.tag 
+
+   return darg;
+}
+
+tree_t* parser_parse_def(parser_t* parser) {
+   tree_t* def;
+
+   def = tree_init(TREE_TYPE_DEF);
+
+   return def;
 }
 
 tree_t* parser_parse_carg(parser_t* parser) {
