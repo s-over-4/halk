@@ -69,7 +69,7 @@ void tree_destroy(tree_t* tree) {
          tree_destroy(tree->data.tag.nxt);
          break;
       case TREE_TYPE_DARG:
-         tree_destroy(tree->data.darg.val);
+         tree_destroy(tree->data.darg.tag);
          tree_destroy(tree->data.darg.nxt);
          break;
       case TREE_TYPE_CARG:
@@ -77,8 +77,8 @@ void tree_destroy(tree_t* tree) {
          tree_destroy(tree->data.carg.nxt);
          break;
       case TREE_TYPE_DEF:
-         free(tree->data.def.tag);
-         free(tree->data.def.arg);
+         tree_destroy(tree->data.def.tag);
+         tree_destroy(tree->data.def.arg);
          tree_destroy(tree->data.def.val);
          break;
       case TREE_TYPE_CALL:
@@ -144,11 +144,31 @@ void tree_print(tree_t* tree, int nest) {
          NEST("nxt:");
             tree_print(tree->data.carg.nxt, nest + 1);
          break;
-      case TREE_TYPE_TAG:
-      case TREE_TYPE_DARG:
       case TREE_TYPE_DEF:
-         NEST("???");
+         NEST("[def]");
+         NEST("tag:");
+            tree_print(tree->data.def.tag, nest + 1);
+         NEST("arg:");
+            tree_print(tree->data.def.arg, nest + 1);
+         NEST("val:");
+            tree_print(tree->data.def.val, nest + 1);
          break;
+      case TREE_TYPE_TAG:
+         NEST("[tag]");
+         NEST("val:");
+            log_raw("%s %s\n", spaces, tree->data.call.target);
+         NEST("nxt:");
+            tree_print(tree->data.tag.nxt, nest + 1);
+         break;
+      case TREE_TYPE_DARG:
+         NEST("[darg]");
+         NEST("tag:");
+            tree_print(tree->data.darg.tag, nest + 1);
+         NEST("nxt:");
+            tree_print(tree->data.darg.nxt, nest + 1);
+         break;
+      default:
+         log_err("%d", __LINE__);
    }
 
    tree_print_exit: free(spaces); return;

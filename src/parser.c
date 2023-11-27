@@ -71,6 +71,8 @@ tree_t* parser_parse_expr(parser_t* parser) {
       case TOKEN_KWD:
          expr->data.expr.val = parser_parse_call(parser);
          break;
+      case TOKEN_TAG:
+         expr->data.expr.val = parser_parse_def(parser);
       default:
          return expr;
    }
@@ -114,12 +116,29 @@ tree_t* parser_parse_block(parser_t* parser) {
    return block;
 }
 
+tree_t* parser_parse_tag(parser_t* parser) {
+   tree_t* tag;
+
+   tag = tree_init(TREE_TYPE_TAG);
+
+   tag->data.tag.val = parser->token->val;
+   parser->token->val = NULL;
+   tag->data.tag.nxt = (parser_nxt_token_match(parser, TOKEN_TAG) ? parser_parse_tag(parser) : NULL);
+
+   return tag;
+}
+
 tree_t* parser_parse_darg(parser_t* parser) {
    tree_t* darg;
 
    darg = tree_init(TREE_TYPE_DARG);
 
-   darg->data.darg.tag 
+   darg->data.darg.tag = parser_parse_tag(parser);
+   /*darg->data.darg.nxt = (parser_nxt_token_match(parser, TOKEN_LIST_DELIM) && parser_nxt_token_match(parser, TOKEN_TAG) ? parser_parse_darg(parser) : NULL);*/
+
+   (! parser_nxt_token_match(parser, TOKEN_LIST_DELIM)) && (darg->data.darg.nxt = NULL); 
+   (! parser_nxt_token_match(parser, TOKEN_TAG)) && (darg->data.darg.nxt = NULL); 
+   
 
    return darg;
 }
@@ -128,6 +147,10 @@ tree_t* parser_parse_def(parser_t* parser) {
    tree_t* def;
 
    def = tree_init(TREE_TYPE_DEF);
+
+   def->data.def.tag = parser_parse_tag(parser);
+   def->data.def.arg = ((parser->token->type == TOKEN_APPLY) && (parser_nxt_token_match(parser, TOKEN_TAG))) ? parser_parse_darg(parser) : NULL;
+   def->data.def.val = ((parser->token->type == TOKEN_SET) && parser_nxt_token(parser)) ? parser_parse_expr(parser) : NULL;
 
    return def;
 }
@@ -138,7 +161,6 @@ tree_t* parser_parse_carg(parser_t* parser) {
    carg = tree_init(TREE_TYPE_CARG);
 
    carg->data.carg.val = parser_parse_expr(parser);
-   
    carg->data.carg.nxt = (parser_nxt_token_match(parser, TOKEN_LIST_DELIM) && parser_nxt_token(parser) ? parser_parse_carg(parser) : NULL);
 
    return carg;

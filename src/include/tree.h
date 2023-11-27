@@ -33,8 +33,7 @@ typedef struct TREE {
 
       /* Expression. */
       struct TREE_DATA_EXPR {
-         /* The contents of the expression. */
-         struct TREE* val;
+         struct TREE* val; /* ??? */
       } expr;
 
       /* Literal integer. */
@@ -56,7 +55,7 @@ typedef struct TREE {
 
       /* Definition arguments. */
       struct TREE_DATA_DARG {
-         struct TREE* val; /* DEF */
+         struct TREE* tag; /* TAG */
          struct TREE* nxt; /* DARG */
       } darg;
 
@@ -70,7 +69,7 @@ typedef struct TREE {
       struct TREE_DATA_DEF {
          struct TREE* tag; /* TAG */
          struct TREE* arg; /* DARG */
-         struct TREE* val;
+         struct TREE* val; /* EXPR */
       } def;
 
       /* Calls. */
