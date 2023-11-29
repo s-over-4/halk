@@ -117,15 +117,15 @@ tree_t* parser_parse_block(parser_t* parser) {
 }
 
 tree_t* parser_parse_tag(parser_t* parser) {
+   if (parser->token->type != TOKEN_TAG) { return NULL; }
+
    tree_t* tag;
 
    tag = tree_init(TREE_TYPE_TAG);
 
-   if (parser->token->type != TOKEN_TAG) { return NULL; }
-
    tag->data.tag.val = parser->token->val;
    parser->token->val = NULL;
-   parser_nxt_token(parser) && (tag->data.tag.nxt = parser_parse_tag(parser));
+   tag->data.tag.nxt = (parser_nxt_token(parser) ? parser_parse_tag(parser) : NULL);
 
    return tag;
 }
