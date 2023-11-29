@@ -109,6 +109,10 @@ void lexer_do_reg(lexer_t* lexer) {
 
 void lexer_do_tag(lexer_t* lexer) {
    switch (*lexer->src) {
+      case SYNTAX_LIST_DELIM:
+         lexer_add_current_char(lexer, TOKEN_LIST_DELIM);
+         lexer->state = LEXER_STATE_REG;
+         break;
       case SYNTAX_SET:
          lexer_add_current_char(lexer, TOKEN_SET);
          lexer->state = LEXER_STATE_REG;

@@ -121,9 +121,11 @@ tree_t* parser_parse_tag(parser_t* parser) {
 
    tag = tree_init(TREE_TYPE_TAG);
 
+   if (parser->token->type != TOKEN_TAG) { return NULL; }
+
    tag->data.tag.val = parser->token->val;
    parser->token->val = NULL;
-   tag->data.tag.nxt = (parser_nxt_token_match(parser, TOKEN_TAG) ? parser_parse_tag(parser) : NULL);
+   parser_nxt_token(parser) && (tag->data.tag.nxt = parser_parse_tag(parser));
 
    return tag;
 }
@@ -133,12 +135,14 @@ tree_t* parser_parse_darg(parser_t* parser) {
 
    darg = tree_init(TREE_TYPE_DARG);
 
-   darg->data.darg.tag = parser_parse_tag(parser);
-   /*darg->data.darg.nxt = (parser_nxt_token_match(parser, TOKEN_LIST_DELIM) && parser_nxt_token_match(parser, TOKEN_TAG) ? parser_parse_darg(parser) : NULL);*/
+   if (parser->token->type != TOKEN_TAG) { return NULL; }
 
-   (! parser_nxt_token_match(parser, TOKEN_LIST_DELIM)) && (darg->data.darg.nxt = NULL); 
-   (! parser_nxt_token_match(parser, TOKEN_TAG)) && (darg->data.darg.nxt = NULL); 
-   
+   darg->data.darg.tag = parser_parse_tag(parser);
+
+   log_war("%d", parser->token->type);
+
+   if (parser->token->type != TOKEN_LIST_DELIM) { darg->data.darg.nxt = NULL; }
+   else { parser_nxt_token(parser) && (darg->data.darg.nxt = parser_parse_darg(parser)); }
 
    return darg;
 }
@@ -149,10 +153,17 @@ tree_t* parser_parse_def(parser_t* parser) {
    def = tree_init(TREE_TYPE_DEF);
 
    def->data.def.tag = parser_parse_tag(parser);
-   def->data.def.arg = ((parser->token->type == TOKEN_APPLY) && (parser_nxt_token_match(parser, TOKEN_TAG))) ? parser_parse_darg(parser) : NULL;
-   def->data.def.val = ((parser->token->type == TOKEN_SET) && parser_nxt_token(parser)) ? parser_parse_expr(parser) : NULL;
+   if (parser->token->type != TOKEN_APPLY) { goto finish; }
+   else { parser_nxt_token(parser); }
 
-   return def;
+   def->data.def.arg = parser_parse_darg(parser);
+   if (parser->token->type != TOKEN_SET) { goto finish; }
+   else { parser_nxt_token(parser); }
+
+   def->data.def.val = parser_parse_expr(parser);
+
+   finish:
+      return def;
 }
 
 tree_t* parser_parse_carg(parser_t* parser) {
