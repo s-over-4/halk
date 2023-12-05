@@ -82,6 +82,12 @@ void lexer_do_reg(lexer_t* lexer) {
       case SYNTAX_RGROUP:
          lexer_add_current_char(lexer, TOKEN_RGROUP);
          break;
+      case SYNTAX_LBLOCK:
+         lexer_add_current_char(lexer, TOKEN_LBLOCK);
+         break;
+      case SYNTAX_RBLOCK:
+         lexer_add_current_char(lexer, TOKEN_RBLOCK);
+         break;
       case SYNTAX_EXPR_END:
          lexer_add_current_char(lexer, TOKEN_EXPR_END);
          break;

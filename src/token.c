@@ -14,6 +14,8 @@ token_t* token_init(int type, char val) {
 }
 
 void token_destroy(token_t* token) {
+   if (!token) { return; }
+   
    if (token->nxt) {
       token_destroy(token->nxt);
       token->nxt = NULL;
@@ -44,9 +46,8 @@ void token_add_char(token_t* token, char c) {
 }
 
 void token_print(token_t* token) {
-
-   log_dbg("token/t=%d\t/v=%s", token->type, token->val);
-
+   if (!token) { return; }
+   log_dbg("token/t=%d\t/v=%s", token->type, token->val); 
    if (token->nxt) {
       token_print(token->nxt);
    }

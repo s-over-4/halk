@@ -92,84 +92,95 @@ void tree_destroy(tree_t* tree) {
 
 void tree_print(tree_t* tree, int nest) {
    char* spaces;
+   int ncolor;
+   char* color;
+   char* bcolor;
    int i;
 
    /* Aaahhh. */
    for(i=0,spaces=ecalloc(nest+1,sizeof(char)),spaces[nest]='\0';i<=nest-1;spaces[i++]=' ');
+   ncolor=31+nest%6;
+   color=malloc(9*sizeof(char));
+   bcolor=malloc(11*sizeof(char));
+   sprintf(color,"\x1b[%dm",ncolor);
+   sprintf(bcolor,"\x1b[%d;1m",ncolor);
 
-   #define NEST(TEXT) log_raw("%s"TEXT"\n",spaces);
-   #define NEST2(TEXT) log_raw("%s"TEXT,spaces);
+   #define NEST0(TEXT) log_raw("%s%s"TEXT"\x1b[0m\n",bcolor,spaces);
+   #define NEST1(TEXT) log_raw("%s%s"TEXT"\x1b[0m\n",color,spaces);
+   #define NEST2(TEXT) log_raw("%s \x1b[39;49;4m%s\x1b[0m\n",spaces,TEXT);
+   #define NEST3(TEXT) log_raw("%s \x1b[39;49;4m%d\x1b[0m\n",spaces,TEXT);
 
-   if (!tree) {
-      NEST("NULL");
-      goto tree_print_exit;
-   }
+   if (!tree) { NEST2("NULL"); goto end; }
 
    switch (tree->type) {
       case TREE_TYPE_BLOCK:
-         NEST("[block]");
-         NEST("val:");
+         NEST0("[block]");
+         NEST1("val:");
             tree_print(tree->data.block.val, nest + 1);
-         NEST("nxt:");
+         NEST1("nxt:");
             tree_print(tree->data.block.nxt, nest + 1);
          break;
       case TREE_TYPE_EXPR:
-         NEST("[expression]");
-         NEST("val:");
+         NEST0("[expression]");
+         NEST1("val:");
             tree_print(tree->data.expr.val, nest + 1);
          break;
       case TREE_TYPE_LINT:
-         NEST("[lint]");
-         NEST("val:");
-            log_raw("%s %d\n", spaces, tree->data.lint.val);
+         NEST0("[lint]");
+         NEST1("val:");
+            NEST3(tree->data.lint.val);
          break;
       case TREE_TYPE_LSTR:
-         NEST("[lstr]");
-         NEST("val:");
-            log_raw("%s %s\n", spaces, tree->data.lstr.val);
-         NEST("len:");
-            log_raw("%s %d\n", spaces, tree->data.lstr.len);
+         NEST0("[lstr]");
+         NEST1("val:");
+            NEST2(tree->data.lstr.val);
+         NEST1("len:");
+            NEST3(tree->data.lstr.len);
          break;
       case TREE_TYPE_CALL:
-         NEST("[call]");
-         NEST("target:");
-            log_raw("%s %s\n", spaces, tree->data.call.target);
-         NEST("arg:")
+         NEST0("[call]");
+         NEST1("target:");
+            NEST2(tree->data.call.target);
+         NEST1("arg:")
             tree_print(tree->data.call.arg, nest + 1);
          break;
       case TREE_TYPE_CARG:
-         NEST("[carg]");
-         NEST("val:");
+         NEST0("[carg]");
+         NEST1("val:");
             tree_print(tree->data.carg.val, nest + 1);
-         NEST("nxt:");
+         NEST1("nxt:");
             tree_print(tree->data.carg.nxt, nest + 1);
          break;
       case TREE_TYPE_DEF:
-         NEST("[def]");
-         NEST("tag:");
+         NEST0("[def]");
+         NEST1("tag:");
             tree_print(tree->data.def.tag, nest + 1);
-         NEST("arg:");
+         NEST1("arg:");
             tree_print(tree->data.def.arg, nest + 1);
-         NEST("val:");
+         NEST1("val:");
             tree_print(tree->data.def.val, nest + 1);
          break;
       case TREE_TYPE_TAG:
-         NEST("[tag]");
-         NEST("val:");
-            log_raw("%s %s\n", spaces, tree->data.call.target);
-         NEST("nxt:");
+         NEST0("[tag]");
+         NEST1("val:");
+            NEST2(tree->data.call.target);
+         NEST1("nxt:");
             tree_print(tree->data.tag.nxt, nest + 1);
          break;
       case TREE_TYPE_DARG:
-         NEST("[darg]");
-         NEST("tag:");
+         NEST0("[darg]");
+         NEST1("tag:");
             tree_print(tree->data.darg.tag, nest + 1);
-         NEST("nxt:");
+         NEST1("nxt:");
             tree_print(tree->data.darg.nxt, nest + 1);
          break;
       default:
          log_err("%d", __LINE__);
    }
 
-   tree_print_exit: free(spaces); return;
+   end:
+      free(spaces);
+      free(color);
+      free(bcolor);
+      return;
 }
