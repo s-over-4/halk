@@ -1,29 +1,33 @@
 `
-   #def# #ID# [#VALUE#]    set a macro
-   #fed# #ID#              unset a macro
+   Preprocessor directive types:
+      
+      #FOO#                Call a macro or function.
+      #=BAR#               A string that can be stored by a macro. 
 
-   #cde# #VALUE#           leave code as is
+   #def# #ID# [#=VALUE#]   Set a macro.
+   #fed# #ID#              Unset a macro.
 
-   #ddo# #ID?# #DIR#       if defined, do #DIR# (Defined DO)
-   #udo# #ID?# #DIR#       if undefined, do #DIR# (UnDefined Do)
+   #dex# #ID?# ... #xed#   If macro ID is defined, expand to ... (Defined EXpand).
+   #uex# #ID?# ... #xeu#   If macro ID is undefined, expand to ... (Undefined EXpand).
 
-   #inc# #FPATH#           include a file
+   #inc# #FILE#            Include a file; first searches cwd, then some kind of $HALKPATH.
 
-   #ID#                    call a macro
+   #ID#                    Call a macro.
 `
 
-` example usage: `
+` Example usage: `
 
-#def# #VERSION# #"31.4.1"#
+` Simple header guard. `
+#uex# #TEST#
+#def# #TEST#
 
-#ddo# #BSD# #inc# #bsd_support.halk#
+#inc# #io#
+#inc# #packet.hlk#
 
-#udo# #OS# #
-   some_error_func."os not specified";
-#
+#def# #VERSION# #= 3.14.1 #
+#def# #ERR# #= {io!print."Error D:"; die;} #
 
-#def# #OSTYPE# #
-   os/shell."sysctl kernel.ostype"
-#
+:packet_t:p = packet!get;
+?.(~=.p!version,#VERSION#),#ERR#;   ` Throw error if versions do not match. `
 
-stdio/pln.#OSTYPE#
+#xeu#

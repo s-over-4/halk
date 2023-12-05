@@ -1,18 +1,16 @@
-` comments in backticks `
+` Comments in backticks. `
 
-#inc# #somefile.halk#   ` include a file `
-#inc# #stdio#           ` include the 'stdio' header (file path stored in the macro #stdio#) `
+:str:hello = "Hello";                                    ` Define a variable "hello" with the type "str". `
 
-:str:hello = "Hello";                                    ` define a variable 'hello' with the type 'str' `
-
-:str:greet.:str:target = strcat.hello, ", ", target;     ` define a function 'greet' that returns a 'str' and accepts an 
-                                                         argument 'target', also of type 'str' `
+:str:greet.:str:target = strcat.hello, ", ", target;     ` Define a function "greet" that returns a "str" and accepts an 
+                                                         argument "target", also of type "str". `
 
 ` some more functions `
 :void:add1.:int:n+=. n, 1;
 :int:fac.:int:n=?.(=.n,0),1,*.n,fac.-.n,1;
 
-:int:fib. :int:n = ?. (<=. n, 1),                        ` multiple lines can be used for clarity ` 
+:int:fib. :int:n = ?. (<=. n, 1),                        ` Multiple lines and whitespace can be used for clarity. ` 
                       n,
                       +. fib.(-. n, 1), fib. -. n, 2);
 
+io!print.greet."world!";                                 ` Use previously defined function to print "Hello, world!". `
