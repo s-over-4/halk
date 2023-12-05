@@ -2,7 +2,6 @@
 #define TOKEN_H
 
 #include "util.h"
-#include "hlkt.h"
 
 typedef enum TOKEN_TYPE {
    TOKEN_UNKNOWN,
