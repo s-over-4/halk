@@ -9,7 +9,13 @@ typedef struct DOER {
    tree_t* tree;
 } doer_t;
 
+/* Creates a new parser. */
 doer_t* doer_init(tree_t* tree);
+
+/*
+   Destroys a doer.
+   - Does not free the `tree`.
+*/
 void doer_destroy(doer_t* doer);
 
 void doer_do_blin_print(char* s);
