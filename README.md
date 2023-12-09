@@ -12,7 +12,7 @@ If you wish to remove all HALK-related items from your life, you can try
 $ sudo make uninstall
 ```
 
-As of 82e7599, HALK has been tested on both Linux and MacOS.
+As of `82e7599`, HALK has been tested on both Linux and MacOS.
 
 # Usage
 
@@ -81,7 +81,7 @@ described is liable to sudden and violent change.
 
 Example programs can be found in the examples directory.
 
-# Progress
+## Progress
 
 - [x] Preprocessor
 - [x] Lexer
