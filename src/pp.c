@@ -75,9 +75,18 @@ void pp_do_com(pp_t* pp) {
 
 void pp_run(pp_t* pp) {
    while (*pp->src) {
-      if (pp->state == PP_STATE_REG) { pp_do_reg(pp); }
-      else if (pp->state == PP_STATE_STR || pp->state == PP_STATE_ESC) { pp_do_str(pp); }
-      else if (pp->state == PP_STATE_COM) { pp_do_com(pp); }
+      switch (pp->state) {
+         case PP_STATE_REG:
+            pp_do_reg(pp);
+            break;
+         case PP_STATE_STR:
+         case PP_STATE_ESC:
+            pp_do_str(pp);
+            break;
+         case PP_STATE_COM:
+            pp_do_com(pp);
+            break;
+      }
 
       pp->src ++;
    }

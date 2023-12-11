@@ -20,14 +20,14 @@ void doer_destroy(doer_t* doer);
 
 void doer_do_blin_print(char* s);
 
-tree_t* doer_do_block(doer_t* doer);
-tree_t* doer_do_expr(doer_t* doer);
-tree_t* doer_do_lint(doer_t* doer);
-tree_t* doer_do_lstr(doer_t* doer);
-tree_t* doer_do_tag(doer_t* doer);
-tree_t* doer_do_darg(doer_t* doer);
-tree_t* doer_do_carg(doer_t* doer);
-tree_t* doer_do_def(doer_t* doer);
-tree_t* doer_do_call(doer_t* doer);
+void doer_do_block(tree_t* tree);
+void doer_do_expr(tree_t* tree);
+void doer_do_lint(tree_t* tree);
+void doer_do_lstr(tree_t* tree);
+void doer_do_tag(tree_t* tree);
+void doer_do_darg(tree_t* tree);
+void doer_do_carg(tree_t* tree);
+void doer_do_def(tree_t* tree);
+void doer_do_call(tree_t* tree);
 
 #endif

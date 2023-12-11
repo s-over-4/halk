@@ -145,7 +145,7 @@ void lexer_do_str(lexer_t* lexer) {
 void lexer_do_int(lexer_t* lexer) {
    if (isdigit(*lexer->src)) {
       lexer_add_current_char_to_last_token(lexer, TOKEN_INT);
-      if (! isdigit(*(lexer->src + 1))) { lexer->state = LEXER_STATE_REG; }
+      ! isdigit(*(lexer->src + 1)) && ( lexer->state = LEXER_STATE_REG );
    } else {
       log_err("int state at non-int token");
    }
@@ -154,7 +154,8 @@ void lexer_do_int(lexer_t* lexer) {
 void lexer_do_kwd(lexer_t* lexer) {
    if (strchr(SYNTAX_KWD_CHARS, *lexer->src)) {
       lexer_add_current_char_to_last_token(lexer, TOKEN_KWD);
-      if (! strchr(SYNTAX_KWD_CHARS, *(lexer->src + 1))) { lexer->state = LEXER_STATE_REG; }
+      ! strchr(SYNTAX_KWD_CHARS, *(lexer->src + 1)) && 
+         ( lexer->state = LEXER_STATE_REG );
    } else {
       log_err("keyword state at non-keyword token");
    }

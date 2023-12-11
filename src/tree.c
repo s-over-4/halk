@@ -90,28 +90,27 @@ void tree_destroy(tree_t* tree) {
    free(tree);
 }
 
+/*
+   Every time I think there's a problem with the parser, it turns out it's 
+   just this stupid tree print function.
+*/
 void tree_print(tree_t* tree, int nest) {
-   char* spaces;
-   int ncolor;
-   char* color;
-   char* bcolor;
-   int i;
-
-   /* Aaahhh. */
-   for(i=0,spaces=ecalloc(nest+1,sizeof(char)),spaces[nest]='\0';i<=nest-1;spaces[i++]=' ');
-   ncolor=31+nest%6;
-   color=malloc(9*sizeof(char));
-   bcolor=malloc(11*sizeof(char));
-   sprintf(color,"\x1b[%dm",ncolor);
-   sprintf(bcolor,"\x1b[%d;1m",ncolor);
-
-   #define NEST0(TEXT) log_raw("%s%s"TEXT"\x1b[0m\n",bcolor,spaces);
-   #define NEST1(TEXT) log_raw("%s%s"TEXT"\x1b[0m\n",color,spaces);
-   #define NEST2(TEXT) log_raw("%s \x1b[39;49;4m%s\x1b[0m\n",spaces,TEXT);
-   #define NEST3(TEXT) log_raw("%s \x1b[39;49;4m%d\x1b[0m\n",spaces,TEXT);
-
-   if (!tree) { NEST2("NULL"); goto end; }
-
+   char*sp;int nc, i;char*c;char*bc;for(i
+   =0,sp=ecalloc(nest+1,sizeof(char)),sp[
+   nest]='\0';i<=nest-1;sp[i++]=' ');nc=0
+   +0x1f+nest%6;c=malloc(9*sizeof(char));
+   ;bc=malloc(11*sizeof(char));sprintf(c,
+   "\x1b[%dm",nc);sprintf(bc,"\x1b[%d;1m"
+   ,nc);NULL;NULL;0x0;0;0;0;0;NULL;0x0;0;
+   #define NEST0(T)log_raw("%s%s"T"\x1b"\
+   """""""""""""""""""""""""[0m\n",bc,sp)
+   #define NEST1(T)log_raw("%s%s"T"\x1b"\
+   """""""""""""""""""""""""[0m\n",c,sp);
+   #define NEST2(T)log_raw("%s \x1b[39;"\
+   """""""""""""""49;4m%s\x1b[0m\n",sp,T)
+   #define NEST3(T)log_raw("%s \x1b[39;"\
+   """""""""""""""49;4m%d\x1b[0m\n",sp,T)
+   if (!tree) { NEST2("NULL"); goto end;}
    switch (tree->type) {
       case TREE_TYPE_BLOCK:
          NEST0("[block]");
@@ -179,8 +178,8 @@ void tree_print(tree_t* tree, int nest) {
    }
 
    end:
-      free(spaces);
-      free(color);
-      free(bcolor);
+      free(sp);
+      free(c);
+      free(bc);
       return;
 }

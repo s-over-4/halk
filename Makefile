@@ -3,7 +3,7 @@ PREFIX     := /usr/local/bin
 CC         := gcc
 REG_CFLAGS := -ansi -O3 -s
 DBG_CFLAGS := -ansi -Og -ggdb -pedantic 
-DBG_CFLAGS += -Wall -Wextra -Wformat
+DBG_CFLAGS += -Wall -Wextra -Wformat -Werror -Wpedantic
 DBG_CFLAGS += -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 CFLAGS     := $(REG_CFLAGS)
 SRCS       := $(wildcard src/*.c)
