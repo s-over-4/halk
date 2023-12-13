@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "include/test.h"
+
 #include "include/util.h"
 #include "include/source.h"
 #include "include/token.h"
@@ -18,6 +20,8 @@ int main(int argc, char* argv[]) {
    src = source_get(argv[1]); 
    log_dbg("source gotten");
    log_inf("source: %s", src);
+
+   ASSERT(src);
 
    /* create pre-processor */
    pp = pp_init(src);
@@ -51,6 +55,8 @@ int main(int argc, char* argv[]) {
    tree_destroy(parser->tree);
    parser_destroy(parser);
    free(src);
+
+   TEST_REPORT;
 
    return 0;
 }

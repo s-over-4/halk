@@ -3,7 +3,8 @@
 void log_dbg(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stdout, "\e[3m\e[37m[==] ");
+   fprintf(stdout, "");
+   fprintf(stderr, "\x1b[37m[\x1b[95;1m==\x1b[0m\x1b[37m]\x1b[0m\x1b[35m ");
 
    va_start(ap, fmt);
    vfprintf(stdout, fmt, ap);
@@ -12,10 +13,22 @@ void log_dbg(const char* fmt, ...) {
    fprintf(stdout, "\e[0m\n");
 }
 
+void log_yay(const char* fmt, ...) {
+   va_list ap;
+
+   fprintf(stdout, "\x1b[37m[\x1b[92;1m==\x1b[0m\x1b[37m]\x1b[32m ");
+
+   va_start(ap, fmt);
+   vfprintf(stdout, fmt, ap);
+   va_end(ap);
+
+   fprintf(stdout, "\x1b[0m\n");
+}
+
 void log_inf(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stdout, "[\e[34m==\e[0m] ");
+   fprintf(stderr, "\x1b[37m[\x1b[94;1m==\x1b[0m\x1b[37m]\x1b[0m ");
 
    va_start(ap, fmt);
    vfprintf(stdout, fmt, ap);
@@ -35,7 +48,7 @@ void log_raw(const char* fmt, ...) {
 void log_war(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stderr, "[\e[33m==\e[0m] WARNING ");
+   fprintf(stderr, "\x1b[37m[\x1b[93;1m==\x1b[0m\x1b[37m]\x1b[93;1m WARNING:\x1b[0m\x1b[33m ");
 
    va_start(ap, fmt);
    vfprintf(stderr, fmt, ap);
@@ -47,24 +60,26 @@ void log_war(const char* fmt, ...) {
 void log_err(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stderr, "[\e[31m==\e[0m] ERROR ");
+   fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m ERROR:\x1b[0m\x1b[31m ");
 
    va_start(ap, fmt);
    vfprintf(stderr, fmt, ap);
    va_end(ap);
 
-   fprintf(stderr, "\n");
+   fprintf(stderr, "\x1b[0m\n");
 }
 
 void die(const char* fmt, ...) {
    va_list ap;
 
-   fprintf(stderr, "[\e[31;1m==\e[0m] FATAL ERROR ");
+   fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m CAUSE OF DEATH:\x1b[0m\x1b[31m ");
 
    va_start(ap, fmt);
    vfprintf(stderr, fmt, ap);
    va_end(ap);
-   fprintf(stderr, "\n");
+   fprintf(stderr, "\x1b[0m\n");
+
+   fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m Exiting...\x1b[0m\n");
 
    exit(1);
 }

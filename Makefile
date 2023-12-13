@@ -30,11 +30,12 @@ halk: reg_options $(OBJS)
 	$(CC) $(OBJS) $(REG_CFLAGS) -o $(BIN).out
 
 dbg: CFLAGS := $(DBG_CFLAGS)
+dbg: TEST := -D TEST
 dbg: dbg_options $(OBJS)
 	$(CC) $(OBJS) $(DBG_CFLAGS) -o $(BIN).out
 
 %.o: %.c
-	$(CC) -c $< -o $@
+	$(CC) $(TEST) -c $< -o $@
 
 install: all
 	mkdir -p $(PREFIX)

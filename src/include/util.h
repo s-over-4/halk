@@ -8,6 +8,8 @@
 
 /* Log some debug information. */
 void log_dbg(const char*, ...);
+/* Log some congratulatory information. */
+void log_yay(const char*, ...);
 /* Log some information. */
 void log_inf(const char*, ...);
 /* Log something with no formatting. */

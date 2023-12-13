@@ -79,6 +79,7 @@ tree_t* parser_parse_expr(parser_t* parser) {
          expr->data.expr.val = parser_parse_block(parser);
          break;
       default:
+         expr->data.lstr.val = "???";  /* TODO: Add an "unknown" token type. */
          return expr;
    }
 
@@ -87,9 +88,9 @@ tree_t* parser_parse_expr(parser_t* parser) {
 
 tree_t* parser_parse_block(parser_t* parser) {
    if (
-         !parser->token || 
-         parser->token->type == TOKEN_EXPR_END || 
-         parser->token->type == TOKEN_RBLOCK
+      ! parser->token || 
+      parser->token->type == TOKEN_EXPR_END ||
+      parser->token->type == TOKEN_RBLOCK
    ) { return NULL; }
 
    tree_t* block;
@@ -97,10 +98,9 @@ tree_t* parser_parse_block(parser_t* parser) {
    block = tree_init(TREE_TYPE_BLOCK);
 
    block->data.block.val = parser_parse_expr(parser);
-   block->data.block.nxt = parser_nxt_token_match(parser, TOKEN_EXPR_END) &&
-      parser_nxt_token(parser) ? 
-         parser_parse_block(parser) : 
-         NULL;
+   block->data.block.nxt = parser_nxt_token(parser) ? 
+      parser_parse_block(parser) : 
+      NULL;
 
    return block;
 }
@@ -169,10 +169,10 @@ tree_t* parser_parse_carg(parser_t* parser) {
    carg->data.carg.val = parser_parse_expr(parser);
    carg->data.carg.nxt = (
       parser_nxt_token_match(parser, TOKEN_LIST_DELIM) && 
-         parser_nxt_token(parser) ? 
-            parser_parse_carg(parser) : 
-            NULL
-   );
+      parser_nxt_token(parser) 
+   ) ? 
+      parser_parse_carg(parser) : 
+      NULL;
 
    return carg;
 }
@@ -184,10 +184,8 @@ tree_t* parser_parse_call(parser_t* parser) {
 
    call->data.call.target = parser->token->val;
    parser->token->val = NULL;
-   parser_nxt_token_match(parser, TOKEN_APPLY) || 
-      (call->data.call.arg = NULL);
    call->data.call.arg = (
-      parser_nxt_token(parser) ?
+      parser_nxt_token_match(parser, TOKEN_APPLY) && parser_nxt_token(parser) ?
          parser_parse_carg(parser) : 
          NULL
    );
