@@ -21,6 +21,7 @@ unsigned int TESTS_PASSED = 0;
 
 #else
 #define ASSERT(EXPR) NULL;
+#define TEST_REPORT NULL;
 #endif
 
 #endif
