@@ -4,15 +4,15 @@
 #include "util.h"
 
 typedef enum TREE_TYPE {
-      TREE_TYPE_BLOCK,
-      TREE_TYPE_EXPR,
-      TREE_TYPE_LINT,
-      TREE_TYPE_LSTR,
-      TREE_TYPE_TAG,
-      TREE_TYPE_DARG,
-      TREE_TYPE_CARG,
-      TREE_TYPE_DEF,
-      TREE_TYPE_CALL,
+   TREE_TYPE_BLOCK,
+   TREE_TYPE_EXPR,
+   TREE_TYPE_LINT,
+   TREE_TYPE_LSTR,
+   TREE_TYPE_TAG,
+   TREE_TYPE_DARG,
+   TREE_TYPE_CARG,
+   TREE_TYPE_DEF,
+   TREE_TYPE_CALL,
 } tree_type_t;
 
 /* The Abstract Syntax Tree (AST) structure. */
@@ -85,6 +85,12 @@ typedef struct TREE {
 tree_t* tree_init(int type);
 /* Destroy the AST. */
 void tree_destroy(tree_t* tree);
+
+/*
+   Compare two trees. For testing.
+   Returns 1 if the same, otherwise 0.
+*/
+int tree_cmp(tree_t* tree_0, tree_t* tree_1);
 
 /* Print a tree. */
 void tree_print(tree_t* tree, int nest);

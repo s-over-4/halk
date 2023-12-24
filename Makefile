@@ -9,8 +9,10 @@ CFLAGS     := $(REG_CFLAGS)
 SRCS       := $(wildcard src/*.c)
 SRCS       := $(filter-out %doer.c,$(SRCS))	# Filter out incomplete doer for now.
 OBJS       := $(SRCS:.c=.o)
+TEST_SRCS  := $(wildcard test/*.c)
+TEST_OUTS  := $(TEST_SRCS:.c=.out)
 
-.PHONY: all reg_options dbg_options halk dbg install uninstall clean me a sandwich
+.PHONY: all reg_options dbg_options halk dbg install uninstall clean test me a sandwich
 
 all: halk
 
@@ -30,12 +32,18 @@ halk: reg_options $(OBJS)
 	$(CC) $(OBJS) $(REG_CFLAGS) -o $(BIN).out
 
 dbg: CFLAGS := $(DBG_CFLAGS)
-dbg: TEST := -D TEST
 dbg: dbg_options $(OBJS)
 	$(CC) $(OBJS) $(DBG_CFLAGS) -o $(BIN).out
 
+test: dbg $(TEST_OUTS)
+	set -e
+	for f in $(TEST_OUTS); do ./$$f; done
+
 %.o: %.c
-	$(CC) $(TEST) -c $< -o $@
+	$(CC) -c $< -o $@
+
+%.out: %.c
+	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@
 
 install: all
 	mkdir -p $(PREFIX)
@@ -46,7 +54,7 @@ uninstall:
 	rm -f $(PREFIX)/$(BIN)
 
 clean:
-	rm -f $(BIN).out src/*.o
+	rm -f $(BIN).out src/*.o test/*.out
 
 me a:
 	@exit

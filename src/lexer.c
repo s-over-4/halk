@@ -36,7 +36,6 @@ void lexer_add_token(lexer_t* lexer, token_t* token) {
       lexer->tokenl_last = token;
    }
 
-
    lexer->tokenc ++;
 }
 
@@ -171,7 +170,4 @@ void lexer_run(lexer_t* lexer) {
       else if (lexer->state == LEXER_STATE_KWD) { lexer_do_kwd(lexer); }
       lexer->src ++;
    }
-
-   /* print tokens *AFTER* they've been discovered */
-   token_print(lexer->tokenl);
 }

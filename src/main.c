@@ -1,17 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "include/main.h"
 
-#include "include/test.h"
-
-#include "include/util.h"
-#include "include/source.h"
-#include "include/token.h"
-#include "include/pp.h"
-#include "include/lexer.h"
-#include "include/parser.h"
+#ifdef TEST
+unsigned int TESTS_RUN;
+unsigned int TESTS_PASSED;
+#endif
 
 int main(int argc, char* argv[]) {
-   char*    src;     /* the source "code" */
+   char*    src;
    pp_t*    pp;
    lexer_t* lexer;
    parser_t* parser;
@@ -20,8 +15,6 @@ int main(int argc, char* argv[]) {
    src = source_get(argv[1]); 
    log_dbg("source gotten");
    log_inf("source: %s", src);
-
-   ASSERT(src);
 
    /* create pre-processor */
    pp = pp_init(src);
@@ -44,6 +37,9 @@ int main(int argc, char* argv[]) {
    lexer_run(lexer);
    log_dbg("lexer ran");
 
+   /* Print the lexer's tokens. */
+   token_print(lexer->tokenl);
+
    /* Create the parser from the lexer's tokens. */
    parser = parser_init(lexer->tokenl);
    parser_run(parser);
@@ -55,8 +51,6 @@ int main(int argc, char* argv[]) {
    tree_destroy(parser->tree);
    parser_destroy(parser);
    free(src);
-
-   TEST_REPORT;
 
    return 0;
 }

@@ -90,6 +90,49 @@ void tree_destroy(tree_t* tree) {
    free(tree);
 }
 
+int tree_cmp(tree_t* tree_0, tree_t* tree_1) {
+   if ((tree_0 && !tree_1) || (!tree_0 && tree_1)) { return 0; }  /* Only 1 is defined (failure). */
+   if (!tree_0 && !tree_1) { return 1; }  /* Both are undefined (success). */
+   if (tree_0->type != tree_1->type) { return 0; } /* Types do not match (failure). */
+
+   switch (tree_0->type) {
+      case TREE_TYPE_BLOCK:
+         return tree_cmp(tree_0->data.block.val, tree_1->data.block.val) &&
+            tree_cmp(tree_0->data.block.val, tree_1->data.block.val);
+         break;
+      case TREE_TYPE_EXPR:
+         return tree_cmp(tree_0->data.expr.val, tree_1->data.expr.val);
+         break;
+      case TREE_TYPE_LINT:
+         return tree_0->data.lint.val == tree_1->data.lint.val;
+         break;
+      case TREE_TYPE_LSTR:
+         return strcmp(tree_0->data.lstr.val, tree_1->data.lstr.val) == 0;
+         break;
+      case TREE_TYPE_TAG:
+         return (strcmp(tree_0->data.tag.val, tree_1->data.tag.val) == 0) &&
+            tree_cmp(tree_0->data.tag.nxt, tree_1->data.tag.nxt);
+         break;
+      case TREE_TYPE_DARG:
+         return tree_cmp(tree_0->data.darg.tag, tree_1->data.darg.tag) &&
+            tree_cmp(tree_0->data.darg.nxt, tree_1->data.darg.nxt);
+         break;
+      case TREE_TYPE_CARG:
+         return tree_cmp(tree_0->data.carg.val, tree_1->data.carg.val) &&
+            tree_cmp(tree_0->data.carg.nxt, tree_1->data.carg.nxt);
+         break;
+      case TREE_TYPE_DEF:
+         return tree_cmp(tree_0->data.def.tag, tree_1->data.def.tag) &&
+            tree_cmp(tree_0->data.def.arg, tree_1->data.def.arg) &&
+            tree_cmp(tree_0->data.def.val, tree_1->data.def.val);
+         break;
+      case TREE_TYPE_CALL:
+         return (strcmp(tree_0->data.call.target, tree_1->data.call.target) == 0) &&
+            tree_cmp(tree_0->data.call.arg, tree_1->data.call.arg);
+         break;
+   }
+}
+
 /*
    Every time I think there's a problem with the parser, it turns out it's 
    just this stupid tree print function.
