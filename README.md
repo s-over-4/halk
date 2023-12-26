@@ -12,7 +12,8 @@ If you wish to remove all HALK-related items from your life, you can try
 $ sudo make uninstall
 ```
 
-As of `82e7599`, HALK has been tested on both Linux and MacOS.
+`test` and `dbg` targets also exist.
+HALK should build properly on unix-like systems with gcc installed.
 
 # Usage
 
@@ -22,9 +23,9 @@ One must simply
 $ halk examples/simple.halk
 ```
 
-. This will print out the token and AST representations of the given text. Running HALK 
-without an argument allows one to pass in text through stdin. An example session is transcribed
-below:
+. This will print out the token and AST representations of the given text.
+Running HALK without an argument allows one to pass in text through stdin. An
+example session is transcribed below:
 
 ```
 $ halk
@@ -75,9 +76,10 @@ nxt:
 
 # About
 
-HALK is a **dubiously-typed**, **vaguely-functional**, **interpreted**  programming language,
-with syntax designed to be as **minimal** and **consistent** as possible. Note that all syntax
-described is liable to sudden and violent change.
+HALK is a **dubiously-typed**, **vaguely-functional**, **interpreted**
+programming language, with syntax designed to be as **minimal** and
+**consistent** as possible. Note that all syntax described is liable to sudden
+and violent change.
 
 Example programs can be found in the examples directory.
 

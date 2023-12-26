@@ -45,10 +45,17 @@ int main(int argc, char** argv) {
                      treep_11->data.block.nxt = NULL;
       tree_0->data.block.nxt = NULL;
 
+   /*
+   
+   [block]
+      
+
+   */
+
    char src_0[] = "" \
       ":int:f = {" \
-      "  a.b;" \
-      "  c.d;" \
+      "a.b;" \
+      "c.d"
       "}";
 
    pp = pp_init(src_0);
