@@ -2,7 +2,7 @@
 
 :str:hello = "Hello";                                    ` Define a variable "hello" with the type "str". `
 
-:str:greet.:str:target = strcat.hello, ", ", target;     ` Define a function "greet" that returns a "str" and accepts an 
+:str:greet.:str:target = strcat.hello, " ", target, "."; ` Define a function "greet" that returns a "str" and accepts an 
                                                          argument "target", also of type "str". `
 
 ` some more functions `

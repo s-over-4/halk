@@ -14,7 +14,7 @@
 #define SYNTAX_APPLY             '.'
 #define SYNTAX_LIST_DELIM        ','
 #define SYNTAX_TAG_DELIM         ':'
-#define SYNTAX_NAMESPACE_DELIM   '!'
+#define SYNTAX_NAMESPACE_DELIM   ':'
 #define SYNTAX_LBLOCK            '{'
 #define SYNTAX_RBLOCK            '}'
 #define SYNTAX_RLIST             '['

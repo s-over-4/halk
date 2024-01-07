@@ -6,8 +6,6 @@
 extern unsigned int TESTS_RUN;
 extern unsigned int TESTS_PASSED;
 
-#define HIDE(THE) do { THE } while ( 0 );
-
 #define ASSERT(EXPR) \
    TESTS_RUN++; \
    (EXPR && ++TESTS_PASSED) ? \
@@ -19,4 +17,4 @@ extern unsigned int TESTS_PASSED;
       log_yay("%s: All %d tests passed!", __FILE__, TESTS_RUN) : \
       log_err("%d/%d tests failed.", TESTS_RUN - TESTS_PASSED, TESTS_RUN);
 
-#endif /* ifndef TEST_H */
+#endif

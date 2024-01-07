@@ -58,5 +58,6 @@ clean:
 
 me a:
 	@exit
+
 sandwich:
-	@[ "$(USER)" = "root" ] && echo "Okay." || echo "What? Make it yourself."
+	@[ "$(shell id -u)" = 0 ] && echo "Okay." || echo "What? Make it yourself."

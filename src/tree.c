@@ -98,7 +98,7 @@ int tree_cmp(tree_t* tree_0, tree_t* tree_1) {
    switch (tree_0->type) {
       case TREE_TYPE_BLOCK:
          return tree_cmp(tree_0->data.block.val, tree_1->data.block.val) &&
-            tree_cmp(tree_0->data.block.val, tree_1->data.block.val);
+            tree_cmp(tree_0->data.block.nxt, tree_1->data.block.nxt);
          break;
       case TREE_TYPE_EXPR:
          return tree_cmp(tree_0->data.expr.val, tree_1->data.expr.val);
