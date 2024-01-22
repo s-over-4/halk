@@ -16,7 +16,9 @@ void parser_destroy(parser_t* parser) {
 
 int parser_nxt_token(parser_t* parser) {
    if (parser->token->nxt) {
-      parser->token = parser->token->nxt;
+      token_t* nxt = parser->token->nxt;
+      free(parser->token);
+      parser->token = nxt;
       return 1;
    } else {
       return 0;
@@ -60,19 +62,19 @@ tree_t* parser_parse_expr(parser_t* parser) {
    expr = tree_init(TREE_TYPE_EXPR);
 
    switch (parser->token->type) {
-      case TOKEN_INT:
+      case TOKEN_TYPE_INT:
          expr->data.expr.val = parser_parse_lint(parser);
          break;
-      case TOKEN_STR:
+      case TOKEN_TYPE_STR:
          expr->data.expr.val = parser_parse_lstr(parser);
          break;
-      case TOKEN_KWD:
+      case TOKEN_TYPE_KWD:
          expr->data.expr.val = parser_parse_call(parser);
          break;
-      case TOKEN_TAG:
+      case TOKEN_TYPE_TAG:
          expr->data.expr.val = parser_parse_def(parser);
          break;
-      case TOKEN_LBLOCK:
+      case TOKEN_TYPE_LBLOCK:
          parser_nxt_token(parser);
          expr->data.expr.val = parser_parse_block(parser);
          break;
@@ -85,26 +87,28 @@ tree_t* parser_parse_expr(parser_t* parser) {
 }
 
 tree_t* parser_parse_block(parser_t* parser) {
-   if (
-      ! parser->token || 
-      parser->token->type == TOKEN_EXPR_END ||
-      parser->token->type == TOKEN_RBLOCK
-   ) { return NULL; }
-
    tree_t* block;
 
    block = tree_init(TREE_TYPE_BLOCK);
 
-   block->data.block.val = parser_parse_expr(parser);
-   block->data.block.nxt = parser_nxt_token(parser) ? 
-      parser_parse_block(parser) : 
-      NULL;
+   if (!parser->token) {
+      block->data.block.val = NULL;
+      block->data.block.nxt = NULL;
+   } else {
+      switch (parser->token->type) {
+         case TOKEN_TYPE_INT:
+            block->data.block.val = parser_parse_lint(parser);
+            break;
+      }
+   }
+
+   block->data.block.nxt = NULL;
 
    return block;
 }
 
 tree_t* parser_parse_tag(parser_t* parser) {
-   if (parser->token->type != TOKEN_TAG) { return NULL; }
+   if (parser->token->type != TOKEN_TYPE_TAG) { return NULL; }
 
    tree_t* tag;
 
@@ -126,13 +130,13 @@ tree_t* parser_parse_darg(parser_t* parser) {
 
    darg = tree_init(TREE_TYPE_DARG);
 
-   if (parser->token->type != TOKEN_TAG) { return NULL; }
+   if (parser->token->type != TOKEN_TYPE_TAG) { return NULL; }
 
    darg->data.darg.tag = parser_parse_tag(parser);
 
    log_war("%d", parser->token->type);
 
-   if (parser->token->type != TOKEN_LIST_DELIM) {
+   if (parser->token->type != TOKEN_TYPE_LIST_DELIM) {
       darg->data.darg.nxt = NULL;
    } else {
       parser_nxt_token(parser) && 
@@ -149,10 +153,10 @@ tree_t* parser_parse_def(parser_t* parser) {
 
    def->data.def.tag = parser_parse_tag(parser);
 
-   parser->token->type == TOKEN_APPLY && 
+   parser->token->type == TOKEN_TYPE_APPLY && 
       parser_nxt_token(parser) &&
       ( def->data.def.arg = parser_parse_darg(parser) );
-   parser->token->type == TOKEN_SET && 
+   parser->token->type == TOKEN_TYPE_SET && 
       parser_nxt_token(parser) && 
       ( def->data.def.val = parser_parse_expr(parser) );
    
@@ -166,7 +170,7 @@ tree_t* parser_parse_carg(parser_t* parser) {
 
    carg->data.carg.val = parser_parse_expr(parser);
    carg->data.carg.nxt = (
-      parser_nxt_token_match(parser, TOKEN_LIST_DELIM) && 
+      parser_nxt_token_match(parser, TOKEN_TYPE_LIST_DELIM) && 
       parser_nxt_token(parser) 
    ) ? 
       parser_parse_carg(parser) : 
@@ -183,7 +187,7 @@ tree_t* parser_parse_call(parser_t* parser) {
    call->data.call.target = parser->token->val;
    parser->token->val = NULL;
    call->data.call.arg = (
-      parser_nxt_token_match(parser, TOKEN_APPLY) && parser_nxt_token(parser) ?
+      parser_nxt_token_match(parser, TOKEN_TYPE_APPLY) && parser_nxt_token(parser) ?
          parser_parse_carg(parser) : 
          NULL
    );
@@ -191,10 +195,19 @@ tree_t* parser_parse_call(parser_t* parser) {
    return call;
 }
 
-tree_t* parser_parse(parser_t* parser) {
-   return parser_parse_block(parser);
+void parser_parse(parser_t* parser) {
+   while (parser->token) {
+      switch (parser->token->type) {
+         case TOKEN_TYPE_INT:
+            parser->tree->data.block.val = parser_parse_lint(parser);
+            break;
+      }
+
+      parser_nxt_token(parser);
+   }
+
 }
 
 void parser_run(parser_t* parser) {
-   parser->tree = parser_parse(parser);
+   parser->tree = parser_parse_block(parser);
 }

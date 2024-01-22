@@ -58,7 +58,7 @@ void lexer_add_current_char_to_last_token(lexer_t* lexer, int type) {
 void lexer_do_reg(lexer_t* lexer) {
    switch (*lexer->src) {
       case SYNTAX_APPLY:
-         lexer_add_current_char(lexer, TOKEN_APPLY);
+         lexer_add_current_char(lexer, TOKEN_TYPE_APPLY);
          break;
       case SYNTAX_TAG_DELIM:
          lexer->state = LEXER_STATE_TAG;
@@ -67,46 +67,46 @@ void lexer_do_reg(lexer_t* lexer) {
          lexer_add_current_char(lexer, TOKEN_NAMESPACE_DELIM);
          break;   */
       case SYNTAX_SET:
-         lexer_add_current_char(lexer, TOKEN_SET);
+         lexer_add_current_char(lexer, TOKEN_TYPE_SET);
          break;
       case SYNTAX_LLIST:
-         lexer_add_current_char(lexer, TOKEN_LLIST);
+         lexer_add_current_char(lexer, TOKEN_TYPE_LLIST);
          break;
       case SYNTAX_RLIST:
-         lexer_add_current_char(lexer, TOKEN_RLIST);
+         lexer_add_current_char(lexer, TOKEN_TYPE_RLIST);
          break;
       case SYNTAX_LGROUP:
-         lexer_add_current_char(lexer, TOKEN_LGROUP);
+         lexer_add_current_char(lexer, TOKEN_TYPE_LGROUP);
          break;
       case SYNTAX_RGROUP:
-         lexer_add_current_char(lexer, TOKEN_RGROUP);
+         lexer_add_current_char(lexer, TOKEN_TYPE_RGROUP);
          break;
       case SYNTAX_LBLOCK:
-         lexer_add_current_char(lexer, TOKEN_LBLOCK);
+         lexer_add_current_char(lexer, TOKEN_TYPE_LBLOCK);
          break;
       case SYNTAX_RBLOCK:
-         lexer_add_current_char(lexer, TOKEN_RBLOCK);
+         lexer_add_current_char(lexer, TOKEN_TYPE_RBLOCK);
          break;
       case SYNTAX_EXPR_END:
-         lexer_add_current_char(lexer, TOKEN_EXPR_END);
+         lexer_add_current_char(lexer, TOKEN_TYPE_EXPR_END);
          break;
       case SYNTAX_LIST_DELIM:
-         lexer_add_current_char(lexer, TOKEN_LIST_DELIM);
+         lexer_add_current_char(lexer, TOKEN_TYPE_LIST_DELIM);
          break;
       case SYNTAX_STR_DELIM:
          lexer->state = LEXER_STATE_STR;
          break;
       default:
          if (isdigit(*lexer->src)) {
-            lexer_add_current_char(lexer, TOKEN_INT);
+            lexer_add_current_char(lexer, TOKEN_TYPE_INT);
             if (isdigit(*(lexer->src + 1))) { lexer->state = LEXER_STATE_INT; }
 
          } else if (strchr(SYNTAX_KWD_CHARS, *lexer->src)) {
-            lexer_add_current_char(lexer, TOKEN_KWD);
+            lexer_add_current_char(lexer, TOKEN_TYPE_KWD);
             if (strchr(SYNTAX_KWD_CHARS, *(lexer->src + 1))) { lexer->state = LEXER_STATE_KWD; }
 
          } else {
-            lexer_add_current_char(lexer, TOKEN_UNKNOWN);
+            lexer_add_current_char(lexer, TOKEN_TYPE_UNKNOWN);
             lexer->state = LEXER_STATE_REG;
          }
    }
@@ -115,21 +115,21 @@ void lexer_do_reg(lexer_t* lexer) {
 void lexer_do_tag(lexer_t* lexer) {
    switch (*lexer->src) {
       case SYNTAX_LIST_DELIM:
-         lexer_add_current_char(lexer, TOKEN_LIST_DELIM);
+         lexer_add_current_char(lexer, TOKEN_TYPE_LIST_DELIM);
          lexer->state = LEXER_STATE_REG;
          break;
       case SYNTAX_SET:
-         lexer_add_current_char(lexer, TOKEN_SET);
+         lexer_add_current_char(lexer, TOKEN_TYPE_SET);
          lexer->state = LEXER_STATE_REG;
          break;
       case SYNTAX_APPLY:
-         lexer_add_current_char(lexer, TOKEN_APPLY);
+         lexer_add_current_char(lexer, TOKEN_TYPE_APPLY);
          lexer->state = LEXER_STATE_REG;
          break;
       case SYNTAX_TAG_DELIM:
-         lexer_add_token(lexer, token_init(TOKEN_TAG, '\0'));
+         lexer_add_token(lexer, token_init(TOKEN_TYPE_TAG, '\0'));
          break;
-      default: lexer_add_current_char_to_last_token(lexer, TOKEN_TAG);
+      default: lexer_add_current_char_to_last_token(lexer, TOKEN_TYPE_TAG);
    }
 }
 
@@ -137,13 +137,13 @@ void lexer_do_str(lexer_t* lexer) {
    if (*lexer->src == SYNTAX_STR_DELIM) {
       lexer->state = LEXER_STATE_REG;
    } else {
-      lexer_add_current_char_to_last_token(lexer, TOKEN_STR);
+      lexer_add_current_char_to_last_token(lexer, TOKEN_TYPE_STR);
    }
 }
 
 void lexer_do_int(lexer_t* lexer) {
    if (isdigit(*lexer->src)) {
-      lexer_add_current_char_to_last_token(lexer, TOKEN_INT);
+      lexer_add_current_char_to_last_token(lexer, TOKEN_TYPE_INT);
       ! isdigit(*(lexer->src + 1)) && ( lexer->state = LEXER_STATE_REG );
    } else {
       log_err("int state at non-int token");
@@ -152,7 +152,7 @@ void lexer_do_int(lexer_t* lexer) {
 
 void lexer_do_kwd(lexer_t* lexer) {
    if (strchr(SYNTAX_KWD_CHARS, *lexer->src)) {
-      lexer_add_current_char_to_last_token(lexer, TOKEN_KWD);
+      lexer_add_current_char_to_last_token(lexer, TOKEN_TYPE_KWD);
       ! strchr(SYNTAX_KWD_CHARS, *(lexer->src + 1)) && 
          ( lexer->state = LEXER_STATE_REG );
    } else {

@@ -1,0 +1,11 @@
+:nsp:people = {
+   ` Get a person's age at a specific year. `
+   :int:get_age.:nsp:person,:int:year = -.year, person:birthyear
+}
+
+:nsp:john = {
+   :int:birthyear = 2000;
+   :str:name = "John Doe";
+}
+
+print.people:get_age.john;

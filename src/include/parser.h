@@ -5,14 +5,27 @@
 #include "tree.h"
 #include "token.h"
 
+typedef enum PARSER_STATE {
+   PARSER_STATE_BLOCK,
+   PARSER_STATE_EXPR,
+   PARSER_STATE_LINT,
+   PARSER_STATE_LSTR,
+   PARSER_STATE_TAG,
+   PARSER_STATE_DARG,
+   PARSER_STATE_CARG,
+   PARSER_STATE_DEF,
+   PARSER_STATE_CALL,
+} parser_state_t;
+
 typedef struct PARSER {
+   /* What the parser's looking at. */
+   parser_state_t state;
+
    /* The token list being consumed. */
    token_t* token;
    
    /* The AST being produced. */
    tree_t* tree;
-
-   /* Pointer to the part of the tree the parser is currently working on. */
 } parser_t;
 
 /* Creates a new parser. */
@@ -46,7 +59,7 @@ tree_t* parser_parse_lstr(parser_t* parser);
 /* Return the tree for an expression.*/
 tree_t* parser_parse_expr(parser_t* parser);
 
-/* Return the tree for an expression. */
+/* Return the tree for an block. */
 tree_t* parser_parse_block(parser_t* parser);
 
 /* Return the tree for a definition's arguments. */
@@ -62,7 +75,7 @@ tree_t* parser_parse_carg(parser_t* parser);
 tree_t* parser_parse_call(parser_t* parser);
 
 /* Parse. */
-tree_t* parser_parse(parser_t* parser);
+void parser_parse(parser_t* parser);
 
 /* Parse with the given parser. */
 void parser_run(parser_t* parser);

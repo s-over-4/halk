@@ -6,6 +6,8 @@
 extern unsigned int TESTS_RUN;
 extern unsigned int TESTS_PASSED;
 
+#define TEST_INIT unsigned int TESTS_RUN = 0, TESTS_PASSED = 0;
+
 #define ASSERT(EXPR) \
    TESTS_RUN++; \
    (EXPR && ++TESTS_PASSED) ? \
