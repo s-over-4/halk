@@ -11,8 +11,8 @@ extern unsigned int TESTS_PASSED;
 #define ASSERT(EXPR) \
    TESTS_RUN++; \
    (EXPR && ++TESTS_PASSED) ? \
-      log_inf("%s:%d: Assertion passed!", __FILE__, __LINE__) : \
-      log_err("%s:%d: Assertion failed:\n\t%s", __FILE__, __LINE__, #EXPR);
+      log_inf("%s:%s:%d: Assertion passed!", __func__, __FILE__, __LINE__) : \
+      log_err("%s:%s:%d: Assertion failed:\n\t%s", __func__, __FILE__, __LINE__, #EXPR);
 
 #define TEST_REPORT \
    (TESTS_RUN == TESTS_PASSED) ? \

@@ -82,8 +82,8 @@ typedef struct TREE {
 } tree_t;
 
 /* Create a new AST. */
-tree_t* tree_init(int type);
-/* Destroy the AST. */
+tree_t* tree_init(tree_type_t type);
+/* Destroy the AST (if it exists). */
 void tree_destroy(tree_t* tree);
 
 /*

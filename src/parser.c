@@ -1,4 +1,5 @@
 #include "include/parser.h"
+#include "include/token.h"
 
 parser_t* parser_init(token_t* token) {
    parser_t* parser;
@@ -11,18 +12,16 @@ parser_t* parser_init(token_t* token) {
 }
 
 void parser_destroy(parser_t* parser) {
-   free(parser);
+   if (parser) { free(parser); }
 }
 
 int parser_nxt_token(parser_t* parser) {
-   if (parser->token->nxt) {
-      token_t* nxt = parser->token->nxt;
-      free(parser->token);
-      parser->token = nxt;
-      return 1;
-   } else {
-      return 0;
+   /* Preserve original token list, to be cleaned up by lexer. */
+   parser->token = parser->token->nxt;
+   if (parser->token && parser->token->type == TOKEN_TYPE_EXPR_END) {
+      return parser_nxt_token(parser);
    }
+   return parser->token ? 1 : 0;
 }
 
 int parser_match(parser_t* parser, token_type_t type) {
@@ -39,6 +38,7 @@ tree_t* parser_parse_lint(parser_t* parser) {
 
    lint = tree_init(TREE_TYPE_LINT);
    lint->data.lint.val = atoi(parser->token->val);
+   parser_nxt_token(parser);
 
    return lint;
 }
@@ -57,52 +57,33 @@ tree_t* parser_parse_lstr(parser_t* parser) {
 }
 
 tree_t* parser_parse_expr(parser_t* parser) {
-   tree_t* expr;
-
-   expr = tree_init(TREE_TYPE_EXPR);
+   tree_t* expr = NULL;
 
    switch (parser->token->type) {
       case TOKEN_TYPE_INT:
-         expr->data.expr.val = parser_parse_lint(parser);
+         expr = parser_parse_lint(parser);
          break;
-      case TOKEN_TYPE_STR:
-         expr->data.expr.val = parser_parse_lstr(parser);
-         break;
-      case TOKEN_TYPE_KWD:
-         expr->data.expr.val = parser_parse_call(parser);
-         break;
-      case TOKEN_TYPE_TAG:
-         expr->data.expr.val = parser_parse_def(parser);
-         break;
-      case TOKEN_TYPE_LBLOCK:
+      case TOKEN_TYPE_EXPR_END:
          parser_nxt_token(parser);
-         expr->data.expr.val = parser_parse_block(parser);
          break;
       default:
-         expr->data.lstr.val = "???";  /* TODO: Add an "unknown" token type. */
-         return expr;
+         log_war("%s: Unknown token type: %d", __func__, parser->token->type);
+         parser_nxt_token(parser);
    }
 
    return expr;
 }
 
 tree_t* parser_parse_block(parser_t* parser) {
+   /* There is nothing to do. */
+   if (!parser->token || parser->token->type == TOKEN_TYPE_RBLOCK) {
+      return NULL;
+   } 
    tree_t* block;
-
    block = tree_init(TREE_TYPE_BLOCK);
 
-   if (!parser->token) {
-      block->data.block.val = NULL;
-      block->data.block.nxt = NULL;
-   } else {
-      switch (parser->token->type) {
-         case TOKEN_TYPE_INT:
-            block->data.block.val = parser_parse_lint(parser);
-            break;
-      }
-   }
-
-   block->data.block.nxt = NULL;
+   block->data.block.val = parser_parse_expr(parser);
+   block->data.block.nxt = parser_parse_block(parser);
 
    return block;
 }

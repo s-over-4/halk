@@ -1,6 +1,6 @@
 #include "include/tree.h"
 
-tree_t* tree_init(int type) {
+tree_t* tree_init(tree_type_t type) {
    tree_t* tree;
 
    tree = emalloc(sizeof(tree_t));
