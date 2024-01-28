@@ -1,26 +1,21 @@
 #include "include/main.h"
 
-#ifdef TEST
-unsigned int TESTS_RUN;
-unsigned int TESTS_PASSED;
-#endif
-
+/* FIXME: Segfaults ~30% of the time. No idea why. Thx future self <3. */
 int main(int argc, char* argv[]) {
-   char*    src;
-   pp_t*    pp;
+   char* src;
+   pp_t* pp;
    lexer_t* lexer;
    parser_t* parser;
 
-   /* get source */
+   /* Get source. */
    src = source_get(argv[1]); 
-   log_dbg("source gotten");
-   log_inf("source: %s", src);
+   log_inf("Source: %s", src);
 
-   /* create pre-processor */
+   /* Create pre-processor. */
    pp = pp_init(src);
-   log_dbg("preprocessor created");
+   log_dbg("Preprocessor created.");
 
-   /* pre-process source */
+   /* Pre-process source. */
    pp_run(pp);
    free(src);
    src = pp->psrc;

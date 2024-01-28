@@ -6,13 +6,17 @@
 
 TEST_INIT
 
-void test_simple_empty() {
+void empty() {
+   /* 
+      Hmm… I feel as though this setup/cleanup process could be wrapped in a 
+      macro. Tentative TODO?
+   */
    tree_t* tree;
    pp_t* pp;
    lexer_t* lexer;
    parser_t* parser;
 
-   char src[] = " ";
+   char src[] = "";
 
    /*
 
@@ -32,6 +36,7 @@ void test_simple_empty() {
 
    ASSERT(tree_cmp(parser->tree, tree) == 1);
 
+   /* Probably not cleaning up fully here. Whatever. */
    token_destroy(lexer->tokenl);
    lexer_destroy(lexer);
    pp_destroy(pp);
@@ -39,7 +44,7 @@ void test_simple_empty() {
    parser_destroy(parser);
 }
 
-void test_single_lint() {
+void single_lint() {
    tree_t* tree;
    pp_t* pp;
    lexer_t* lexer;
@@ -82,7 +87,7 @@ void test_single_lint() {
    parser_destroy(parser);
 }
 
-void test_double_lint() {
+void double_lint() {
    tree_t* tree;
    pp_t* pp;
    lexer_t* lexer;
@@ -134,10 +139,164 @@ void test_double_lint() {
    parser_destroy(parser);
 }
 
+void single_lstr() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = "\"Hello, World.\"";
+
+   /*
+
+      [block]
+      val:
+         [lstr]
+         val:
+            "Hello, World."
+         len:
+            13
+      nxt:
+         NULL
+
+   */
+
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0lstr = tree->data.block.val = tree_init(TREE_TYPE_LSTR);
+         tree0lstr->data.lstr.val = "Hello, World.";
+         tree0lstr->data.lstr.len = 13;
+      tree->data.block.nxt = NULL;
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+}
+
+void double_lstr() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = "\"foo\";\"bar\"";
+
+   /*
+
+      [block]
+      val:
+         [lstr]
+         val:
+            "foo"
+         len:
+            3
+      nxt:
+         [block]
+         val:
+            [lstr]
+            val:
+               "bar"
+            len:
+               3
+         nxt:
+            NULL
+
+   */
+
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0lstr = tree->data.block.val = tree_init(TREE_TYPE_LSTR);
+         tree0lstr->data.lstr.val = "foo";
+         tree0lstr->data.lstr.len = 3;
+      tree_t* tree0block = tree->data.block.nxt = tree_init(TREE_TYPE_BLOCK);
+         tree_t* tree1lstr = tree0block->data.block.val = tree_init(TREE_TYPE_LSTR);
+            tree1lstr->data.lstr.val = "bar";
+            tree1lstr->data.lstr.len = 3;
+         tree0block->data.block.nxt = NULL;
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+}
+
+void single_block() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = "{}";
+
+   /*
+
+      [block]
+      val:
+         [block]
+         val:
+            NULL
+         nxt:
+            NULL
+      nxt:
+         NULL
+
+   */
+
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0block = tree->data.block.val = tree_init(TREE_TYPE_BLOCK);
+         tree0block->data.block.val = NULL;
+         tree0block->data.block.nxt = NULL;
+      tree->data.block.nxt = NULL;
+
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+}
+
 int main(int argc, char** argv) {
-   test_simple_empty();
-   test_single_lint();
-   test_double_lint();
+   empty();
+   single_lint();
+   double_lint();
+   single_lstr();
+   double_lstr();
+   single_block();
 
    TEST_REPORT;
 

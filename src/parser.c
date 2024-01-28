@@ -15,6 +15,7 @@ void parser_destroy(parser_t* parser) {
    if (parser) { free(parser); }
 }
 
+/* TODO: What if the program begins with a ";"? */
 int parser_nxt_token(parser_t* parser) {
    /* Preserve original token list, to be cleaned up by lexer. */
    parser->token = parser->token->nxt;
@@ -24,6 +25,7 @@ int parser_nxt_token(parser_t* parser) {
    return parser->token ? 1 : 0;
 }
 
+/* I don't know if these need to exist. Guess I'll wait and see… */
 int parser_match(parser_t* parser, token_type_t type) {
    return parser->token->type == type;
 }
@@ -49,9 +51,10 @@ tree_t* parser_parse_lstr(parser_t* parser) {
    lstr = tree_init(TREE_TYPE_LSTR);
 
    lstr->data.lstr.len = strlen(parser->token->val);
-   /* Swap pointers to allow for future token destruction. */
+   /* Move token value to tree, to allow for future token destruction. */
    lstr->data.lstr.val = parser->token->val;
    parser->token->val = NULL; 
+   parser_nxt_token(parser);
 
    return lstr;
 }
@@ -63,8 +66,8 @@ tree_t* parser_parse_expr(parser_t* parser) {
       case TOKEN_TYPE_INT:
          expr = parser_parse_lint(parser);
          break;
-      case TOKEN_TYPE_EXPR_END:
-         parser_nxt_token(parser);
+      case TOKEN_TYPE_STR:
+         expr = parser_parse_lstr(parser);
          break;
       default:
          log_war("%s: Unknown token type: %d", __func__, parser->token->type);

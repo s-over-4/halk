@@ -3,12 +3,17 @@
 #include "../src/include/lexer.h"
 #include "../src/include/tree.h"
 
-unsigned int TESTS_RUN = 0, TESTS_PASSED = 0;
+TEST_INIT
 
-int main(int argc, char** argv) {
+/*
+   I wrote these before I started putting tests in their own functions, so 
+   this'll have to do for now.
+*/
+void test_things() {
    tree_t* tree_0;
    tree_t* tree_1;
 
+   /* Not refactoring this. */
    tree_t* tree_lint_0;
    tree_t* tree_lint_1;
    tree_t* tree_lstr_0;
@@ -240,7 +245,10 @@ int main(int argc, char** argv) {
 
       ASSERT(tree_cmp(tree_block_0, tree_block_0) == 1);
       ASSERT(tree_cmp(tree_block_0, tree_block_1) == 0);
+}
 
-   TEST_REPORT;
-   return 0;
+int main() {
+   test_things();
+
+   TEST_REPORT
 }
