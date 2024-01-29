@@ -18,13 +18,17 @@ extern unsigned int TESTS_PASSED;
 
 #define ASSERT(EXPR) \
    TESTS_RUN++; \
-   (EXPR && ++TESTS_PASSED) ? \
-      log_inf("%s:%s:%d: Assertion passed!", __FILE__, __func__, __LINE__) : \
-      log_err("%s:%s:%d: Assertion failed:\n\t%s", __FILE__, __func__, __LINE__, #EXPR);
+   if (EXPR && ++TESTS_PASSED) { \
+      LOG_INF("%s:%s:%d: Assertion passed!", __FILE__, __func__, __LINE__); \
+   } else { \
+      LOG_ERR("%s:%s:%d: Assertion failed:\n\t%s", __FILE__, __func__, __LINE__, #EXPR); \
+   }
 
 #define TEST_REPORT \
-   (TESTS_RUN == TESTS_PASSED) ? \
-      log_yay("%s: All %d tests passed!", __FILE__, TESTS_RUN) : \
-      log_err("%d/%d tests failed.", TESTS_RUN - TESTS_PASSED, TESTS_RUN);
+   if (TESTS_RUN == TESTS_PASSED) { \
+      LOG_YAY("%s: All %d tests passed!", __FILE__, TESTS_RUN); \
+   } else { \
+      LOG_ERR("%d/%d tests failed.", TESTS_RUN - TESTS_PASSED, TESTS_RUN); \
+   }
 
 #endif

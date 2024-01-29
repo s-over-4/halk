@@ -1,4 +1,5 @@
 #include "include/main.h"
+#include "include/util.h"
 
 /* FIXME: Segfaults ~30% of the time. No idea why. Thx future self <3. */
 int main(int argc, char* argv[]) {

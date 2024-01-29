@@ -1,6 +1,7 @@
 #include "include/util.h"
 
 void log_dbg(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    fprintf(stdout, "");
@@ -14,6 +15,7 @@ void log_dbg(const char* fmt, ...) {
 }
 
 void log_yay(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    fprintf(stdout, "\x1b[37m[\x1b[92;1m==\x1b[0m\x1b[37m]\x1b[32m ");
@@ -26,6 +28,7 @@ void log_yay(const char* fmt, ...) {
 }
 
 void log_inf(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    fprintf(stderr, "\x1b[37m[\x1b[94;1m==\x1b[0m\x1b[37m]\x1b[0m ");
@@ -38,6 +41,7 @@ void log_inf(const char* fmt, ...) {
 }
 
 void log_raw(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    va_start(ap, fmt);
@@ -46,6 +50,7 @@ void log_raw(const char* fmt, ...) {
 }
 
 void log_war(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    fprintf(stderr, "\x1b[37m[\x1b[93;1m==\x1b[0m\x1b[37m]\x1b[93;1m WARNING:\x1b[0m\x1b[33m ");
@@ -58,6 +63,7 @@ void log_war(const char* fmt, ...) {
 }
 
 void log_err(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m ERROR:\x1b[0m\x1b[31m ");
@@ -70,6 +76,7 @@ void log_err(const char* fmt, ...) {
 }
 
 void die(const char* fmt, ...) {
+   WFDEPRECATED;
    va_list ap;
 
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m CAUSE OF DEATH:\x1b[0m\x1b[31m ");

@@ -32,10 +32,10 @@ halk: reg_options $(OBJS)
 	$(CC) $(OBJS) $(REG_CFLAGS) -o $(BIN).out
 
 dbg: CFLAGS := $(DBG_CFLAGS)
-dbg: dbg_options $(OBJS)
+dbg: clean dbg_options $(OBJS)
 	$(CC) $(OBJS) $(DBG_CFLAGS) -o $(BIN).out
 
-test: clean dbg $(TEST_OUTS)
+test: $(TEST_OUTS)
 	set -e
 	for f in $(TEST_OUTS); do ./$$f; done
 
