@@ -12,6 +12,10 @@ extern unsigned int TESTS_PASSED;
 
 #define TEST_INIT unsigned int TESTS_RUN = 0, TESTS_PASSED = 0;
 
+#ifndef __func__
+#define __func__ ""
+#endif
+
 #define ASSERT(EXPR) \
    TESTS_RUN++; \
    (EXPR && ++TESTS_PASSED) ? \

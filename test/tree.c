@@ -20,8 +20,6 @@ void test_things() {
    tree_t* tree_lstr_1;
    tree_t* tree_tag_0;
    tree_t* tree_tag_1;
-   tree_t* tree_def_0;
-   tree_t* tree_def_1;
    tree_t* tree_carg_0;
    tree_t* tree_carg_1;
    tree_t* tree_call_0;
@@ -245,6 +243,8 @@ void test_things() {
 
       ASSERT(tree_cmp(tree_block_0, tree_block_0) == 1);
       ASSERT(tree_cmp(tree_block_0, tree_block_1) == 0);
+
+      /* *Definitely* not cleaning up fully here. Oh, well.  */
 }
 
 int main() {

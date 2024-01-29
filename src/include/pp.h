@@ -27,7 +27,7 @@ typedef struct PP_STRUC {
       PP_STATE_REG,  /* Regular. */
       PP_STATE_STR,  /* String. */
       PP_STATE_COM,  /* Comment. */
-      PP_STATE_ESC,  /* Escaped character in string. */
+      PP_STATE_ESC   /* Escaped character in string. */
       /* PP_STATE_MCO, */  /* Macro. */
    } state;
 } pp_t;

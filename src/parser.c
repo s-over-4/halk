@@ -18,11 +18,65 @@ void parser_destroy(parser_t* parser) {
 /* TODO: What if the program begins with a ";"? */
 int parser_nxt_token(parser_t* parser) {
    /* Preserve original token list, to be cleaned up by lexer. */
+   if (!parser->token) { return 0; }
    parser->token = parser->token->nxt;
    if (parser->token && parser->token->type == TOKEN_TYPE_EXPR_END) {
       return parser_nxt_token(parser);
    }
    return parser->token ? 1 : 0;
+}
+
+tree_t* parser_parse_init(parser_t* parser) {
+   /* There is nothing to do. */
+   if (!parser->token || parser->token->type == TOKEN_TYPE_RBLOCK) {
+      return NULL;
+   } 
+   tree_t* block;
+   block = tree_init(TREE_TYPE_BLOCK);
+
+   block->data.block.val = parser_parse_expr(parser);
+   block->data.block.nxt = parser_parse_block(parser);
+
+   return block;
+}
+
+tree_t* parser_parse_block(parser_t* parser) {
+   /* There is nothing to do. */
+   if (!parser->token || parser->token->type == TOKEN_TYPE_RBLOCK) {
+      parser_nxt_token(parser);  /* Skip over closing bracket. */
+      return NULL;
+   } 
+   tree_t* block;
+   block = tree_init(TREE_TYPE_BLOCK);
+
+   block->data.block.val = parser_parse_expr(parser);
+   block->data.block.nxt = parser_parse_block(parser);
+
+   parser_nxt_token(parser);  /* Skip over semicolon. */
+
+   return block;
+}
+
+tree_t* parser_parse_expr(parser_t* parser) {
+   tree_t* expr = NULL;
+
+   switch (parser->token->type) {
+      case TOKEN_TYPE_INT:
+         expr = parser_parse_lint(parser);
+         break;
+      case TOKEN_TYPE_STR:
+         expr = parser_parse_lstr(parser);
+         break;
+      case TOKEN_TYPE_LBLOCK:
+         parser_nxt_token(parser);  /* Skip over opening curly bracket. */
+         expr = parser_parse_block(parser);
+         break;
+      default:
+         log_war("%s: Unknown token type: %d", __func__, parser->token->type);
+         parser_nxt_token(parser);
+   }
+
+   return expr;
 }
 
 /* I don't know if these need to exist. Guess I'll wait and see… */
@@ -57,38 +111,6 @@ tree_t* parser_parse_lstr(parser_t* parser) {
    parser_nxt_token(parser);
 
    return lstr;
-}
-
-tree_t* parser_parse_expr(parser_t* parser) {
-   tree_t* expr = NULL;
-
-   switch (parser->token->type) {
-      case TOKEN_TYPE_INT:
-         expr = parser_parse_lint(parser);
-         break;
-      case TOKEN_TYPE_STR:
-         expr = parser_parse_lstr(parser);
-         break;
-      default:
-         log_war("%s: Unknown token type: %d", __func__, parser->token->type);
-         parser_nxt_token(parser);
-   }
-
-   return expr;
-}
-
-tree_t* parser_parse_block(parser_t* parser) {
-   /* There is nothing to do. */
-   if (!parser->token || parser->token->type == TOKEN_TYPE_RBLOCK) {
-      return NULL;
-   } 
-   tree_t* block;
-   block = tree_init(TREE_TYPE_BLOCK);
-
-   block->data.block.val = parser_parse_expr(parser);
-   block->data.block.nxt = parser_parse_block(parser);
-
-   return block;
 }
 
 tree_t* parser_parse_tag(parser_t* parser) {

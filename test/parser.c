@@ -249,7 +249,7 @@ void single_block() {
    lexer_t* lexer;
    parser_t* parser;
 
-   char src[] = "{}";
+   char src[] = "{1}";
 
    /*
 
@@ -257,7 +257,9 @@ void single_block() {
       val:
          [block]
          val:
-            NULL
+            [lint]
+            val:
+               1
          nxt:
             NULL
       nxt:
@@ -267,7 +269,8 @@ void single_block() {
 
    tree = tree_init(TREE_TYPE_BLOCK);
       tree_t* tree0block = tree->data.block.val = tree_init(TREE_TYPE_BLOCK);
-         tree0block->data.block.val = NULL;
+         tree_t* tree0lint = tree0block->data.block.val = tree_init(TREE_TYPE_LINT);
+            tree0lint->data.lint.val = 1;
          tree0block->data.block.nxt = NULL;
       tree->data.block.nxt = NULL;
 
@@ -290,13 +293,72 @@ void single_block() {
    parser_destroy(parser);
 }
 
-int main(int argc, char** argv) {
+void lint_and_block() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = "1;{1}";
+
+   /*
+
+      [block]
+      val:
+         [lint]
+         val:
+            1
+      nxt:
+         [block]
+         val:
+            [block]
+            val:
+               [lint]
+               val:
+                  1
+            nxt:
+               NULL
+         nxt:
+            NULL
+
+   */
+
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0lint = tree->data.block.val = tree_init(TREE_TYPE_LINT);
+         tree0lint->data.lint.val = 1;
+      tree_t* tree0block = tree->data.block.nxt = tree_init(TREE_TYPE_BLOCK);
+         tree_t* tree1block = tree0block->data.block.val = tree_init(TREE_TYPE_BLOCK);
+            tree_t* tree1lint = tree1block->data.block.val = tree_init(TREE_TYPE_LINT);
+               tree1lint->data.lint.val = 1;
+            tree1block->data.block.nxt = NULL;
+         tree0block->data.block.nxt = NULL;
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+}
+
+int main() {
    empty();
    single_lint();
    double_lint();
    single_lstr();
    double_lstr();
    single_block();
+   lint_and_block();
 
    TEST_REPORT;
 

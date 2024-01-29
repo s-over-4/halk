@@ -4,6 +4,7 @@
 tags
 *.out
 *.tmp.*
+coredump
 *.notes.md
 [._]sw[a-p]
 [._]*.sw[a-p]

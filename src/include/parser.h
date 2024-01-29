@@ -14,7 +14,7 @@ typedef enum PARSER_STATE {
    PARSER_STATE_DARG,
    PARSER_STATE_CARG,
    PARSER_STATE_DEF,
-   PARSER_STATE_CALL,
+   PARSER_STATE_CALL
 } parser_state_t;
 
 typedef struct PARSER {
@@ -41,6 +41,15 @@ void parser_destroy(parser_t* parser);
 /* Step the parser forward by 1 token. */
 int parser_nxt_token(parser_t* parser);
 
+/* Get tree for first (implied) block. */
+tree_t* parser_parse_init(parser_t* parser);
+
+/* Get tree for a block. */
+tree_t* parser_parse_block(parser_t* parser);
+
+/* Get tree for an expression.*/
+tree_t* parser_parse_expr(parser_t* parser);
+
 /* 
    Check whether the current token matches the given type.
    - If it doesn't, return 0 and throw error.
@@ -55,12 +64,6 @@ tree_t* parser_parse_lint(parser_t* parser);
 
 /* Return the tree for a string.  */
 tree_t* parser_parse_lstr(parser_t* parser);
-
-/* Return the tree for an expression.*/
-tree_t* parser_parse_expr(parser_t* parser);
-
-/* Return the tree for an block. */
-tree_t* parser_parse_block(parser_t* parser);
 
 /* Return the tree for a definition's arguments. */
 tree_t* parser_parse_darg(parser_t* parser);

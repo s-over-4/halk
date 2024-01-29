@@ -23,7 +23,7 @@ typedef struct LEXER_STRUC {
       /* Integer. */
       LEXER_STATE_INT,
       /* Keyword. */
-      LEXER_STATE_KWD,
+      LEXER_STATE_KWD
    } state;
 
    /* The linked list of tokens generated. */

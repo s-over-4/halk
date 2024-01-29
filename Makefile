@@ -1,8 +1,8 @@
 BIN        := halk
 PREFIX     := /usr/local/bin
 CC         := gcc
-REG_CFLAGS := -ansi -O3 -s
-DBG_CFLAGS := -ansi -Og -ggdb -pedantic 
+REG_CFLAGS := -std=c99 -O3 -s
+DBG_CFLAGS := -std=c99 -Og -ggdb -pedantic 
 DBG_CFLAGS += -Wall -Wextra -Wformat -Werror -Wpedantic
 DBG_CFLAGS += -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 CFLAGS     := $(REG_CFLAGS)
@@ -35,7 +35,7 @@ dbg: CFLAGS := $(DBG_CFLAGS)
 dbg: dbg_options $(OBJS)
 	$(CC) $(OBJS) $(DBG_CFLAGS) -o $(BIN).out
 
-test: dbg $(TEST_OUTS)
+test: clean dbg $(TEST_OUTS)
 	set -e
 	for f in $(TEST_OUTS); do ./$$f; done
 
