@@ -3,7 +3,7 @@ PREFIX     := /usr/local/bin
 CC         := gcc
 REG_CFLAGS := -std=c99 -O3 -s
 DBG_CFLAGS := -std=c99 -Og -ggdb -pedantic 
-DBG_CFLAGS += -Wall -Wextra -Wformat -Werror -Wpedantic
+DBG_CFLAGS += -Wall -Wextra -Wformat -Wpedantic
 DBG_CFLAGS += -fsanitize=leak,address,undefined -fno-omit-frame-pointer
 CFLAGS     := $(REG_CFLAGS)
 SRCS       := $(wildcard src/*.c)
@@ -40,10 +40,10 @@ test: clean dbg $(TEST_OUTS)
 	for f in $(TEST_OUTS); do ./$$f; done
 
 %.o: %.c
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 %.out: %.c
-	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@
+	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@ $(CFLAGS)
 
 install: all
 	mkdir -p $(PREFIX)

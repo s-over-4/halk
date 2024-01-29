@@ -43,7 +43,7 @@ tree_t* parser_parse_init(parser_t* parser) {
 tree_t* parser_parse_block(parser_t* parser) {
    /* There is nothing to do. */
    if (!parser->token || parser->token->type == TOKEN_TYPE_RBLOCK) {
-      parser_nxt_token(parser);  /* Skip over closing bracket. */
+      (void) parser_nxt_token(parser); /* Skip over closing bracket. */
       return NULL;
    } 
    tree_t* block;

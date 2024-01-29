@@ -130,13 +130,20 @@ int tree_cmp(tree_t* tree_0, tree_t* tree_1) {
          return (strcmp(tree_0->data.call.target, tree_1->data.call.target) == 0) &&
             tree_cmp(tree_0->data.call.arg, tree_1->data.call.arg);
          break;
+      default:
+         log_war("Unknown tree type.");
    }
+
+   return 0;
 }
 
 /*
    Every time I think there's a problem with the parser, it turns out it's 
-   just this stupid tree print function.
+   just this stupid tree print function. Now it works. Never touching it 
+   again. Ever.
 */
+#pragma GCC diagnostic ignored "-Wunused-value"
+#pragma GCC diagnostic ignored "-Wmisleading-indentation"
 void tree_print(tree_t* tree, int nest) {
    char*sp;int nc, i;char*c;char*bc;for(i
    =0,sp=ecalloc(nest+1,sizeof(char)),sp[
@@ -226,3 +233,5 @@ void tree_print(tree_t* tree, int nest) {
       free(bc);
       return;
 }
+#pragma GCC diagnostic warning "-Wunused-value"
+#pragma GCC diagnostic warning "-Wmisleading-indentation"

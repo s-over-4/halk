@@ -53,7 +53,7 @@ void lexer_add_current_char(lexer_t* lexer, int type);
    Add first character of given lexer's `src` to the value of the last token in `tokenl`, if it exists. 
    Otherwise, create new token and add it. 
 */
-void lexer_add_current_char_to_last_token(lexer_t* lexer, int type);
+void lexer_add_current_char_to_last_token(lexer_t* lexer, token_type_t type);
 
 /* Handle regular state. */
 void lexer_do_reg(lexer_t* lexer);

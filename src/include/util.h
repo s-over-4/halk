@@ -6,6 +6,13 @@
 #include <string.h>
 #include <stdio.h>
 
+#define MIN(a, b) (a < b ? a : b)
+#define MAX(a, b) (a > b ? a : b)
+
+/* 
+   TODO: Make these macros, to allow for better logging (printing __FILE__,
+   __func__, etc.)
+*/
 /* Log some debug information. */
 void log_dbg(const char*, ...);
 /* c: */

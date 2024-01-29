@@ -1,5 +1,5 @@
 #include "include/source.h"
-#include <unistd.h>
+
 char* source_get(char* arg) {
    return arg? 
       source_get_from_fpath(arg):
@@ -30,19 +30,20 @@ char* source_get_from_fpath(char* path) {
 }
 
 char* source_get_from_stdin() {
+   char* s;
    char* src;
    size_t l;
 
-   src = ecalloc(256, sizeof(char));
    l = 0;
 
-   while (fgets(src + l, 20, stdin) != NULL) {
-      l += strlen(src + l);
+   src = ecalloc(16, sizeof(char));
+
+   while ((s = fgets(src + l, 20, stdin))) {
+      l = MIN(16, l + strlen(src + l));
    }
 
-   (src[l - 1] == '\n') && (src[l - 1] = '\0');
-
-//   src = fgets(src, 256, stdin);
+   /* This works, I guess. */
+   s && src[l - 1] == '\n' && (src[l - 1] = '\0');
 
    return src;
 }

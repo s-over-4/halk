@@ -26,8 +26,6 @@ void lexer_destroy(lexer_t* lexer) {
 }
 
 void lexer_add_token(lexer_t* lexer, token_t* token) {
-   token_t* t;
-
    if (lexer->tokenl) {
       lexer->tokenl_last->nxt = token;
       lexer->tokenl_last = token;
@@ -47,7 +45,7 @@ void lexer_add_current_char(lexer_t* lexer, int type) {
    lexer_add_token(lexer, t);
 }
 
-void lexer_add_current_char_to_last_token(lexer_t* lexer, int type) {
+void lexer_add_current_char_to_last_token(lexer_t* lexer, token_type_t type) {
    if (lexer->tokenl_last && lexer->tokenl_last->type == type) {
       token_add_char(lexer->tokenl_last, *lexer->src);
    } else {

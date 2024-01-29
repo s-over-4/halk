@@ -28,6 +28,8 @@ void token_destroy(token_t* token) {
 token_t* token_last(token_t* token) {
    token_t* t;
 
+   t = token;
+
    while (t->nxt) {
       t = t->nxt;
    }
