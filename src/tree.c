@@ -131,7 +131,7 @@ int tree_cmp(tree_t* tree_0, tree_t* tree_1) {
             tree_cmp(tree_0->data.call.arg, tree_1->data.call.arg);
          break;
       default:
-         log_war("Unknown tree type.");
+         LOG_WAR("Unknown tree type.");
    }
 
    return 0;
@@ -152,13 +152,13 @@ void tree_print(tree_t* tree, int nest) {
    ;bc=malloc(11*sizeof(char));sprintf(c,
    "\x1b[%dm",nc);sprintf(bc,"\x1b[%d;1m"
    ,nc);NULL;NULL;0x0;0;0;0;0;NULL;0x0;0;
-   #define NEST0(T)log_raw("%s%s"T"\x1b"\
+   #define NEST0(T)LOG_RAWF("%s%s"T"\x1b"\
    """""""""""""""""""""""""[0m\n",bc,sp)
-   #define NEST1(T)log_raw("%s%s"T"\x1b"\
+   #define NEST1(T)LOG_RAWF("%s%s"T"\x1b"\
    """""""""""""""""""""""""[0m\n",c,sp);
-   #define NEST2(T)log_raw("%s \x1b[39;"\
+   #define NEST2(T)LOG_RAWF("%s \x1b[39;"\
    """""""""""""""49;4m%s\x1b[0m\n",sp,T)
-   #define NEST3(T)log_raw("%s \x1b[39;"\
+   #define NEST3(T)LOG_RAWF("%s \x1b[39;"\
    """""""""""""""49;4m%d\x1b[0m\n",sp,T)
    if (!tree) { NEST2("NULL"); goto end;}
    switch (tree->type) {
@@ -224,7 +224,7 @@ void tree_print(tree_t* tree, int nest) {
             tree_print(tree->data.darg.nxt, nest + 1);
          break;
       default:
-         log_err("%d", __LINE__);
+         LOG_ERRF("%d", __LINE__);
    }
 
    end:

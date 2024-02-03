@@ -28,9 +28,10 @@ int parser_nxt_token(parser_t* parser) {
 
 tree_t* parser_parse_init(parser_t* parser) {
    /* There is nothing to do. */
-   if (!parser->token || parser->token->type == TOKEN_TYPE_RBLOCK) {
+   if (!parser->token) {
       return NULL;
    } 
+
    tree_t* block;
    block = tree_init(TREE_TYPE_BLOCK);
 
@@ -46,13 +47,12 @@ tree_t* parser_parse_block(parser_t* parser) {
       (void) parser_nxt_token(parser); /* Skip over closing bracket. */
       return NULL;
    } 
+
    tree_t* block;
    block = tree_init(TREE_TYPE_BLOCK);
 
    block->data.block.val = parser_parse_expr(parser);
    block->data.block.nxt = parser_parse_block(parser);
-
-   parser_nxt_token(parser);  /* Skip over semicolon. */
 
    return block;
 }
@@ -68,20 +68,53 @@ tree_t* parser_parse_expr(parser_t* parser) {
          expr = parser_parse_lstr(parser);
          break;
       case TOKEN_TYPE_LBLOCK:
+         /* TODO: Move this into parser_parse_block, parser_parse_init exists now. */
          parser_nxt_token(parser);  /* Skip over opening curly bracket. */
          expr = parser_parse_block(parser);
          break;
+      case TOKEN_TYPE_KWD:
+         expr = parser_parse_kwd(parser);
+         break;
       default:
-         log_war("%s: Unknown token type: %d", __func__, parser->token->type);
+         LOG_WARF("%s: Unknown token type: %d", __func__, parser->token->type);
          parser_nxt_token(parser);
    }
 
    return expr;
 }
 
+tree_t* parser_parse_carg(parser_t* parser) {
+   tree_t* carg;
+
+   carg = tree_init(TREE_TYPE_CARG); 
+
+   carg->data.carg.val = parser_parse_expr(parser);
+
+   carg->data.carg.nxt = NULL;
+
+   return carg;
+}
+
+tree_t* parser_parse_kwd(parser_t* parser) {
+   tree_t* call;
+
+   call = tree_init(TREE_TYPE_CALL);
+
+   call->data.call.target = parser->token->val;
+   parser->token->val = NULL;
+   
+   if (parser_nxt_token_match(parser, TOKEN_TYPE_APPLY)) {
+      call->data.call.arg = parser_parse_carg(parser);
+   } else {
+      call->data.call.arg = NULL;
+   }
+
+   return call;
+}
+
 /* I don't know if these need to exist. Guess I'll wait and see… */
 int parser_match(parser_t* parser, token_type_t type) {
-   return parser->token->type == type;
+   return parser->token ? parser->token->type == type : 0;
 }
 
 int parser_nxt_token_match(parser_t* parser, token_type_t type) {
@@ -140,7 +173,7 @@ tree_t* parser_parse_darg(parser_t* parser) {
 
    darg->data.darg.tag = parser_parse_tag(parser);
 
-   log_war("%d", parser->token->type);
+   LOG_WARF("%d", parser->token->type);
 
    if (parser->token->type != TOKEN_TYPE_LIST_DELIM) {
       darg->data.darg.nxt = NULL;
@@ -167,22 +200,6 @@ tree_t* parser_parse_def(parser_t* parser) {
       ( def->data.def.val = parser_parse_expr(parser) );
    
    return def;
-}
-
-tree_t* parser_parse_carg(parser_t* parser) {
-   tree_t* carg;
-
-   carg = tree_init(TREE_TYPE_CARG);
-
-   carg->data.carg.val = parser_parse_expr(parser);
-   carg->data.carg.nxt = (
-      parser_nxt_token_match(parser, TOKEN_TYPE_LIST_DELIM) && 
-      parser_nxt_token(parser) 
-   ) ? 
-      parser_parse_carg(parser) : 
-      NULL;
-
-   return carg;
 }
 
 tree_t* parser_parse_call(parser_t* parser) {

@@ -10,28 +10,28 @@ int main(int argc, char* argv[]) {
 
    /* Get source. */
    src = source_get(argv[1]); 
-   log_inf("Source: %s", src);
+   LOG_INFF("Source: %s", src);
 
    /* Create pre-processor. */
    pp = pp_init(src);
-   log_dbg("Preprocessor created.");
+   LOG_DBG("Preprocessor created.");
 
    /* Pre-process source. */
    pp_run(pp);
    free(src);
    src = pp->psrc;
-   log_inf("pre-processed source: %s", pp->psrc);
+   LOG_INFF("pre-processed source: %s", pp->psrc);
    /* destroy pre-processor */
    pp_destroy(pp);
-   log_dbg("preprocessor ran");
+   LOG_DBG("preprocessor ran");
 
    /* create lexer */
    lexer = lexer_init(src);
-   log_dbg("lexer created");
+   LOG_DBG("lexer created");
 
    /* run lexer */
    lexer_run(lexer);
-   log_dbg("lexer ran");
+   LOG_DBG("lexer ran");
 
    /* Print the lexer's tokens. */
    token_print(lexer->tokenl);

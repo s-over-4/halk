@@ -19,11 +19,11 @@ void pp_destroy(pp_t* pp) {
 }
 
 void pp_cpy_char(pp_t* pp) {
-   int plen = strlen(pp->psrc);
-   pp->psrc = erealloc(pp->psrc, (plen + 2) * sizeof(char));
+   int psize = strlen(pp->psrc);
+   pp->psrc = erealloc(pp->psrc, (psize + 2) * sizeof(char));
 
-   pp->psrc[plen] = *pp->src;
-   pp->psrc[plen + 1] = '\0';
+   pp->psrc[psize] = *pp->src;
+   pp->psrc[psize + 1] = '\0';
 }
 
 void pp_do_reg(pp_t* pp) {

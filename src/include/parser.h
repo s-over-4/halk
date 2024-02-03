@@ -47,6 +47,8 @@ tree_t* parser_parse_init(parser_t* parser);
 /* Get tree for a block. */
 tree_t* parser_parse_block(parser_t* parser);
 
+tree_t* parser_parse_kwd(parser_t* parser);
+
 /* Get tree for an expression.*/
 tree_t* parser_parse_expr(parser_t* parser);
 

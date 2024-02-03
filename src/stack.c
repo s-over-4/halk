@@ -31,8 +31,8 @@ size_t stack_len(stack_t* stack) {
 }
 
 void stack_print(stack_t* stack) {
-   log_inf("stack_print(): %p", stack);
+   LOG_INFF("stack_print(): %p", stack);
    for (int i = stack_len(stack) - 1; i >= 0; --i) {
-      log_inf("%d: %p", i, stack[i]);
+      LOG_INFF("%d: %p", i, stack[i]);
    }
 }

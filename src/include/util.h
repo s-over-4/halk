@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 
-/* Welcome to macro hell. */
+/* Welcome to macro Hell. */
 
 #define HIDE(x) do {x} while (0)
 
@@ -18,64 +18,104 @@
    fprintf(stderr, "%s:%s:%d: ", __FILE__, __func__, __LINE__); \
 )
 
+/* Call `f` on `x` if `x` exists. */
+#define EDO(f, x) HIDE(if (x) {f(x);})
+
 /* Log some debug information. */
-void log_dbg(const char*, ...);
-#define LOG_DBG(fmt, ...) HIDE( \
+#define LOG_DBGF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[95;1m==\x1b[0m\x1b[37m]\x1b[0m\x1b[35m "); \
    LOG_FINF; \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
    fprintf(stderr, "\x1b[0m\n"); \
 )
 
+#define LOG_DBG(body) HIDE( \
+   fprintf(stderr, "\x1b[37m[\x1b[95;1m==\x1b[0m\x1b[37m]\x1b[0m\x1b[35m "); \
+   LOG_FINF; \
+   fprintf(stderr, body); \
+   fprintf(stderr, "\x1b[0m\n"); \
+)
+
 /* c: */
-void log_yay(const char*, ...);
-#define LOG_YAY(fmt, ...) HIDE( \
+#define LOG_YAYF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[92;1m==\x1b[0m\x1b[37m]\x1b[32m "); \
    LOG_FINF; \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
    fprintf(stderr, "\x1b[0m\n"); \
 )
 
+#define LOG_YAY(body) HIDE( \
+   fprintf(stderr, "\x1b[37m[\x1b[92;1m==\x1b[0m\x1b[37m]\x1b[32m "); \
+   LOG_FINF; \
+   fprintf(stderr, body); \
+   fprintf(stderr, "\x1b[0m\n"); \
+)
+
 /* Log some information. */
-void log_inf(const char*, ...);
-#define LOG_INF(fmt, ...) HIDE( \
+#define LOG_INFF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[94;1m==\x1b[0m\x1b[37m]\x1b[0m "); \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
    fprintf(stderr, "\x1b[0m\n"); \
 )
 
+#define LOG_INF(body) HIDE( \
+   fprintf(stderr, "\x1b[37m[\x1b[94;1m==\x1b[0m\x1b[37m]\x1b[0m "); \
+   fprintf(stderr, body); \
+   fprintf(stderr, "\x1b[0m\n"); \
+)
+
 /* Log something with no formatting. */
-void log_raw(const char*, ...);
-#define LOG_RAW(fmt, ...) HIDE( \
+#define LOG_RAWF(fmt, ...) HIDE( \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
 )
 
+#define LOG_RAW(body) HIDE( \
+   fprintf(stderr, body); \
+)
+
 /* Log a warning. */
-void log_war(const char*, ...);
-#define LOG_WAR(fmt, ...) HIDE( \
+#define LOG_WARF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[93;1m==\x1b[0m\x1b[37m]\x1b[93;1m WARNING:\x1b[0m\x1b[33m "); \
    LOG_FINF; \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
    fprintf(stderr, "\x1b[0m\n"); \
 )
 
+#define LOG_WAR(body) HIDE( \
+   fprintf(stderr, "\x1b[37m[\x1b[93;1m==\x1b[0m\x1b[37m]\x1b[93;1m WARNING:\x1b[0m\x1b[33m "); \
+   LOG_FINF; \
+   fprintf(stderr, body); \
+   fprintf(stderr, "\x1b[0m\n"); \
+)
+
 /* Log an error. */
-void log_err(const char*, ...);
-#define LOG_ERR(fmt, ...) HIDE( \
+#define LOG_ERRF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m ERROR:\x1b[0m\x1b[31m "); \
    LOG_FINF; \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
    fprintf(stderr, "\x1b[0m\n"); \
 )
 
-/* Warn of soon™-to-be-removed functions. */
-#define WFDEPRECATED LOG_WAR("Use of this function is deprecated.")
+#define LOG_ERR(body) HIDE( \
+   fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m ERROR:\x1b[0m\x1b[31m "); \
+   LOG_FINF; \
+   fprintf(stderr, body); \
+   fprintf(stderr, "\x1b[0m\n"); \
+)
 
 /* Die and leave message. */
 void die(const char*, ...);
-#define DIE(fmt, ...) HIDE( \
+#define DIEF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m CAUSE OF DEATH:\x1b[0m\x1b[31m "); \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
+   fprintf(stderr, "\x1b[0m\n"); \
+   fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m Exiting...\x1b[0m\n"); \
+   exit(1); \
+)
+
+#define DIE(body) HIDE( \
+   fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m CAUSE OF DEATH:\x1b[0m\x1b[31m "); \
+   fprintf(stderr, body); \
    fprintf(stderr, "\x1b[0m\n"); \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m Exiting...\x1b[0m\n"); \
    exit(1); \

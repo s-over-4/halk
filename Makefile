@@ -4,8 +4,8 @@ CC         := gcc
 REG_CFLAGS := -std=c99 -O3 -s
 DBG_CFLAGS := -std=c99 -Og -ggdb -pedantic 
 DBG_CFLAGS += -Wall -Wextra -Wformat -Wpedantic
-DBG_CFLAGS += -fsanitize=leak,address,undefined -fno-omit-frame-pointer
-CFLAGS     := $(REG_CFLAGS)
+DBG_CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+CFLAGS     := none
 SRCS       := $(wildcard src/*.c)
 SRCS       := $(filter-out %doer.c,$(SRCS))	# Filter out incomplete doer for now.
 OBJS       := $(SRCS:.c=.o)
@@ -16,25 +16,21 @@ TEST_OUTS  := $(TEST_SRCS:.c=.out)
 
 all: halk
 
-reg_options:
+options:
 	@echo "HALK build options:"
 	@echo "CC:         $(CC)"
-	@echo "CFLAGS:     $(REG_CFLAGS)"
+	@echo "CFLAGS:     $(CFLAGS)"
 	@echo
 
-dbg_options:
-	@echo "HALK build options (dbg):"
-	@echo "CC:         $(CC)"
-	@echo "CFLAGS:     $(DBG_CFLAGS)"
-	@echo
-
-halk: reg_options $(OBJS)
+halk: CFLAGS := $(REG_CFLAGS)
+halk: options $(OBJS)
 	$(CC) $(OBJS) $(REG_CFLAGS) -o $(BIN).out
 
 dbg: CFLAGS := $(DBG_CFLAGS)
-dbg: clean dbg_options $(OBJS)
+dbg: clean options $(OBJS)
 	$(CC) $(OBJS) $(DBG_CFLAGS) -o $(BIN).out
 
+test: CFLAGS := $(REG_CFLAGS)
 test: $(TEST_OUTS)
 	set -e
 	for f in $(TEST_OUTS); do ./$$f; done
@@ -43,7 +39,7 @@ test: $(TEST_OUTS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 %.out: %.c
-	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@ $(CFLAGS)
+	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@ $(DBG_CFLAGS)
 
 install: all
 	mkdir -p $(PREFIX)

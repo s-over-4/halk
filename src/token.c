@@ -49,7 +49,7 @@ void token_add_char(token_t* token, char c) {
 
 void token_print(token_t* token) {
    if (!token) { return; }
-   log_dbg("token/t=%d\t/v=%s", token->type, token->val); 
+   LOG_DBGF("token/t=%d\t/v=%s", token->type, token->val); 
    if (token->nxt) {
       token_print(token->nxt);
    }
