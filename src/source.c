@@ -35,16 +35,16 @@ char* source_get_from_stdin() {
    size_t l;
 
 #if 0
-   l = 0;
+      l = 0;
 
-   src = ecalloc(16, sizeof(char));
+      src = ecalloc(16, sizeof(char));
 
-   while ((s = fgets(src + l, 20, stdin))) {
-      l = MIN(15, l + strlen(src + l));
-   }
+      while ((s = fgets(src + l, 20, stdin))) {
+         l = MIN(15, l + strlen(src + l));
+      }
 
-   /* This works, I guess. */
-   s && src[l - 1] == '\n' && (src[l - 1] = '\0');
+      /* This works, I guess. */
+      s && src[l - 1] == '\n' && (src[l - 1] = '\0');
 #endif
 
    src = ecalloc(256, sizeof(char));

@@ -42,7 +42,8 @@ void token_add_char(token_t* token, char c) {
 
    orig = strlen(token->val);
 
-   token->val = erealloc(token->val, orig + sizeof c + 1);
+   /* [...] c+1 [...] */
+   token->val = erealloc(token->val, orig + sizeof c+1);
    token->val[orig] = c;
    token->val[orig + 1] = '\0';
 }

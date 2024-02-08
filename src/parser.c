@@ -87,9 +87,7 @@ tree_t* parser_parse_carg(parser_t* parser) {
    tree_t* carg;
 
    carg = tree_init(TREE_TYPE_CARG); 
-
    carg->data.carg.val = parser_parse_expr(parser);
-
    carg->data.carg.nxt = NULL;
 
    return carg;
