@@ -100,10 +100,17 @@ tree_t* parser_parse_kwd(parser_t* parser) {
 
    call->data.call.target = parser->token->val;
    parser->token->val = NULL;
-   
-   if (parser_nxt_token_match(parser, TOKEN_TYPE_APPLY)) {
+
+   /* Skip over keyword, check for arguments. */
+   if (
+      parser_nxt_token(parser) &&
+      parser->token->type == TOKEN_TYPE_APPLY
+   ) {
+      /* Expect some arguments. */
+      parser_nxt_token(parser);
       call->data.call.arg = parser_parse_carg(parser);
    } else {
+      /* There're no arguments. */
       call->data.call.arg = NULL;
    }
 

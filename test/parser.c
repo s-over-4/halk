@@ -716,7 +716,7 @@ void cargumented_call_of_call() {
                char* target1 = tree1call->data.call.target = ecalloc(2, sizeof(char));
                   strcpy(target1, "x");
                tree1call->data.call.arg = NULL;
-            tree0call->data.carg.nxt = NULL;
+            tree0carg->data.carg.nxt = NULL;
       tree->data.block.nxt = NULL;
 
    pp = pp_init(src);
@@ -729,9 +729,6 @@ void cargumented_call_of_call() {
    parser_run(parser);
 
    ASSERT(tree_cmp(parser->tree, tree) == 1);
-
-   tree_print(tree, 0);
-   tree_print(parser->tree, 0);
 
    token_destroy(lexer->tokenl);
    lexer_destroy(lexer);
