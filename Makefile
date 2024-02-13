@@ -39,7 +39,7 @@ test: $(TEST_OUTS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 %.out: %.c
-	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@ $(DBG_CFLAGS)
+	$(CC) $< $(filter-out %main.o,$(OBJS)) -o $@ $(CFLAGS)
 
 install: all
 	mkdir -p $(PREFIX)

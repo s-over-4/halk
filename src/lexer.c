@@ -61,9 +61,9 @@ void lexer_do_reg(lexer_t* lexer) {
       case SYNTAX_TAG_DELIM:
          lexer->state = LEXER_STATE_TAG;
          break;
-/*    case SYNTAX_NAMESPACE_DELIM:
+         /*case SYNTAX_NAMESPACE_DELIM:
          lexer_add_current_char(lexer, TOKEN_NAMESPACE_DELIM);
-         break;   */
+         break;*/
       case SYNTAX_SET:
          lexer_add_current_char(lexer, TOKEN_TYPE_SET);
          break;

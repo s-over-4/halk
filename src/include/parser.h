@@ -47,10 +47,32 @@ tree_t* parser_parse_init(parser_t* parser);
 /* Get tree for a block. */
 tree_t* parser_parse_block(parser_t* parser);
 
+/* Get tree for a keyword. */
 tree_t* parser_parse_kwd(parser_t* parser);
 
 /* Get tree for an expression.*/
 tree_t* parser_parse_expr(parser_t* parser);
+
+/* Return the tree for an integer. */
+tree_t* parser_parse_lint(parser_t* parser);
+
+/* Return the tree for a string.  */
+tree_t* parser_parse_lstr(parser_t* parser);
+
+/* Return the tree for a call. */
+tree_t* parser_parse_call(parser_t* parser);
+
+/* Return the tree for a call's arguments. */
+tree_t* parser_parse_carg(parser_t* parser);
+
+/* Return the tree for a definition. */
+tree_t* parser_parse_def(parser_t* parser);
+
+/* Return the tree for a definition tag. */
+tree_t* parser_parse_tag(parser_t* parser);
+
+/* Return the tree for a definition's arguments. */
+tree_t* parser_parse_darg(parser_t* parser);
 
 /* 
    Check whether the current token matches the given type.
@@ -60,24 +82,6 @@ int parser_match(parser_t* parser, token_type_t type);
 
 /* Steps the parser forward by one token, then check whether the new token matches the given type. */
 int parser_nxt_token_match(parser_t* parser, token_type_t type);
-
-/* Return the tree for an integer. */
-tree_t* parser_parse_lint(parser_t* parser);
-
-/* Return the tree for a string.  */
-tree_t* parser_parse_lstr(parser_t* parser);
-
-/* Return the tree for a definition's arguments. */
-tree_t* parser_parse_darg(parser_t* parser);
-
-/* Return the tree for a definition. */
-tree_t* parser_parse_def(parser_t* parser);
-
-/* Return the tree for a call's arguments. */
-tree_t* parser_parse_carg(parser_t* parser);
-
-/* Return the tree for a call. */
-tree_t* parser_parse_call(parser_t* parser);
 
 /* Parse. */
 void parser_parse(parser_t* parser);

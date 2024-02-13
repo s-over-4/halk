@@ -797,6 +797,171 @@ void cargumented_call_of_lint() {
    tree_destroy(tree);
 }
 
+void def_bare_lint() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = ":i:n = 3";
+
+   /*
+
+      [block]
+      val:
+         [def]
+         tag:
+            [tag]
+            val:
+               i
+            nxt:
+               [tag]
+               val:
+                  n
+               nxt:
+                  NULL
+         arg:
+            NULL
+         val:
+            [lint]
+            val:
+               3
+      nxt:
+         NULL
+
+   */
+
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0def = tree->data.block.val = tree_init(TREE_TYPE_DEF);
+         tree_t* tree0tag = tree0def->data.def.tag = tree_init(TREE_TYPE_TAG);
+            char* val0 = tree0tag->data.tag.val = ecalloc(2, sizeof(char));
+               strcpy(val0, "i");
+            tree_t* tree1tag = tree0tag->data.tag.nxt = tree_init(TREE_TYPE_TAG);
+               char* val1 = tree1tag->data.tag.val = ecalloc(2, sizeof(char));
+                  strcpy(val1, "n");
+               tree1tag->data.tag.nxt = NULL;
+         tree0def->data.def.arg = NULL;
+         tree_t* tree0lint = tree0def->data.def.val = tree_init(TREE_TYPE_LINT);
+            tree0lint->data.lint.val = 3;
+      tree->data.block.nxt = NULL;
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   free(pp->psrc);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+   tree_destroy(tree);
+}
+
+void def_add1() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = ":i:add1.:i:n = +.n, 1";
+
+   /*
+
+      [block]
+      val:
+         [def]
+         tag:
+            [tag]
+            val:
+               i
+            nxt:
+               [tag]
+               val:
+                  add1
+               nxt:
+                  NULL
+         arg:
+            [darg]
+            tag:
+               [tag]
+               val:
+                  i
+               nxt:
+                  [tag]
+                  val:
+                     n
+                  nxt:
+                     NULL
+            nxt:
+               NULL
+         val:
+            [call]
+            target:
+               +
+            arg:
+               [carg]
+               val:
+                  [call]
+                  target:
+                     n
+                  arg:
+                     NULL
+               nxt:
+                  [carg]
+                  val:
+                     [lint]
+                     val:
+                        1
+                   nxt:
+                     NULL
+      nxt:
+         NULL
+
+   */
+
+   /* TODO: Write this test. */
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0def = tree->data.block.val = tree_init(TREE_TYPE_DEF);
+         tree_t* tree0tag = tree0def->data.def.tag = tree_init(TREE_TYPE_TAG);
+            char* val0 = tree0tag->data.tag.val = ecalloc(2, sizeof(char));
+               strcpy(val0, "i");
+            tree_t* tree1tag = tree0tag->data.tag.nxt = tree_init(TREE_TYPE_TAG);
+               char* val1 = tree1tag->data.tag.val = ecalloc(2, sizeof(char));
+                  strcpy(val1, "n");
+               tree1tag->data.tag.nxt = NULL;
+         tree0def->data.def.arg = NULL;
+         tree_t* tree0lint = tree0def->data.def.val = tree_init(TREE_TYPE_LINT);
+            tree0lint->data.lint.val = 3;
+      tree->data.block.nxt = NULL;
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   free(pp->psrc);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+   tree_destroy(tree);
+}
+
 int main() {
    empty();
    single_lint();
@@ -812,6 +977,7 @@ int main() {
    double_bare_call();
    cargumented_call_of_call();
    cargumented_call_of_lint();
+   def_bare_lint();
 
    TEST_REPORT;
 

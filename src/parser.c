@@ -75,12 +75,72 @@ tree_t* parser_parse_expr(parser_t* parser) {
       case TOKEN_TYPE_KWD:
          expr = parser_parse_kwd(parser);
          break;
+      case TOKEN_TYPE_TAG:
+         expr = parser_parse_def(parser);
+         break;
       default:
          LOG_WARF("%s: Unknown token type: %d", __func__, parser->token->type);
          parser_nxt_token(parser);
    }
 
    return expr;
+}
+
+tree_t* parser_parse_def(parser_t* parser) {
+   tree_t* def = tree_init(TREE_TYPE_DEF);
+
+   def->data.def.tag = parser_parse_tag(parser);
+
+   if (parser->token->type == TOKEN_TYPE_APPLY) {
+      parser_nxt_token(parser);
+      def->data.def.arg = parser_parse_darg(parser);
+   } else {
+      def->data.def.arg = NULL;
+   }
+
+   if (parser->token->type == TOKEN_TYPE_SET) {
+      parser_nxt_token(parser);
+      def->data.def.val = parser_parse_expr(parser);
+   } else {
+      def->data.def.val = NULL;
+   }
+
+   return def;
+}
+
+tree_t* parser_parse_tag(parser_t* parser) {
+   if (
+      parser->token && 
+      parser->token->type != TOKEN_TYPE_TAG
+   ) { return NULL; }
+
+   tree_t* tag = tree_init(TREE_TYPE_TAG);
+
+   tag->data.tag.val = parser->token->val;
+   parser->token->val = NULL;
+
+   parser_nxt_token(parser);
+
+   tag->data.tag.nxt = parser_parse_tag(parser);
+
+   return tag;
+}
+
+tree_t* parser_parse_darg(parser_t* parser) {
+   tree_t* darg = tree_init(TREE_TYPE_DARG);
+
+   darg->data.darg.tag = parser_parse_tag(parser);
+   
+   parser_nxt_token(parser);
+
+   if (parser->token->type == TOKEN_TYPE_LIST_DELIM) {
+      parser_nxt_token(parser);
+      darg->data.darg.nxt = parser_parse_darg(parser);
+   } else {
+      darg->data.darg.nxt = NULL;
+   }
+
+   return darg;
 }
 
 tree_t* parser_parse_carg(parser_t* parser) {
@@ -149,62 +209,6 @@ tree_t* parser_parse_lstr(parser_t* parser) {
    parser_nxt_token(parser);
 
    return lstr;
-}
-
-tree_t* parser_parse_tag(parser_t* parser) {
-   if (parser->token->type != TOKEN_TYPE_TAG) { return NULL; }
-
-   tree_t* tag;
-
-   tag = tree_init(TREE_TYPE_TAG);
-
-   tag->data.tag.val = parser->token->val;
-   parser->token->val = NULL;
-   tag->data.tag.nxt = (
-      parser_nxt_token(parser) ? 
-         parser_parse_tag(parser) : 
-         NULL
-   );
-
-   return tag;
-}
-
-tree_t* parser_parse_darg(parser_t* parser) {
-   tree_t* darg;
-
-   darg = tree_init(TREE_TYPE_DARG);
-
-   if (parser->token->type != TOKEN_TYPE_TAG) { return NULL; }
-
-   darg->data.darg.tag = parser_parse_tag(parser);
-
-   LOG_WARF("%d", parser->token->type);
-
-   if (parser->token->type != TOKEN_TYPE_LIST_DELIM) {
-      darg->data.darg.nxt = NULL;
-   } else {
-      parser_nxt_token(parser) && 
-         (darg->data.darg.nxt = parser_parse_darg(parser));
-   }
-
-   return darg;
-}
-
-tree_t* parser_parse_def(parser_t* parser) {
-   tree_t* def;
-
-   def = tree_init(TREE_TYPE_DEF);
-
-   def->data.def.tag = parser_parse_tag(parser);
-
-   parser->token->type == TOKEN_TYPE_APPLY && 
-      parser_nxt_token(parser) &&
-      ( def->data.def.arg = parser_parse_darg(parser) );
-   parser->token->type == TOKEN_TYPE_SET && 
-      parser_nxt_token(parser) && 
-      ( def->data.def.val = parser_parse_expr(parser) );
-   
-   return def;
 }
 
 tree_t* parser_parse_call(parser_t* parser) {
