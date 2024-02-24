@@ -878,8 +878,6 @@ void call_many_arg() {
 
    ASSERT(tree_cmp(parser->tree, tree) == 1);
 
-   tree_print(tree, 0);
-
    token_destroy(lexer->tokenl);
    lexer_destroy(lexer);
    free(pp->psrc);
@@ -957,16 +955,15 @@ void def_bare_lint() {
    tree_destroy(tree);
 }
 
-void def_add1() {
+void def_with_arg() {
    tree_t* tree;
    pp_t* pp;
    lexer_t* lexer;
    parser_t* parser;
 
-   char src[] = ":i:add1.:i:n = +.n, 1";
+   char src[] = ":i:f.:i:x=x";
 
    /*
-
       [block]
       val:
          [def]
@@ -977,7 +974,7 @@ void def_add1() {
             nxt:
                [tag]
                val:
-                  add1
+                  f
                nxt:
                   NULL
          arg:
@@ -989,7 +986,7 @@ void def_add1() {
                nxt:
                   [tag]
                   val:
-                     n
+                     x
                   nxt:
                      NULL
             nxt:
@@ -997,26 +994,11 @@ void def_add1() {
          val:
             [call]
             target:
-               +
+               x
             arg:
-               [carg]
-               val:
-                  [call]
-                  target:
-                     n
-                  arg:
-                     NULL
-               nxt:
-                  [carg]
-                  val:
-                     [lint]
-                     val:
-                        1
-                   nxt:
-                     NULL
+               NULL
       nxt:
          NULL
-
    */
 
    /* TODO: Write this test. */
@@ -1027,11 +1009,20 @@ void def_add1() {
                strcpy(val0, "i");
             tree_t* tree1tag = tree0tag->data.tag.nxt = tree_init(TREE_TYPE_TAG);
                char* val1 = tree1tag->data.tag.val = ecalloc(2, sizeof(char));
-                  strcpy(val1, "n");
+                  strcpy(val1, "f");
                tree1tag->data.tag.nxt = NULL;
-         tree0def->data.def.arg = NULL;
-         tree_t* tree0lint = tree0def->data.def.val = tree_init(TREE_TYPE_LINT);
-            tree0lint->data.lint.val = 3;
+         tree_t* tree0arg = tree0def->data.def.arg = tree_init(TREE_TYPE_DARG);
+            tree_t* tree2tag = tree0arg->data.darg.tag = tree_init(TREE_TYPE_TAG);
+               char* val2 = tree2tag->data.tag.val = ecalloc(2, sizeof(char));
+                  strcpy(val2, "i");
+               tree_t* tree3tag = tree2tag->data.tag.nxt = tree_init(TREE_TYPE_TAG);
+                  char* val3 = tree3tag->data.tag.val = ecalloc(2, sizeof(char));
+                     strcpy(val3, "x");
+                  tree3tag->data.tag.nxt = NULL;
+         tree_t* tree0call = tree0def->data.def.val = tree_init(TREE_TYPE_CALL);
+            char* target0 = tree0call->data.call.target = ecalloc(2, sizeof(char));
+               strcpy(target0, "x");
+            tree0call->data.call.arg = NULL;
       tree->data.block.nxt = NULL;
 
    pp = pp_init(src);
@@ -1044,6 +1035,9 @@ void def_add1() {
    parser_run(parser);
 
    ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   tree_print(tree, 0);
+   tree_print(parser->tree, 0);
 
    token_destroy(lexer->tokenl);
    lexer_destroy(lexer);
@@ -1071,6 +1065,7 @@ int main() {
    cargumented_call_of_lint();
    call_many_arg();
    def_bare_lint();
+   def_with_arg();
 
    TEST_REPORT;
 

@@ -94,14 +94,15 @@ tree_t* parser_parse_def(parser_t* parser) {
    def->data.def.tag = parser_parse_tag(parser);
 
    if (parser->token->type == TOKEN_TYPE_APPLY) {
-      parser_nxt_token(parser);
+      parser_nxt_token(parser);  /* Skip over apply. */
       def->data.def.arg = parser_parse_darg(parser);
    } else {
       def->data.def.arg = NULL;
    }
 
+   LOG_DBGF("%s <<<<<<<<<<<<,, HERE HER HERE", parser->token->val);
    if (parser->token->type == TOKEN_TYPE_SET) {
-      parser_nxt_token(parser);
+      parser_nxt_token(parser);  /* Skip over set. */
       def->data.def.val = parser_parse_expr(parser);
    } else {
       def->data.def.val = NULL;
@@ -133,10 +134,8 @@ tree_t* parser_parse_darg(parser_t* parser) {
 
    darg->data.darg.tag = parser_parse_tag(parser);
    
-   parser_nxt_token(parser);
-
    if (parser->token->type == TOKEN_TYPE_LIST_DELIM) {
-      parser_nxt_token(parser);
+      parser_nxt_token(parser);  /* Skip over list delim. */
       darg->data.darg.nxt = parser_parse_darg(parser);
    } else {
       darg->data.darg.nxt = NULL;
