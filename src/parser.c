@@ -1,5 +1,6 @@
 #include "include/parser.h"
 #include "include/token.h"
+#include "include/util.h"
 
 parser_t* parser_init(token_t* token) {
    parser_t* parser;
@@ -73,7 +74,8 @@ tree_t* parser_parse_expr(parser_t* parser) {
          expr = parser_parse_block(parser);
          break;
       case TOKEN_TYPE_KWD:
-         expr = parser_parse_kwd(parser);
+//         expr = parser_parse_kwd(parser);
+         expr = parser_parse_call(parser);
          break;
       case TOKEN_TYPE_TAG:
          expr = parser_parse_def(parser);
@@ -146,9 +148,22 @@ tree_t* parser_parse_darg(parser_t* parser) {
 tree_t* parser_parse_carg(parser_t* parser) {
    tree_t* carg;
 
+   /*
+      f.x,y,z;
+   */
+
    carg = tree_init(TREE_TYPE_CARG); 
    carg->data.carg.val = parser_parse_expr(parser);
-   carg->data.carg.nxt = NULL;
+
+   if (
+      parser->token
+      && parser->token->type == TOKEN_TYPE_LIST_DELIM
+      && parser_nxt_token(parser)
+   ) {
+      carg->data.carg.nxt = parser_parse_carg(parser);
+   } else {
+      carg->data.carg.nxt = NULL;
+   }
 
    return carg;
 }
@@ -218,11 +233,20 @@ tree_t* parser_parse_call(parser_t* parser) {
 
    call->data.call.target = parser->token->val;
    parser->token->val = NULL;
-   call->data.call.arg = (
-      parser_nxt_token_match(parser, TOKEN_TYPE_APPLY) && parser_nxt_token(parser) ?
-         parser_parse_carg(parser) : 
-         NULL
-   );
+
+   /*
+      If there's a call with an apply, but the file ends just after, NULL.
+      ¯\_(ツ)_/¯ 
+   */
+   if (
+      parser_nxt_token(parser)
+      && parser->token->type == TOKEN_TYPE_APPLY
+      && parser_nxt_token(parser)
+   ) {
+      call->data.call.arg = parser_parse_carg(parser);
+   } else {
+      call->data.call.arg = NULL;
+   }
 
    return call;
 }

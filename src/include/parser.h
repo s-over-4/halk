@@ -5,6 +5,7 @@
 #include "tree.h"
 #include "token.h"
 
+/* Parser states. */
 typedef enum PARSER_STATE {
    PARSER_STATE_BLOCK,
    PARSER_STATE_EXPR,

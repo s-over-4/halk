@@ -797,6 +797,98 @@ void cargumented_call_of_lint() {
    tree_destroy(tree);
 }
 
+void call_many_arg() {
+   tree_t* tree;
+   pp_t* pp;
+   lexer_t* lexer;
+   parser_t* parser;
+
+   char src[] = "f.x,y,z";
+
+   /*
+
+      [block]
+      val:
+         [call]
+         target:
+            f
+         arg:
+            [carg]
+            val:
+               [call]
+               target:
+                  x
+               arg:
+                  NULL
+            nxt:
+               [carg]
+               val:
+                  [call]
+                  target:
+                     y
+                  arg:
+                     NULL
+               nxt:
+                  [carg]
+                  val:
+                     [call]
+                     target:
+                        z
+                     arg:
+                        NULL
+                  nxt:
+                     NULL
+            nxt:
+               NULL
+      nxt:
+         NULL
+
+   */
+
+   tree = tree_init(TREE_TYPE_BLOCK);
+      tree_t* tree0call = tree->data.block.val = tree_init(TREE_TYPE_CALL);
+         char* target0 = tree0call->data.call.target = ecalloc(2, sizeof(char));
+            strcpy(target0, "f");
+         tree_t* tree0carg = tree0call->data.call.arg = tree_init(TREE_TYPE_CARG);
+            tree_t* tree1call = tree0carg->data.carg.val = tree_init(TREE_TYPE_CALL);
+               char* target1 = tree1call->data.call.target = ecalloc(2, sizeof(char));
+                  strcpy(target1, "x");
+               tree1call->data.call.arg = NULL;
+            tree_t* tree1carg = tree0carg->data.carg.nxt = tree_init(TREE_TYPE_CARG);
+               tree_t* tree2call = tree1carg->data.carg.val = tree_init(TREE_TYPE_CALL);
+                  char* target2 = tree2call->data.call.target = ecalloc(2, sizeof(char));
+                     strcpy(target2, "y");
+                  tree2call->data.call.arg = NULL;
+               tree_t* tree2carg = tree1carg->data.carg.nxt = tree_init(TREE_TYPE_CARG);
+                  tree_t* tree3call = tree2carg->data.carg.val = tree_init(TREE_TYPE_CALL);
+                     char* target3 = tree3call->data.call.target = ecalloc(2, sizeof(char));
+                        strcpy(target3, "z");
+                     tree3call->data.call.arg = NULL;
+                  tree2carg->data.carg.nxt = NULL;
+      tree->data.block.nxt = NULL;
+
+   pp = pp_init(src);
+   pp_run(pp);
+
+   lexer = lexer_init(pp->psrc);
+   lexer_run(lexer);
+
+   parser = parser_init(lexer->tokenl);
+   parser_run(parser);
+
+   ASSERT(tree_cmp(parser->tree, tree) == 1);
+
+   tree_print(tree, 0);
+
+   token_destroy(lexer->tokenl);
+   lexer_destroy(lexer);
+   free(pp->psrc);
+   pp_destroy(pp);
+   tree_destroy(parser->tree);
+   parser_destroy(parser);
+   tree_destroy(tree);
+}
+
 void def_bare_lint() {
    tree_t* tree;
    pp_t* pp;
@@ -977,6 +1069,7 @@ int main() {
    double_bare_call();
    cargumented_call_of_call();
    cargumented_call_of_lint();
+   call_many_arg();
    def_bare_lint();
 
    TEST_REPORT;
