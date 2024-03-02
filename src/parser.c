@@ -16,7 +16,6 @@ void parser_destroy(parser_t* parser) {
    if (parser) { free(parser); }
 }
 
-/* TODO: What if the program begins with a ";"? */
 int parser_nxt_token(parser_t* parser) {
    /* Preserve original token list, to be cleaned up by lexer. */
    if (!parser->token) { return 0; }
@@ -100,7 +99,6 @@ tree_t* parser_parse_def(parser_t* parser) {
       def->data.def.arg = NULL;
    }
 
-   LOG_DBGF("%s <<<<<<<<<<<<,, HERE HER HERE", parser->token->val);
    if (parser->token->type == TOKEN_TYPE_SET) {
       parser_nxt_token(parser);  /* Skip over set. */
       def->data.def.val = parser_parse_expr(parser);

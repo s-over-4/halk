@@ -1,5 +1,4 @@
 #include "include/main.h"
-#include "include/util.h"
 
 /* FIXME: Segfaults ~30% of the time. No idea why. Thx future self <3. */
 int main(int argc, char* argv[]) {
@@ -41,7 +40,11 @@ int main(int argc, char* argv[]) {
    parser_run(parser);
    tree_print(parser->tree, 0);
 
-   /* Clean up parser stuff. */
+   doer_t* doer = doer_init(parser->tree);
+   doer_do_block(doer);
+
+   /* Clean up. */
+   doer_destroy(doer);
    token_destroy(lexer->tokenl);
    lexer_destroy(lexer);
    tree_destroy(parser->tree);

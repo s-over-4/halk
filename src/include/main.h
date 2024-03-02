@@ -10,5 +10,6 @@
 #include "pp.h"
 #include "lexer.h"
 #include "parser.h"
+#include "doer.h"
 
 #endif
