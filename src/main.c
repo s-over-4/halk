@@ -1,4 +1,5 @@
 #include "include/main.h"
+#include "include/doer.h"
 
 /* FIXME: Segfaults ~30% of the time. No idea why. Thx future self <3. */
 int main(int argc, char* argv[]) {
@@ -42,6 +43,7 @@ int main(int argc, char* argv[]) {
 
    doer_t* doer = doer_init(parser->tree);
    doer_do_block(doer);
+   target_print(doer->targets);
 
    /* Clean up. */
    doer_destroy(doer);
