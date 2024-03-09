@@ -4,7 +4,7 @@ CC         := gcc
 REG_CFLAGS := -std=c99 -O3 -s
 DBG_CFLAGS := -std=c99 -Og -ggdb -pedantic 
 DBG_CFLAGS += -Wall -Wextra -Wformat -Wpedantic
-DBG_CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+DBG_CFLAGS += -fsanitize=address -fno-omit-frame-pointer -DDBG
 CFLAGS     := none
 SRCS       := $(wildcard src/*.c)
 # SRCS       := $(filter-out %doer.c,$(SRCS))	# Filter out incomplete doer for now.

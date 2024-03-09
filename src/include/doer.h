@@ -4,8 +4,9 @@
 #include "util.h"
 #include "tree.h"
 
+// Points to a part of the AST the doer wishes to remember.
 typedef struct TARGET {
-   char* name;          // The name of the target (unique).
+// char* name;          // The name of the target (unique).
    tree_t* tree;        // The tree to which the target refers.
    struct TARGET* nxt;  // The next target in the list.
 } target_t;
@@ -40,17 +41,25 @@ void doer_destroy(doer_t* doer);
 
 /* Built-in function. */
 typedef struct BLINF {
-   void (*fp)(doer_t*);
+   void (*fp)(doer_t*);    // The callback function in C.
+   tree_type_t returnt;    // The return type of the function.
+   tree_type_t* argts;     // Array of the arguments' types.
    char name[24];
 } blinf_t;
 
 void doer_add_target(doer_t* doer, target_t* target);
 
 // Built-in functions.
+// `die`: dies. Does not accept any arguments, returns int (if a tree falls in
+// the forest, but it burns down before anyone can hear it, did it ever make a
+// sound at all?)
+void blin_die(doer_t* tree);
 // `print`: print a string.
 void blin_print(doer_t* tree);
+static tree_type_t blin_print_args[] = { TREE_TYPE_LSTR };
 // `printl`: print a string, and add a newline.
 void blin_printl(doer_t* tree);
+static tree_type_t blin_printl_args[] = { TREE_TYPE_LSTR };
 
 void doer_do_block(doer_t* tree);
 void doer_do_expr(doer_t* tree);
@@ -62,9 +71,10 @@ void doer_do_carg(doer_t* tree);
 void doer_do_def(doer_t* tree);
 void doer_do_call(doer_t* tree);
 
-const static blinf_t blinfs[] = {
-   { blin_print, "print" },
-   { blin_printl, "printl" }
+static blinf_t blinfs[] = {
+   { blin_die, TREE_TYPE_LINT, NULL, "die" },
+   { blin_print, TREE_TYPE_LSTR, blin_print_args, "print" },
+   { blin_printl, TREE_TYPE_LSTR, blin_printl_args, "printl" },
 };
 
 #endif

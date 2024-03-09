@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
    /* Get source. */
    src = source_get(argv[1]); 
-   LOG_INFF("Source: %s", src);
+   LOG_DBGF("Source: %s", src);
 
    /* Create pre-processor. */
    pp = pp_init(src);
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
    pp_run(pp);
    free(src);
    src = pp->psrc;
-   LOG_INFF("pre-processed source: %s", pp->psrc);
+   LOG_DBGF("pre-processed source: %s", pp->psrc);
    /* destroy pre-processor */
    pp_destroy(pp);
    LOG_DBG("preprocessor ran");
@@ -39,11 +39,15 @@ int main(int argc, char* argv[]) {
    /* Create the parser from the lexer's tokens. */
    parser = parser_init(lexer->tokenl);
    parser_run(parser);
+#ifdef DBG
    tree_print(parser->tree, 0);
+#endif
 
    doer_t* doer = doer_init(parser->tree);
    doer_do_block(doer);
    target_print(doer->targets);
+
+   sudden_death:
 
    /* Clean up. */
    doer_destroy(doer);

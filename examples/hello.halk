@@ -13,4 +13,5 @@
                       n,
                       +. fib.(-. n, 1), fib. -. n, 2);
 
-io!print.greet."world!";                                 ` Use previously defined function to print "Hello, world!". `
+io/print.greet."world!";                                 ` Use previously defined function to print "Hello, world!". `
+

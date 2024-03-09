@@ -4,7 +4,6 @@
 
 target_t* target_init(char* name, tree_t* tree) {
    target_t* target = emalloc(sizeof(target_t));
-   target->name = name;
    target->tree = tree;
    target->nxt = NULL;
    return target;
@@ -13,7 +12,6 @@ target_t* target_init(char* name, tree_t* tree) {
 void target_destroy(target_t* target) {
    if (target) {
       target_destroy(target->nxt);
-      free(target->name);
       free(target);
    }
 }
@@ -51,6 +49,10 @@ void doer_add_target(doer_t* doer, target_t* target) {
    else doer->ltarget->nxt = target;
 }
 
+void blin_die(doer_t* doer) {
+   DIE(":(\nYour PC ran into a\n");
+}
+
 void blin_print(doer_t* doer) {
    printf(
       "%s",
@@ -80,7 +82,6 @@ void doer_do_block(doer_t* doer) {
 void doer_do_expr(doer_t* doer) {
    switch (doer->tree->type) {
       case TREE_TYPE_CALL:
-         /* Assume only call is `print` for now. */
          doer_do_call(doer);
          break;
       case TREE_TYPE_DEF:
@@ -109,7 +110,7 @@ void doer_do_call(doer_t* doer) {
    for (int i = 0; i < sizeof(blinfs) / sizeof(blinf_t); i++) {
       if (!strcmp(blinfs[i].name, doer->tree->data.call.target)) {
          (blinfs[i].fp)(doer);
-         break;
+         return;
       }
    }
 }

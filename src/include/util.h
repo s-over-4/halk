@@ -21,6 +21,8 @@
 /* Call `f` on `x` if `x` exists. */
 #define EDO(f, x) HIDE(if (x) {f(x);})
 
+#ifdef DBG
+
 /* Log some debug information. */
 #define LOG_DBGF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[95;1m==\x1b[0m\x1b[37m]\x1b[0m\x1b[35m "); \
@@ -35,6 +37,13 @@
    fprintf(stderr, body); \
    fprintf(stderr, "\x1b[0m\n"); \
 )
+
+#else    // ifdef DBG
+
+#define LOG_DBGF(fmt, ...);
+#define LOG_DBG(body);
+
+#endif   // ifdef DBG
 
 /* c: */
 #define LOG_YAYF(fmt, ...) HIDE( \
