@@ -18,7 +18,7 @@ void target_destroy(target_t* target) {
 
 void target_print(target_t* target) {
    if (!target) return;
-   LOG_DBGF("target: %s; points to tree: %p", target->name, target->tree);
+   LOG_DBGF("target points to tree: %p", target->tree);
    target_print(target->nxt);
 }
 
@@ -40,6 +40,7 @@ doer_t* doer_init(tree_t* tree) {
    - Does not destroy the `tree`.
 */
 void doer_destroy(doer_t* doer) {
+   target_destroy(doer->targets);
    free(doer);
 }
 
@@ -49,24 +50,53 @@ void doer_add_target(doer_t* doer, target_t* target) {
    else doer->ltarget->nxt = target;
 }
 
+/*
+
+   :str:var = "Hello"
+   printl.var
+
+*/
+
+char* doer_eval_str(doer_t* doer) {
+   // Assume tree type is a simple call to variable.
+   // Search through target list for matching variable.
+   // Return its value as a string (assume it's a string).
+   // Assume there is only 1 target in the target list.
+
+   switch (doer->tree->type) {
+      case TREE_TYPE_CALL:
+         // Assume there is only 1 target in the target list.
+         doer->tree = doer->ltarget->tree->data.def.val;
+         return doer_eval_str(doer);
+      case TREE_TYPE_LSTR:
+         // Already done \o/
+         return doer->tree->data.lstr.val;
+      default:
+         DIE("Wrong type, FOOL!");
+   }
+}
+
 void blin_die(doer_t* doer) {
    DIE(":(\nYour PC ran into a\n");
 }
 
 void blin_print(doer_t* doer) {
+   doer->tree = doer->tree->data.call.arg->data.carg.val;
+
    printf(
       "%s",
-      doer->tree->data.call.arg->data.carg.val->data.lstr.val
+      doer_eval_str(doer)
    );
 }
 
 void blin_printl(doer_t* doer) {
+   doer->tree = doer->tree->data.call.arg->data.carg.val;
+
    printf(
       "%s\n",
-      doer->tree->data.call.arg->data.carg.val->data.lstr.val
+      doer_eval_str(doer)
    );
 }
-
 
 void doer_do_block(doer_t* doer) {
    if (!doer->tree) return;
@@ -106,11 +136,14 @@ void doer_do_def(doer_t* doer) {
 }
 
 void doer_do_call(doer_t* doer) {
-   /* Search through built-in functions first. */
+   // Search through built-in functions first.
    for (int i = 0; i < sizeof(blinfs) / sizeof(blinf_t); i++) {
       if (!strcmp(blinfs[i].name, doer->tree->data.call.target)) {
          (blinfs[i].fp)(doer);
          return;
       }
    }
+
+   // Search through targets next.
+   LOG_DBGF("got %s", doer->ltarget->tree->data.def.tag->data.tag.nxt->data.tag.val);
 }

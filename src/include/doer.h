@@ -6,7 +6,6 @@
 
 // Points to a part of the AST the doer wishes to remember.
 typedef struct TARGET {
-// char* name;          // The name of the target (unique).
    tree_t* tree;        // The tree to which the target refers.
    struct TARGET* nxt;  // The next target in the list.
 } target_t;
@@ -49,10 +48,14 @@ typedef struct BLINF {
 
 void doer_add_target(doer_t* doer, target_t* target);
 
+
+// Given a tree, evaluate it to a string (or type error).
+char* doer_eval_str(doer_t* doer);
+
 // Built-in functions.
 // `die`: dies. Does not accept any arguments, returns int (if a tree falls in
 // the forest, but it burns down before anyone can hear it, did it ever make a
-// sound at all?)
+// sound at all?) TODO: Make this actually clean up afterwards.
 void blin_die(doer_t* tree);
 // `print`: print a string.
 void blin_print(doer_t* tree);
