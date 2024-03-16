@@ -47,7 +47,7 @@ typedef struct BLINF {
 } blinf_t;
 
 void doer_add_target(doer_t* doer, target_t* target);
-
+tree_t* doer_find_target_from_call(target_t* targetl, tree_t* call);
 
 // Given a tree, evaluate it to a string (or type error).
 char* doer_eval_str(doer_t* doer);

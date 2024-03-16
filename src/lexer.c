@@ -7,6 +7,12 @@
 #include "include/syntax.h"
 #include "include/token.h"
 
+/*
+
+   TODO: Fix bug where calls ending with numbers get interpreted as lints.
+
+*/
+
 lexer_t* lexer_init(char* src) {
    lexer_t* lexer;
 

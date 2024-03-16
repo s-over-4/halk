@@ -47,29 +47,39 @@ void doer_destroy(doer_t* doer) {
 void doer_add_target(doer_t* doer, target_t* target) {
    // First target being added.
    if (!doer->targets) doer->targets = doer->ltarget = target;
-   else doer->ltarget->nxt = target;
+   else {
+      doer->ltarget->nxt = target;
+      doer->ltarget = target;
+   }
 }
 
-/*
+tree_t* doer_find_target_from_call(target_t* targetl, tree_t* call) {
+   if (!targetl) { DIE("Call to missing value."); }
+   
+   char* last_target_name = targetl->tree->data.def.tag->data.tag.nxt->data.tag.val;
+   char* call_name = call->data.call.target;
 
-   :str:var = "Hello"
-   printl.var
-
-*/
+   if (!strcmp(last_target_name, call_name)) {
+      return targetl->tree; 
+   } else {
+      return doer_find_target_from_call(targetl->nxt, call);
+   }
+}
 
 char* doer_eval_str(doer_t* doer) {
    // Assume tree type is a simple call to variable.
    // Search through target list for matching variable.
    // Return its value as a string (assume it's a string).
-   // Assume there is only 1 target in the target list.
 
    switch (doer->tree->type) {
       case TREE_TYPE_CALL:
-         // Assume there is only 1 target in the target list.
-         doer->tree = doer->ltarget->tree->data.def.val;
+         doer->tree = doer_find_target_from_call(doer->targets, doer->tree);
+         return doer_eval_str(doer);
+      case TREE_TYPE_DEF:
+         doer->tree = doer->tree->data.def.val;
          return doer_eval_str(doer);
       case TREE_TYPE_LSTR:
-         // Already done \o/
+         // Already done \o/.
          return doer->tree->data.lstr.val;
       default:
          DIE("Wrong type, FOOL!");
@@ -118,7 +128,7 @@ void doer_do_expr(doer_t* doer) {
          doer_do_def(doer);
          break;
       default:
-         LOG_WARF("unknown tree type: %d", doer->tree->type);
+         LOG_WARF("Unknown tree type: %d", doer->tree->type);
    }
 }
 
