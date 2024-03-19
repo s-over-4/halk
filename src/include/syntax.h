@@ -22,6 +22,6 @@
 #define SYNTAX_ESC               '\\'
 
 /* Characters that can appear in keywords. */
-#define SYNTAX_KWD_CHARS         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_~|&+-/*<>=%^$@?"
+#define SYNTAX_KWD_CHARS         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_~|&+-/*<>=%^$@?0123456789"
 
 #endif

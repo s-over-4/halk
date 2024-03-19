@@ -56,13 +56,16 @@ char* doer_eval_str(doer_t* doer);
 // `die`: dies. Does not accept any arguments, returns int (if a tree falls in
 // the forest, but it burns down before anyone can hear it, did it ever make a
 // sound at all?) TODO: Make this actually clean up afterwards.
-void blin_die(doer_t* tree);
+void blin_die(doer_t* doer);
 // `print`: print a string.
-void blin_print(doer_t* tree);
+void blin_print(doer_t* doer);
 static tree_type_t blin_print_args[] = { TREE_TYPE_LSTR };
 // `printl`: print a string, and add a newline.
-void blin_printl(doer_t* tree);
+void blin_printl(doer_t* doer);
 static tree_type_t blin_printl_args[] = { TREE_TYPE_LSTR };
+// `to_str`: convert any (primitive) type to a string.
+void blin_to_str(doer_t* doer);
+static tree_type_t blin_to_str_args[] = { TREE_TYPE_CALL };
 
 void doer_do_block(doer_t* tree);
 void doer_do_expr(doer_t* tree);
@@ -78,6 +81,7 @@ static blinf_t blinfs[] = {
    { blin_die, TREE_TYPE_LINT, NULL, "die" },
    { blin_print, TREE_TYPE_LSTR, blin_print_args, "print" },
    { blin_printl, TREE_TYPE_LSTR, blin_printl_args, "printl" },
+   { blin_to_str, TREE_TYPE_LSTR, blin_to_str_args, "to_str" },
 };
 
 #endif

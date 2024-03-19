@@ -87,7 +87,7 @@ char* doer_eval_str(doer_t* doer) {
 }
 
 void blin_die(doer_t* doer) {
-   DIE(":(\nYour PC ran into a\n");
+   exit(1);
 }
 
 void blin_print(doer_t* doer) {
@@ -106,6 +106,10 @@ void blin_printl(doer_t* doer) {
       "%s\n",
       doer_eval_str(doer)
    );
+}
+
+void blin_to_str(doer_t* doer) {
+   // TODO
 }
 
 void doer_do_block(doer_t* doer) {
