@@ -19,6 +19,8 @@ typedef enum TREE_TYPE {
 typedef struct TREE {
    tree_type_t type;
 
+   struct TREE* parent;
+
    union TREE_DATA{
       /* Block. */
       struct TREE_DATA_BLOCK {
@@ -77,12 +79,11 @@ typedef struct TREE {
          char* target;
          struct TREE* arg; /* CARG */
       } call;
-
    } data;
 } tree_t;
 
 /* Create a new AST. */
-tree_t* tree_init(tree_type_t type);
+tree_t* tree_init(tree_type_t type, tree_t* parent);
 /* Destroy the AST (if it exists). */
 void tree_destroy(tree_t* tree);
 

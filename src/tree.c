@@ -1,11 +1,13 @@
 #include "include/tree.h"
 
-tree_t* tree_init(tree_type_t type) {
+tree_t* tree_init(tree_type_t type, tree_t* parent) {
    tree_t* tree;
 
    tree = emalloc(sizeof(tree_t));
 
    tree->type = type;
+
+   tree->parent = parent;
    
    switch (tree->type) {
       case TREE_TYPE_BLOCK:
@@ -153,7 +155,7 @@ void tree_print(tree_t* tree, int nest) {
    "\x1b[%dm",nc);sprintf(bc,"\x1b[%d;1m"
    ,nc);NULL;NULL;0x0;0;0;0;0;NULL;0x0;0;
    #define NEST0(T)LOG_RAWF("%s%s"T"\x1b"\
-   """""""""""""""""""""""""[0m\n",bc,sp)
+   "[0m -> %d\n",bc,sp,tree->parent?tree->parent->type:-1)
    #define NEST1(T)LOG_RAWF("%s%s"T"\x1b"\
    """""""""""""""""""""""""[0m\n",c,sp);
    #define NEST2(T)LOG_RAWF("%s \x1b[39;"\

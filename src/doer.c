@@ -1,6 +1,7 @@
 #include "include/doer.h"
 #include "include/tree.h"
 #include "include/util.h" 
+#include <string.h>
 
 target_t* target_init(char* name, tree_t* tree) {
    target_t* target = emalloc(sizeof(target_t));
@@ -108,8 +109,16 @@ void blin_printl(doer_t* doer) {
    );
 }
 
-void blin_to_str(doer_t* doer) {
-   // TODO
+void blin_str_cat(doer_t* doer) {
+   tree_t* oldt = doer->tree;
+   doer->tree = doer->tree->data.call.arg->data.carg.val;
+   char* str1 = doer_eval_str(doer);
+   doer->tree = oldt->data.call.arg->data.carg.nxt->data.carg.val;
+   char* str2 = doer_eval_str(doer);
+
+   tree_destroy(doer->tree);
+
+//    doer->tree = tree_init(TREE_TYPE_LSTR);
 }
 
 void doer_do_block(doer_t* doer) {

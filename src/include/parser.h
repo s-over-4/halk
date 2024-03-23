@@ -27,6 +27,9 @@ typedef struct PARSER {
    
    /* The AST being produced. */
    tree_t* tree;
+
+   /* The current parent tree node. */
+   tree_t* ltree;
 } parser_t;
 
 /* Creates a new parser. */

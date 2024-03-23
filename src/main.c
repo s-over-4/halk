@@ -47,8 +47,6 @@ int main(int argc, char* argv[]) {
    doer_do_block(doer);
    target_print(doer->targets);
 
-   sudden_death:
-
    /* Clean up. */
    doer_destroy(doer);
    token_destroy(lexer->tokenl);

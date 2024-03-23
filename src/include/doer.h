@@ -63,9 +63,9 @@ static tree_type_t blin_print_args[] = { TREE_TYPE_LSTR };
 // `printl`: print a string, and add a newline.
 void blin_printl(doer_t* doer);
 static tree_type_t blin_printl_args[] = { TREE_TYPE_LSTR };
-// `to_str`: convert any (primitive) type to a string.
-void blin_to_str(doer_t* doer);
-static tree_type_t blin_to_str_args[] = { TREE_TYPE_CALL };
+// `str_cat`: concatenate strings.
+void blin_str_cat(doer_t* doer);
+static tree_type_t blin_str_cat_args[] = { TREE_TYPE_LSTR, TREE_TYPE_LSTR };
 
 void doer_do_block(doer_t* tree);
 void doer_do_expr(doer_t* tree);
@@ -81,7 +81,7 @@ static blinf_t blinfs[] = {
    { blin_die, TREE_TYPE_LINT, NULL, "die" },
    { blin_print, TREE_TYPE_LSTR, blin_print_args, "print" },
    { blin_printl, TREE_TYPE_LSTR, blin_printl_args, "printl" },
-   { blin_to_str, TREE_TYPE_LSTR, blin_to_str_args, "to_str" },
+   { blin_str_cat, TREE_TYPE_LSTR, blin_str_cat_args, "str_cat" },
 };
 
 #endif
