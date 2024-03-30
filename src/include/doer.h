@@ -40,7 +40,7 @@ void doer_destroy(doer_t* doer);
 
 /* Built-in function. */
 typedef struct BLINF {
-   void (*fp)(doer_t*);    // The callback function in C.
+   tree_t* (*fp)(doer_t*);    // The callback function in C.
    tree_type_t returnt;    // The return type of the function.
    tree_type_t* argts;     // Array of the arguments' types.
    char name[24];
@@ -56,26 +56,29 @@ char* doer_eval_str(doer_t* doer);
 // `die`: dies. Does not accept any arguments, returns int (if a tree falls in
 // the forest, but it burns down before anyone can hear it, did it ever make a
 // sound at all?) TODO: Make this actually clean up afterwards.
-void blin_die(doer_t* doer);
+tree_t* blin_die(doer_t* doer);
 // `print`: print a string.
-void blin_print(doer_t* doer);
+tree_t* blin_print(doer_t* doer);
 static tree_type_t blin_print_args[] = { TREE_TYPE_LSTR };
 // `printl`: print a string, and add a newline.
-void blin_printl(doer_t* doer);
+tree_t* blin_printl(doer_t* doer);
 static tree_type_t blin_printl_args[] = { TREE_TYPE_LSTR };
 // `str_cat`: concatenate strings.
-void blin_str_cat(doer_t* doer);
+// Returns a tree pointer to a lstr.
+tree_t* blin_str_cat(doer_t* doer);
 static tree_type_t blin_str_cat_args[] = { TREE_TYPE_LSTR, TREE_TYPE_LSTR };
 
+tree_t* doer_do_call(doer_t* doer);
+tree_t* doer_do_call_blin(doer_t* doer);
+tree_t* doer_do_call_def(doer_t* doer);
+tree_t* doer_do_carg(doer_t* doer);
 void doer_do_block(doer_t* tree);
 void doer_do_expr(doer_t* tree);
 void doer_do_lint(doer_t* tree);
 void doer_do_lstr(doer_t* tree);
 void doer_do_tag(doer_t* tree);
 void doer_do_darg(doer_t* tree);
-void doer_do_carg(doer_t* tree);
 void doer_do_def(doer_t* tree);
-void doer_do_call(doer_t* tree);
 
 static blinf_t blinfs[] = {
    { blin_die, TREE_TYPE_LINT, NULL, "die" },

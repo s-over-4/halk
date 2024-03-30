@@ -5,6 +5,7 @@ tags
 *.out
 *.tmp.*
 coredump
+test.halk
 *.notes.md
 [._]sw[a-p]
 [._]*.sw[a-p]
