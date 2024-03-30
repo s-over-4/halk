@@ -53,6 +53,26 @@ tree_t* tree_init(tree_type_t type, tree_t* parent) {
 void tree_destroy(tree_t* tree) {
    if (!tree) { return; }
 
+   if (tree->parent && tree->type == TREE_TYPE_CALL) {
+      tree_t* treep = tree->parent;
+      switch (treep->type) {
+         case TREE_TYPE_BLOCK:
+            treep->data.block.val = NULL;
+            break;
+         case TREE_TYPE_EXPR:
+            treep->data.expr.val = NULL;
+            break;
+         case TREE_TYPE_CARG:
+            treep->data.carg.val = NULL;
+            break;
+         case TREE_TYPE_DEF:
+            treep->data.def.val = NULL;
+            break;
+         default:
+            break;
+      }
+   }
+
    switch (tree->type) {
       case TREE_TYPE_BLOCK:
          tree_destroy(tree->data.block.val);

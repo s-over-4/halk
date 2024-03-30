@@ -55,12 +55,12 @@ void doer_add_target(doer_t* doer, target_t* target) {
 }
 
 tree_t* doer_find_target_from_call(target_t* targetl, tree_t* call) {
-   if (!targetl) { DIE("Call to missing value."); }
+   if (!targetl) { DIE("Call to missing target."); }
    
-   char* last_target_name = targetl->tree->data.def.tag->data.tag.nxt->data.tag.val;
+   char* targname = targetl->tree->data.def.tag->data.tag.nxt->data.tag.val;
    char* call_name = call->data.call.target;
 
-   if (!strcmp(last_target_name, call_name)) {
+   if (!strcmp(targname, call_name)) {
       return targetl->tree; 
    } else {
       return doer_find_target_from_call(targetl->nxt, call);
@@ -74,8 +74,7 @@ char* doer_eval_str(doer_t* doer) {
 
    switch (doer->tree->type) {
       case TREE_TYPE_CALL:
-         // doer->tree = doer_find_target_from_call(doer->targets, doer->tree);
-         doer->tree = doer_do_call(doer);
+         doer_do_call(doer);
          return doer_eval_str(doer);
       case TREE_TYPE_DEF:
          doer->tree = doer->tree->data.def.val;
@@ -110,6 +109,7 @@ tree_t* blin_print(doer_t* doer) {
 }
 
 tree_t* blin_printl(doer_t* doer) {
+   tree_t* oldt = doer->tree;
    doer->tree = doer->tree->data.call.arg->data.carg.val;
    char* strval = doer_eval_str(doer);
 
@@ -118,7 +118,7 @@ tree_t* blin_printl(doer_t* doer) {
       strval
    );
 
-   tree_t* lstr = tree_init(TREE_TYPE_LSTR, doer->tree->parent);
+   tree_t* lstr = tree_init(TREE_TYPE_LSTR, oldt->parent);
    lstr->data.lstr.val = strval;
    lstr->data.lstr.len = strlen(strval);
 
@@ -140,9 +140,6 @@ tree_t* blin_str_cat(doer_t* doer) {
 
    strcpy(val, str1);
    strcat(val, str2);
-
-   free(str1);
-   free(str2);
 
    doer->tree = tree_init(TREE_TYPE_LSTR, oldt->parent);
 
@@ -187,10 +184,20 @@ void doer_do_def(doer_t* doer) {
    doer_add_target(doer, target);
 }
 
-tree_t* doer_do_call(doer_t* doer) {
-   tree_t* blin = doer_do_call_blin(doer);
-   if (!blin) return doer_find_target_from_call(doer->targets, doer->tree);
-   else return blin;
+void doer_do_call(doer_t* doer) {
+   tree_t* oldt = doer->tree;
+   tree_t* blinrval = doer_do_call_blin(doer);  // Could modify the *current*
+                                                // tree, but only if it's a
+                                                // blin.
+
+   if (blinrval) {
+      doer->tree = blinrval;
+   } else {
+      tree_t* newt = doer_find_target_from_call(doer->targets, oldt);
+      doer->tree = newt->data.def.val;
+   }
+
+   tree_destroy(oldt);
 }
 
 tree_t* doer_do_call_blin(doer_t* doer) {
@@ -200,9 +207,6 @@ tree_t* doer_do_call_blin(doer_t* doer) {
          return (blinfs[i].fp)(doer);
       }
    }
-
-   // Search through targets next.
-   LOG_DBGF("got %s", doer->ltarget->tree->data.def.tag->data.tag.nxt->data.tag.val);
 
    return NULL;
 }

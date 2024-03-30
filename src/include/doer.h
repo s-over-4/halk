@@ -68,7 +68,7 @@ static tree_type_t blin_printl_args[] = { TREE_TYPE_LSTR };
 tree_t* blin_str_cat(doer_t* doer);
 static tree_type_t blin_str_cat_args[] = { TREE_TYPE_LSTR, TREE_TYPE_LSTR };
 
-tree_t* doer_do_call(doer_t* doer);
+void doer_do_call(doer_t* doer);
 tree_t* doer_do_call_blin(doer_t* doer);
 tree_t* doer_do_call_def(doer_t* doer);
 tree_t* doer_do_carg(doer_t* doer);
