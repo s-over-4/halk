@@ -67,6 +67,22 @@ tree_t* doer_find_target_from_call(target_t* targetl, tree_t* call) {
    }
 }
 
+tree_t* doer_eval_prim(doer_t* doer) {
+   switch (doer->tree->type) {
+      case TREE_TYPE_CALL:
+         doer_do_call(doer);
+         return doer_eval_prim(doer);
+      case TREE_TYPE_DEF:
+         doer->tree = doer->tree->data.def.val;
+         return doer_eval_prim(doer);
+      case TREE_TYPE_LSTR:
+      case TREE_TYPE_LINT:
+         return doer->tree;
+      default:
+         DIE("???");
+   }
+}
+
 char* doer_eval_str(doer_t* doer) {
    // Assume tree type is a simple call to variable.
    // Search through target list for matching variable.
@@ -111,18 +127,32 @@ tree_t* blin_print(doer_t* doer) {
 tree_t* blin_printl(doer_t* doer) {
    tree_t* oldt = doer->tree;
    doer->tree = doer->tree->data.call.arg->data.carg.val;
-   char* strval = doer_eval_str(doer);
+   tree_t* arg = doer_eval_prim(doer);
 
-   printf(
-      "%s\n",
-      strval
-   );
+   char* rval;
+
+   switch (arg->type) {
+      case TREE_TYPE_LINT:
+         printf("%d\n", arg->data.lint.val);
+         rval = ecalloc(64, sizeof(char));
+         sprintf(rval, "%d\n", arg->data.lint.val);
+         break;
+      case TREE_TYPE_LSTR:
+         printf("%s\n", arg->data.lstr.val);
+         rval = ecalloc(arg->data.lstr.len + 2, sizeof(char));
+         sprintf(rval, "%s\n", arg->data.lstr.val);
+         break;
+      default:
+         rval = ecalloc(2, sizeof(char));
+         rval[0] = '\n';
+         rval[1] = '\0';
+   }
 
    tree_t* lstr = tree_init(TREE_TYPE_LSTR, oldt->parent);
-   lstr->data.lstr.val = strval;
-   lstr->data.lstr.len = strlen(strval);
+   lstr->data.lstr.val = rval;
+   lstr->data.lstr.len = strlen(rval);
 
-   return doer->tree;
+   return lstr;
 }
 
 tree_t* blin_str_cat(doer_t* doer) {
@@ -184,6 +214,7 @@ void doer_do_def(doer_t* doer) {
    doer_add_target(doer, target);
 }
 
+#if 0
 void doer_do_call(doer_t* doer) {
    tree_t* oldt = doer->tree;
    tree_t* blinrval = doer_do_call_blin(doer);  // Could modify the *current*
@@ -199,9 +230,23 @@ void doer_do_call(doer_t* doer) {
 
    tree_destroy(oldt);
 }
+#endif
+
+void doer_do_call(doer_t* doer) {
+   tree_t* oldt = doer->tree;
+   tree_t* blinrval = doer_do_call_blin(doer);  // Could modify the *current*
+                                                // tree, but only if it's a
+                                                // blin.
+
+   if (blinrval) {
+      tree_swp_call(oldt, blinrval);
+   } else {
+      tree_t* newt = doer_find_target_from_call(doer->targets, oldt);
+      tree_swp_call(oldt, newt);
+   }
+}
 
 tree_t* doer_do_call_blin(doer_t* doer) {
-   // Search through built-in functions first.
    for (int i = 0; i < sizeof(blinfs) / sizeof(blinf_t); i++) {
       if (!strcmp(blinfs[i].name, doer->tree->data.call.target)) {
          return (blinfs[i].fp)(doer);

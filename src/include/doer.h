@@ -49,6 +49,8 @@ typedef struct BLINF {
 void doer_add_target(doer_t* doer, target_t* target);
 tree_t* doer_find_target_from_call(target_t* targetl, tree_t* call);
 
+// Given a tree, evaluate it to a primitive type.
+tree_t* doer_eval_prim(doer_t* doer);
 // Given a tree, evaluate it to a string (or type error).
 char* doer_eval_str(doer_t* doer);
 

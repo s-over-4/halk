@@ -53,6 +53,7 @@ tree_t* tree_init(tree_type_t type, tree_t* parent) {
 void tree_destroy(tree_t* tree) {
    if (!tree) { return; }
 
+   // Stop calls from being double freed.
    if (tree->parent && tree->type == TREE_TYPE_CALL) {
       tree_t* treep = tree->parent;
       switch (treep->type) {
@@ -112,6 +113,12 @@ void tree_destroy(tree_t* tree) {
    free(tree);
 }
 
+tree_t* tree_copy_out(tree_t* tree) {
+   tree_t* newt = tree_init(tree->type, tree->parent);
+   memcpy(&newt->data, &tree->data, sizeof(newt->data));
+   return newt;
+}
+
 int tree_cmp(tree_t* tree_0, tree_t* tree_1) {
    if ((tree_0 && !tree_1) || (!tree_0 && tree_1)) { return 0; }  /* Only 1 is defined (failure). */
    if (!tree_0 && !tree_1) { return 1; }  /* Both are undefined (success). */
@@ -157,6 +164,71 @@ int tree_cmp(tree_t* tree_0, tree_t* tree_1) {
    }
 
    return 0;
+}
+
+void tree_rm(tree_t* t) {
+   tree_t* parent = t->parent;
+
+   t->parent = NULL;
+
+   switch (parent->type) {
+      case TREE_TYPE_BLOCK:
+         if (parent->data.block.val == t) parent->data.block.val = NULL;
+         else parent->data.block.nxt = NULL;
+         break;
+      case TREE_TYPE_EXPR: // Deprecated?
+         parent->data.expr.val = NULL;
+         break;
+      case TREE_TYPE_TAG:
+         parent->data.tag.nxt = NULL;
+         break;
+      case TREE_TYPE_DARG:
+         if (parent->data.darg.tag == t) parent->data.darg.tag = NULL;
+         else parent->data.darg.nxt = NULL;
+         break;
+      case TREE_TYPE_CARG:
+         if (parent->data.carg.val == t) parent->data.carg.val = NULL;
+         else parent->data.carg.nxt = NULL;
+         break;
+      case TREE_TYPE_DEF:
+         if (parent->data.def.tag == t) parent->data.def.tag = NULL;
+         else if (parent->data.def.arg == t) parent->data.def.arg = NULL;
+         else parent->data.def.val = NULL;
+         break;
+      case TREE_TYPE_CALL:
+         parent->data.call.arg = NULL;
+         break;
+      default:
+         LOG_WAR("Fscked state reached.");
+         break;
+   }
+}
+
+void tree_swp_call(tree_t* t0, tree_t* t1) {
+   tree_t* parent = t0->parent;
+
+   tree_rm(t0);
+
+   t1->parent = parent;
+
+   switch (parent->type) {
+      case TREE_TYPE_BLOCK:
+         parent->data.block.val = t1;
+         break;
+      case TREE_TYPE_EXPR:
+         parent->data.expr.val = t1;
+         break;
+      case TREE_TYPE_CARG:
+         parent->data.carg.val = t1;
+         break;
+      case TREE_TYPE_DEF:
+         parent->data.def.val = t1;
+         break;
+      default:
+         break;
+   }
+
+//   tree_destroy(t0);
 }
 
 /*
