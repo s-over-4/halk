@@ -88,6 +88,6 @@ Example programs can be found in the examples directory.
 - [x] Preprocessor
 - [x] Lexer
 - [x] Abstract Syntax Tree
-- [~] Parser
-- [ ] Doer
+- [x] Parser
+- [~] Doer
 - [ ] ?? profit ??
