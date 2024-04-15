@@ -54,17 +54,30 @@ void doer_add_target(doer_t* doer, target_t* target) {
    }
 }
 
-tree_t* doer_find_target_from_call(target_t* targetl, tree_t* call) {
-   if (!targetl) { DIE("Call to missing target."); }
-   
-   char* targname = targetl->tree->data.def.tag->data.tag.nxt->data.tag.val;
-   char* call_name = call->data.call.target;
+tree_t* doer_find_target_from_call(doer_t* doer) {
+   tree_t* this_call = doer->tree;
+   char* call_name = this_call->data.call.target;
 
-   if (!strcmp(targname, call_name)) {
-      return targetl->tree; 
-   } else {
-      return doer_find_target_from_call(targetl->nxt, call);
+   target_t* target = doer->targets;
+
+   while (target) {
+      tree_t* tag = target->tree->data.def.tag;
+
+      // HACK: Not saving types, just going straight to the good stuff.
+      char* target_type = tag->data.tag.val;
+
+      // Extract target's name from 2nd tag's val.
+      char* target_name = tag->data.tag.nxt->data.tag.val;
+
+
+      if (!strcmp(target_name, call_name)) {
+         return target->tree; 
+      } else {
+         target = target->nxt;
+      }
    }
+
+   DIE("Call to missing target.");
 }
 
 tree_t* doer_eval_prim(doer_t* doer) {
@@ -182,11 +195,11 @@ tree_t* blin_str_cat(doer_t* doer) {
 void doer_do_block(doer_t* doer) {
    if (!doer->tree) return;
    
-   tree_t* tree_root = doer->tree;
+   tree_t* tree_block = doer->tree;
 
    doer->tree = doer->tree->data.block.val;
    doer_do_expr(doer);
-   doer->tree = tree_root->data.block.nxt;
+   doer->tree = tree_block->data.block.nxt;
    doer_do_block(doer);
 }
 
@@ -214,50 +227,27 @@ void doer_do_def(doer_t* doer) {
    doer_add_target(doer, target);
 }
 
-#if 0
 void doer_do_call(doer_t* doer) {
-   tree_t* oldt = doer->tree;
-   tree_t* blinrval = doer_do_call_blin(doer);  // Could modify the *current*
-                                                // tree, but only if it's a
-                                                // blin.
+   tree_t* the_call = doer->tree;
+   tree_t* resolved = NULL;
 
-   if (blinrval) {
-      doer->tree = blinrval;
-   } else {
-      tree_t* newt = doer_find_target_from_call(doer->targets, oldt);
-      doer->tree = newt->data.def.val;
+   // Could modify the *current* tree, but only if it's a blin.
+   resolved = doer_do_call_blin(doer);
+
+   if (!resolved) {
+      doer->tree = the_call;
+      resolved = doer_find_target_from_call(doer);
    }
 
-   tree_destroy(oldt);
-}
-#endif
-
-void doer_do_call(doer_t* doer) {
-   tree_t* oldt = doer->tree;
-   tree_t* blinrval = doer_do_call_blin(doer);  // Could modify the *current*
-                                                // tree, but only if it's a
-                                                // blin.
-
-   if (blinrval) {
-      tree_swp_call(oldt, blinrval);
-   } else {
-      tree_t* newt = doer_find_target_from_call(doer->targets, oldt);
-      tree_swp_call(oldt, newt);
-   }
+   tree_swp_call(the_call, resolved);
+   tree_destroy(the_call);
+   doer->tree = resolved;
 }
 
 tree_t* doer_do_call_blin(doer_t* doer) {
-   for (int i = 0; i < sizeof(blinfs) / sizeof(blinf_t); i++) {
-      if (!strcmp(blinfs[i].name, doer->tree->data.call.target)) {
+   for (int i = 0; i < sizeof(blinfs) / sizeof(blinf_t); i++)
+      if (!strcmp(blinfs[i].name, doer->tree->data.call.target))
          return (blinfs[i].fp)(doer);
-      }
-   }
 
    return NULL;
 }
-
-// TODO: doer_do_call will check first doer_do_call_blin and then
-// doer_do_call_def for user-defined functions. Will return a tree, which will
-// replace the call in the tree.
-//
-// Maybe the parent should be set by the looping function?

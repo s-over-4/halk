@@ -228,7 +228,7 @@ void tree_swp_call(tree_t* t0, tree_t* t1) {
          break;
    }
 
-//   tree_destroy(t0);
+   tree_destroy(t0);
 }
 
 /*
