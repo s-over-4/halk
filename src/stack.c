@@ -1,5 +1,7 @@
 #include "include/stack.h"
 
+// Not actually used anywhere, might be name collision on clang.
+
 stack_t* stack_init() {
    stack_t* stack = emalloc(sizeof(stack_t));
    

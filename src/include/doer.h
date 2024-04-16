@@ -53,11 +53,11 @@ tree_t* doer_find_target_from_call(doer_t* doer);
 tree_t* doer_eval_prim(doer_t* doer);
 // Given a tree, evaluate it to a string (or type error).
 char* doer_eval_str(doer_t* doer);
+int doer_eval_lint(doer_t* doer);
 
 // Built-in functions.
 // `die`: dies. Does not accept any arguments, returns int (if a tree falls in
-// the forest, but it burns down before anyone can hear it, did it ever make a
-// sound at all?) TODO: Make this actually clean up afterwards.
+// the forest, &c &c.) TODO: Make this actually clean up afterwards.
 tree_t* blin_die(doer_t* doer);
 // `print`: print a string.
 tree_t* blin_print(doer_t* doer);
@@ -69,6 +69,9 @@ static tree_type_t blin_printl_args[] = { TREE_TYPE_LSTR };
 // Returns a tree pointer to a lstr.
 tree_t* blin_str_cat(doer_t* doer);
 static tree_type_t blin_str_cat_args[] = { TREE_TYPE_LSTR, TREE_TYPE_LSTR };
+// `+`: Add two integers.
+tree_t* blin_add(doer_t* doer);
+static tree_type_t blin_add_args[] = { TREE_TYPE_LINT, TREE_TYPE_LINT };
 
 void doer_do_call(doer_t* doer);
 tree_t* doer_do_call_blin(doer_t* doer);
@@ -87,6 +90,7 @@ static blinf_t blinfs[] = {
    { blin_print, TREE_TYPE_LSTR, blin_print_args, "print" },
    { blin_printl, TREE_TYPE_LSTR, blin_printl_args, "printl" },
    { blin_str_cat, TREE_TYPE_LSTR, blin_str_cat_args, "str_cat" },
+   { blin_add, TREE_TYPE_LINT, blin_add_args, "+" },
 };
 
 #endif

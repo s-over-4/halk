@@ -116,23 +116,53 @@ char* doer_eval_str(doer_t* doer) {
    }
 }
 
+int doer_eval_lint(doer_t* doer) {
+   switch (doer->tree->type) {
+      case TREE_TYPE_CALL:
+         doer_do_call(doer);
+         return doer_eval_lint(doer);
+      case TREE_TYPE_DEF:
+         doer->tree = doer->tree->data.def.val;
+         return doer_eval_lint(doer);
+      case TREE_TYPE_LINT:
+         // Already done \o/.
+         return doer->tree->data.lint.val;
+      default:
+         DIE("Wrong type, FOOL!");
+   }
+}
+
 tree_t* blin_die(doer_t* doer) {
    exit(1);
    return NULL;   // Doesn't really matter what happens here.
 }
 
 tree_t* blin_print(doer_t* doer) {
+   tree_t* oldt = doer->tree;
    doer->tree = doer->tree->data.call.arg->data.carg.val;
-   char* strval = doer_eval_str(doer);
+   tree_t* arg = doer_eval_prim(doer);
 
-   printf(
-      "%s",
-      strval
-   );
+   char* rval;
 
-   tree_t* lstr = tree_init(TREE_TYPE_LSTR, doer->tree->parent);
-   lstr->data.lstr.val = strval;
-   lstr->data.lstr.len = strlen(strval);
+   switch (arg->type) {
+      case TREE_TYPE_LINT:
+         printf("%d", arg->data.lint.val);
+         rval = ecalloc(64, sizeof(char));
+         sprintf(rval, "%d", arg->data.lint.val);
+         break;
+      case TREE_TYPE_LSTR:
+         printf("%s", arg->data.lstr.val);
+         rval = ecalloc(arg->data.lstr.len + 1, sizeof(char));
+         sprintf(rval, "%s", arg->data.lstr.val);
+         break;
+      default:
+         rval = ecalloc(1, sizeof(char));
+         rval[0] = '\0';
+   }
+
+   tree_t* lstr = tree_init(TREE_TYPE_LSTR, oldt->parent);
+   lstr->data.lstr.val = rval;
+   lstr->data.lstr.len = strlen(rval);
 
    return lstr;
 }
@@ -190,6 +220,25 @@ tree_t* blin_str_cat(doer_t* doer) {
    doer->tree->data.lstr.len = strlen(val);
 
    return doer->tree; 
+}
+
+tree_t* blin_add(doer_t* doer) {
+   tree_t* tree = doer->tree;
+
+   tree_t* args = tree->data.call.arg;
+   tree_t* arg1 = args;
+   tree_t* arg2 = arg1->data.carg.nxt;
+
+   doer->tree = arg1;
+   int a = doer_eval_lint(doer);
+   doer->tree = arg2;
+   int b = doer_eval_lint(doer);
+
+   tree_t* newt =  tree_init(TREE_TYPE_LINT, tree->parent);
+
+   newt->data.lint.val = a + b;
+
+   return newt;
 }
 
 void doer_do_block(doer_t* doer) {

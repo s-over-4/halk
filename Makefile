@@ -7,7 +7,7 @@ DBG_CFLAGS += -Wall -Wextra -Wformat -Wpedantic
 DBG_CFLAGS += -fsanitize=address -fno-omit-frame-pointer -DDBG
 CFLAGS     := none
 SRCS       := $(wildcard src/*.c)
-# SRCS       := $(filter-out %doer.c,$(SRCS))	# Filter out incomplete doer for now.
+SRCS       := $(filter-out %stack.c,$(SRCS))	# Filter out unused stack code.
 OBJS       := $(SRCS:.c=.o)
 TEST_SRCS  := $(wildcard test/*.c)
 TEST_OUTS  := $(TEST_SRCS:.c=.out)
