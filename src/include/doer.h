@@ -72,6 +72,9 @@ static tree_type_t blin_str_cat_args[] = { TREE_TYPE_LSTR, TREE_TYPE_LSTR };
 // `+`: Add two integers.
 tree_t* blin_add(doer_t* doer);
 static tree_type_t blin_add_args[] = { TREE_TYPE_LINT, TREE_TYPE_LINT };
+// `-`: Subtract two integers.
+tree_t* blin_sub(doer_t* doer);
+static tree_type_t blin_sub_args[] = { TREE_TYPE_LINT, TREE_TYPE_LINT };
 
 void doer_do_call(doer_t* doer);
 tree_t* doer_do_call_blin(doer_t* doer);
@@ -91,6 +94,7 @@ static blinf_t blinfs[] = {
    { blin_printl, TREE_TYPE_LSTR, blin_printl_args, "printl" },
    { blin_str_cat, TREE_TYPE_LSTR, blin_str_cat_args, "str_cat" },
    { blin_add, TREE_TYPE_LINT, blin_add_args, "+" },
+   { blin_sub, TREE_TYPE_LINT, blin_sub_args, "-" },
 };
 
 #endif

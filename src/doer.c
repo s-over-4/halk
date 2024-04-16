@@ -229,14 +229,33 @@ tree_t* blin_add(doer_t* doer) {
    tree_t* arg1 = args;
    tree_t* arg2 = arg1->data.carg.nxt;
 
-   doer->tree = arg1;
+   doer->tree = arg1->data.carg.val;
    int a = doer_eval_lint(doer);
-   doer->tree = arg2;
+   doer->tree = arg2->data.carg.val;
    int b = doer_eval_lint(doer);
 
    tree_t* newt =  tree_init(TREE_TYPE_LINT, tree->parent);
 
    newt->data.lint.val = a + b;
+
+   return newt;
+}
+
+tree_t* blin_sub(doer_t* doer) {
+   tree_t* tree = doer->tree;
+
+   tree_t* args = tree->data.call.arg;
+   tree_t* arg1 = args;
+   tree_t* arg2 = arg1->data.carg.nxt;
+
+   doer->tree = arg1->data.carg.val;
+   int a = doer_eval_lint(doer);
+   doer->tree = arg2->data.carg.val;
+   int b = doer_eval_lint(doer);
+
+   tree_t* newt =  tree_init(TREE_TYPE_LINT, tree->parent);
+
+   newt->data.lint.val = a - b;
 
    return newt;
 }
