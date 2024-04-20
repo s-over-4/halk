@@ -77,7 +77,7 @@ tree_t* doer_find_target_from_call(doer_t* doer) {
       }
    }
 
-   DIE("Call to missing target.");
+   DIEF("Call to missing target: %s", call_name);
 }
 
 tree_t* doer_eval_prim(doer_t* doer) {
@@ -260,6 +260,25 @@ tree_t* blin_sub(doer_t* doer) {
    return newt;
 }
 
+tree_t* blin_mul(doer_t* doer) {
+   tree_t* tree = doer->tree;
+
+   tree_t* args = tree->data.call.arg;
+   tree_t* arg1 = args;
+   tree_t* arg2 = arg1->data.carg.nxt;
+
+   doer->tree = arg1->data.carg.val;
+   int a = doer_eval_lint(doer);
+   doer->tree = arg2->data.carg.val;
+   int b = doer_eval_lint(doer);
+
+   tree_t* newt =  tree_init(TREE_TYPE_LINT, tree->parent);
+
+   newt->data.lint.val = a * b;
+
+   return newt;
+}
+
 void doer_do_block(doer_t* doer) {
    if (!doer->tree) return;
    
@@ -274,7 +293,9 @@ void doer_do_block(doer_t* doer) {
 void doer_do_expr(doer_t* doer) {
    switch (doer->tree->type) {
       case TREE_TYPE_CALL:
+         // Add targets
          doer_do_call(doer);
+         // Remove targets
          break;
       case TREE_TYPE_DEF:
          doer_do_def(doer);
