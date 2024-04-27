@@ -3,6 +3,29 @@
 #include "include/util.h" 
 #include <string.h>
 
+
+/*
+
+
+   find_target();
+   args =  read_args() {
+      return args
+   }
+
+   for (arg in args) {
+      stack_add(targets, args)
+   }
+
+   :int:add1.:int:x, :int:y = +.x,+.y,1;
+
+   :int:a = 5
+   :int:b 99
+
+   add1.a,99
+
+
+*/
+
 target_t* target_init(char* name, tree_t* tree) {
    target_t* target = emalloc(sizeof(target_t));
    target->tree = tree;
@@ -77,6 +100,8 @@ tree_t* doer_find_target_from_call(doer_t* doer) {
       }
    }
 
+   for (target_t* t = doer->targets; t; printf("%s\n", t->tree->data.def.tag->data.tag.nxt->data.tag.val) && (t = t->nxt));
+
    DIEF("Call to missing target: %s", call_name);
 }
 
@@ -92,7 +117,7 @@ tree_t* doer_eval_prim(doer_t* doer) {
       case TREE_TYPE_LINT:
          return doer->tree;
       default:
-         DIE("???");
+         DIEF("Unknown primitive type: %d", doer->tree->type);
    }
 }
 
@@ -308,8 +333,8 @@ void doer_do_expr(doer_t* doer) {
 void doer_do_def(doer_t* doer) {
    tree_t* tag2 = doer->tree->data.def.tag->data.tag.nxt;
    target_t* target = target_init(
-      tag2->data.tag.val,     // HACK: Grab the 2nd tag's value, without
-                                    // checking if it's actually there…
+      tag2->data.tag.val,  // HACK: Grab the 2nd tag's value, without
+                           // checking if it's actually there…
       doer->tree
    );
 
@@ -319,13 +344,68 @@ void doer_do_def(doer_t* doer) {
 void doer_do_call(doer_t* doer) {
    tree_t* the_call = doer->tree;
    tree_t* resolved = NULL;
+   tree_t* target_def = NULL;
 
    // Could modify the *current* tree, but only if it's a blin.
    resolved = doer_do_call_blin(doer);
 
    if (!resolved) {
       doer->tree = the_call;
-      resolved = doer_find_target_from_call(doer);
+      target_def = doer_find_target_from_call(doer);  // Is def.
+      
+      tree_t* darg = target_def->data.def.arg;
+      LOG_DBGF("------------------------------");
+      tree_print(darg, 0);
+
+
+      tree_t* carg = the_call->data.call.arg;
+
+      target_t
+         * targs = NULL,   // Pointer to first target.
+         * targ = targs;   // Pointer to where new targets will be added.
+
+      // Evaluate arguments.
+      while (darg) {
+         doer->tree = carg->data.carg.val;
+         // HACK: Assume already a primitive.
+         tree_t* carg_resolved = doer->tree; //doer_eval_prim(doer);
+
+         char
+            * darg_type = darg->data.darg.tag->data.tag.val,
+            * carg_type = tree_type2str(carg_resolved->type);
+
+         if (strcmp(darg_type, carg_type)) DIE("Type mismatch.");
+
+         targ = target_init(
+            "This field doesn't actually do anything but I can't be bothered to remove it :P",
+            carg_resolved
+         );
+
+         targ = targ->nxt;
+         darg = darg->data.darg.nxt;
+
+         printf("\n\n[---\n");
+         for (target_t* t = doer->targets; t; printf("%s\n", t->tree->data.def.tag->data.tag.nxt->data.tag.val) && (t = t->nxt));
+         printf("---]\n");
+      }
+
+      target_t* old_ltarget = doer->ltarget;
+
+      // Append the new targets from the args.
+      doer->ltarget->nxt = targs;
+      doer->ltarget = targ;
+
+      // Execute the call.
+      doer->tree = target_def->data.def.val;
+      printf("[---\n");
+      for (target_t* t = doer->targets; t; printf("%s\n", t->tree->data.def.tag->data.tag.nxt->data.tag.val) && (t = t->nxt));
+      printf("---]\n");
+      resolved = doer_eval_prim(doer);
+
+      // Clean up temporary targets.
+      target_destroy(targs);
+      old_ltarget->nxt = NULL;
+      doer->ltarget = old_ltarget;
    }
 
    tree_swp_call(the_call, resolved);

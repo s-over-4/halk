@@ -116,6 +116,7 @@
 void die(const char*, ...);
 #define DIEF(fmt, ...) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m CAUSE OF DEATH:\x1b[0m\x1b[31m "); \
+   LOG_FINF; \
    fprintf(stderr, fmt, ##__VA_ARGS__); \
    fprintf(stderr, "\x1b[0m\n"); \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m Exiting...\x1b[0m\n"); \
@@ -124,6 +125,7 @@ void die(const char*, ...);
 
 #define DIE(body) HIDE( \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m CAUSE OF DEATH:\x1b[0m\x1b[31m "); \
+   LOG_FINF; \
    fprintf(stderr, body); \
    fprintf(stderr, "\x1b[0m\n"); \
    fprintf(stderr, "\x1b[37m[\x1b[91;1m==\x1b[0m\x1b[37m]\x1b[91;1m Exiting...\x1b[0m\n"); \

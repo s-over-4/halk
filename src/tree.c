@@ -229,6 +229,28 @@ void tree_swp_call(tree_t* t0, tree_t* t1) {
    }
 }
 
+int tree_type_str(tree_type_t tree_type, char* str) {
+   switch (tree_type) {
+      case TREE_TYPE_LINT:
+         return !strcmp("int", str);
+      case TREE_TYPE_LSTR:
+         return !strcmp("str", str);
+      default:
+         DIE("Invalid primitive type.");
+   }
+}
+
+char* tree_type2str(tree_type_t tree_type) {
+   switch (tree_type) {
+      case TREE_TYPE_LINT:
+         return "int";
+      case TREE_TYPE_LSTR:
+         return "str";
+      default:
+         DIE("Invalid primitive type.");
+   }
+}
+
 /*
    Every time I think there's a problem with the parser, it turns out it's 
    just this stupid tree print function. Now it works. Never touching it 

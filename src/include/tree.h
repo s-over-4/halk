@@ -101,6 +101,12 @@ int tree_cmp(tree_t* tree_0, tree_t* tree_1);
 // Swaps a tree for another.
 void tree_swp_call(tree_t* t0, tree_t* t1);
 
+// Determines if a tree_type_t matches a string.
+int tree_type_str(tree_type_t tree_type, char* str);
+
+// Returns a string for a tree type.
+char* tree_type2str(tree_type_t tree_type);
+
 /* Print a tree. */
 void tree_print(tree_t* tree, int nest);
 
